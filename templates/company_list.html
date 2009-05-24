@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Company List{% endblock %}
+
+{% block css %}
+	<style type="text/css">
+		#company_filter_box		{border: 1px solid black; background: lightgreen;}
+	</style>
+{% endblock %}
+
+{% block javascript %}
+
+
+
+{% endblock %}
+
+{% block body %}
+<div id="main_container">
+
+	<div id="top_title">All Companies</div>
+	
+	<div id="company_filter_box">
+		<table>
+			<tr>
+				<td>All Companies</td>
+				<td>All Flight Schools</td>
+			</tr>
+		</table>
+	</div>
+	{% for c in company_list %}
+	
+		<a href="../../company/{{c.pk}}">{{ c.name }}</a><br/>
+	
+	{% endfor %}
+
+
+</div>
+{% endblock %}

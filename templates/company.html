@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+
+{%block title%}{{c.name}}{% endblock %}
+
+{% block css %}
+<style type="text/css">
+	.alert			{color: darkred; font-weight: bold}
+	
+	.operation_box		{border: 3px solid black; margin: 1em; padding: 1em; font-size: medium}
+	
+	.position_box		{border: 1px solid black; margin-bottom: .5em; padding: .5em; font-size: medium; background: lightgreen}
+	.position_status	{font-size: medium}
+	.position_name		{font-size: x-large; font-weight: bold}
+	.position_salary	{font-size: medium}
+	
+	.position_mins		{margin-top: 1em; border-collapse: collapse}
+	.position_mins td	{border: 0px solid black; padding-right: 1em}
+	
+	.fleet_box		{border: 1px solid black; margin-top: 0.5em; margin-bottom: 0.5em; background: lightgray; padding: .5em}
+
+	
+	.base			{border: 1px solid black; margin-top: 1em; padding: 0.5em; overflow: hidden}
+	.base_link		{font-weight: bold}
+	.base_info		{display: none}
+	.base_floats		{float: left; padding-right: 1em}
+	
+	.b1			{background: gray}						/* not hiring */
+	.b2			{background: lightblue}						/* hring */
+	.b3			{background: red}						/* lay offs */
+	.a1			{background: gold; border: 3px double green}			/* advertising */
+	
+	.plus			{cursor: pointer}
+	
+	.routes_table		{border-collapse: collapse; margin-top: 1em}
+	.routes_table td	{padding-right: 2em}
+	
+</style>
+{% endblock %}
+
+{% block javascript %}
+
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAtDznsRv92g_KZ0HK9mBD5RS3ydai3R5pSwWU_IHTQxn79Z9awhQaWXs60I2yGfPRz5z-Bs_CTn5lMg" type="text/javascript"></script>
+<script type="text/javascript" src="/site-media/javascripts/small_map.js"></script>
+<script type="text/javascript" src="/site-media/javascripts/company_doc_ready.js"></script>
+
+<script type="text/javascript">
+	var bases = [];	//lat longs of all bases, indexed by the pk of that opbase
+	var maps = [];	//array of the Gmap2 objects
+	var data = [];	//array of all the points, indexed by the opbase pk
+	
+{% for op in c.operation_set.all %}{% for ob in op.opbase_set.all %}
+	bases[{{ob.pk}}] = [{{ob.base.lat}},{{ob.base.long}}]; 
+	data[{{ob.pk}}] = {% if ob.routes.all %}{{ob.routes_json}}{%else%}"None";{% endif %}
+{% endfor %}{% endfor %}
+
+</script>
+{% endblock %}
+
+{% block body %}
+	<div id="main_container">
+	
+		{% if not_found %}
+		
+			<h1>Company Does Not Exist</h1>
+		
+		{% endif %}
+			<div id="top_title">{{ c.name }}</div>
+			{{ c.call_sign }}<br />
+			{% if c.website %}
+				<a href="{{c.website}}">{{c.website}}</a>
+			{% endif %}
+			
+			
+			{% for op in c.operation_set.all %}
+			<div class="operation_box">
+				{% for pos in op.positions.all %}
+				<div class="position_box p{{ p.hiring_status }}">
+					<div class="position_name">{{pos.name}}</div>
+					
+					{% if pos.salary %}
+						<div class="position_salary">
+							Salary: <em>${{ pos.salary }} {{ pos.get_salary_type_display }}</em>
+						
+							{% if not pos.training_provided %}
+								<span class="alert">** INITIAL TRAINING NOT PROVIDED **</span>
+							{% endif %}
+						</div>
+					{% endif %}
+					
+					<table class="position_mins">
+						<tr>
+							{% if pos.hard_mins %}
+								<td>Hard Minimums:</td>
+								{% for r in pos.hard_mins.display_hard %}
+									{% if forloop.first %}
+										<td>{{r|join:" "}}</td></tr>
+									{% else %}
+										<tr><td></td><td>{{r|join:" "}}</td></tr>
+									{% endif %}
+								{% endfor %}
+							{% endif %}
+					
+							{% if pos.pref_mins %}
+					
+								<tr><td>&nbsp;</td></tr>
+								<tr><td>Preferred:</td>
+								{% for r in pos.pref_mins.display_pref %}
+									{% if forloop.first %}
+										<td>{{r|join:" "}}</td></tr>
+									{% else %}
+										<tr><td></td><td>{{r|join:" "}}</td></tr>
+									{% endif %}
+								{% endfor %}
+								
+								
+							{% endif %}
+							
+							{% if not pos.pref_mins and not pos.hard_mins %}
+								<td><em>No known hiring minimums</em></td></tr>
+							{% endif %}
+					</table>
+				</div>
+					
+				{% endfor %}
+				
+				{# ---------------------------------------------- #}
+					
+				{% for f in op.fleet.all %}
+					<div class="fleet_box">
+						<a href="../../aircraft/{{ f.aircraft.type }}">{{ f.aircraft }}</a> ({{ f.size }})
+					</div>
+				{% endfor %}
+					
+				{% for ob in op.opbase_set.all %}
+					<div class="base b{{ ob.hiring_status }} a{{ ob.advertising }}">
+						<div class="base_floats">
+							<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="/site-media/plus.png" alt="+"/>
+						</div>
+						<div class="base_floats">
+							<a title="{{ ob.base.get_location }}" class="base_link" href="../../airport/{{ ob.base.identifier }}">
+								{{ ob.base.display_name }}</a> {{ ob.get_hiring_status_display }}<br />
+								<small>{{ ob.base.city }}, {{ ob.base.sector }}</small>
+							
+							<div class="base_info" id="info_{{ob.pk}}" >
+								<div id="map_{{ob.pk}}" class="small_map"></div>
+							
+							
+								{% ifequal ob.flight_time 1 %}
+									<br /><br /><span class="alert">** FLIES MORE OFTEN THAN OTHER BASES **</span>
+								{% endifequal %}
+						
+								{% ifequal ob.flight_time 2 %}
+									<br /><br /><span class="alert">** FLIES LESS OFTEN THAN OTHER BASES **</span>
+								{% endifequal %}
+							
+								{% if ob.routes.all %}
+									<table class="routes_table">
+									{% for r in ob.routes.all %}		{# new row, new route #}
+										<tr>
+										{% if forloop.first %}
+											<td>Routes:</td>
+										{% else %}
+											<td></td>
+										{% endif %}
+									
+										<td>
+										{{r.get_often_display}}
+										<a href="../../airport/{{ ob.base.identifier }}" title="{{ ob.base.city }}, {{ ob.base.sector }}">{{ ob.base.identifier }}</a> &#8594; 
+										{% for b in r.routebase_set.all %}
+										<a href="../../airport/{{ b.base.identifier }}" title="{{ b.base.city }}, {{ b.base.sector }}">{{ b.base.identifier }}</a> &#8594; 
+										{% if forloop.last%}
+										<a href="../../airport/{{ ob.base.identifier }}" title="{{ ob.base.city }}, {{ ob.base.sector }}">{{ ob.base.identifier }}</a>
+										{% endif %}
+										{% endfor%}
+										</td>
+										</tr>
+									{% endfor %}
+									</table>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+				</div>			
+			{% endfor %}
+
+	</div>
+{% endblock %}

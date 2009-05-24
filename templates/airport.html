@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block css %}
+	<style type="text/css">
+		.airport_positions		{background: #DDDDDD; border: 1px solid black; padding: 1em; margin-bottom: 1em}
+	</style>
+{% endblock %}
+
+{% block javascript %}
+
+	<script type="text/javascript">
+		airport_lat = {{a.lat}};
+		airport_long = {{ a.long}};
+	</script>
+
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAtDznsRv92g_KZ0HK9mBD5RS3ydai3R5pSwWU_IHTQxn79Z9awhQaWXs60I2yGfPRz5z-Bs_CTn5lMg" type="text/javascript"></script>
+	<script type="text/javascript" src="/site-media/javascripts/small_map.js"></script>
+	
+	<script type="text/javascript">
+		window.onunload = GUnload;
+		window.onload = initialize_airport;
+	</script>
+
+{% endblock %}
+
+{% block body %}
+<div id="main_container">
+	{% if not_found %}
+		<div id="top_title">Airport Not Found</div>
+	{% else %}
+
+
+		<div id="top_title">{{ a.identifier }} - {{ a.name }}</div>
+		<div>{{a.city}}, {{a.sector}}</div>
+	
+		<div id="small_map" class="small_map"></div>
+	
+		<div class="airport_positions">
+			<big>Positions based at this airport:</big>
+			<br /><br />
+
+			{% for pos in positions_base %}
+				<a href="../../company/{{ pos.company.pk }}">{{ pos.company }}</a> - {{ pos.name }} <br />
+			{% endfor %}
+		
+			{% if not positions_base %}
+				<em>None</em>
+			{% endif %}
+		</div>
+	
+		<div class="airport_positions">
+			<big>Positions that fly to this airport:</big>
+			<br /><br />
+
+			{% for pos in positions_fly %}
+				<a href="../../company/{{ pos.company.pk }}">{{ pos.company }}</a> - {{ pos.name }} <br />
+			{% endfor %}
+		
+			{% if not positions_fly %}
+				<em>None</em>
+			{% endif %}
+		</div>
+	
+	{% endif %}
+</div>
+{% endblock %}
