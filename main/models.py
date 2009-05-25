@@ -64,8 +64,13 @@ class Base(models.Model):
 		return u"%s" % (self.identifier,)
 		
 class Route(models.Model):
-	bases		=	models.LineStringField()
+	bases		=	models.ManyToManyField("Base", through="RouteBase", blank=True)
 	description	=	models.TextField(blank=True)
+
+class RouteBase(models.Model):
+	bases		=	models.ForeignKey("Base")
+	route		=	models.ForeignKey("Route")
+	sequency	=	models.IntegerField()
 		
 	
 class Fleet(models.Model):

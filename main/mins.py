@@ -59,8 +59,10 @@ class Mins(models.Model):
 	type_rating	=	models.ForeignKey("Aircraft", null=True, blank=True)
 	
 	def __unicode__(self):
-		
 		return str(self.bools())
+		
+	class Meta:
+        	verbose_name_plural = "Mins"
 		
 	def instructor_certs(self):
 		instructor = []		
