@@ -86,7 +86,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.gis',
-    'googlemap',
+    'django.contrib.humanize',
     'registration',
 )
 

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {%block title%}{{c.name}}{% endblock %}
 
@@ -8,10 +9,11 @@
 	
 	.operation_box		{border: 3px solid black; margin: 1em; padding: 1em; font-size: medium}
 	
-	.position_box		{border: 1px solid black; margin-bottom: .5em; padding: .5em; font-size: medium; background: lightgreen}
+	.position_box		{border: 1px solid black; margin-bottom: .5em; padding: .5em; font-size: medium}
 	.position_status	{font-size: medium}
 	.position_name		{font-size: x-large; font-weight: bold}
-	.position_salary	{font-size: medium}
+	.payscale		{border-collapse: collapse; font-size: medium; margin-top: 1em}
+	.payscale td		{border: 1px solid gray;  padding: 3px}
 	
 	.position_mins		{margin-top: 1em; border-collapse: collapse}
 	.position_mins td	{border: 0px solid black; padding-right: 1em}
@@ -28,6 +30,11 @@
 	.b2			{background: lightblue}						/* hring */
 	.b3			{background: red}						/* lay offs */
 	.a1			{background: gold; border: 3px double green}			/* advertising */
+	
+	.hm0			{background: clear}
+	.hm1			{background: lightgreen}
+	.hm2			{background: lightgreen}
+	.hm3			{background: lightblue}
 	
 	.plus			{cursor: pointer}
 	
@@ -74,17 +81,32 @@
 			{% for op in c.operation_set.all %}
 			<div class="operation_box">
 				{% for pos in op.positions.all %}
-				<div class="position_box p{{ p.hiring_status }}">
+				<div class="position_box hm{{ pos.hiring_method }}">
 					<div class="position_name">{{pos.name}}</div>
 					
-					{% if pos.salary %}
-						<div class="position_salary">
-							Salary: <em>${{ pos.salary }} {{ pos.get_salary_type_display }}</em>
+					{% if pos.payscaleyear_set %}
+						<table class="payscale">
+							{% for ps in pos.payscaleyear_set.all %}
+								{% if forloop.last and forloop.first %}
+									<tr>
+										<td>${{ ps.amount|floatformat:2 }} <small>{{ ps.get_salary_unit_display }}</small></td>
+									</tr>
+								{% else %}
+									<tr>
+										<td>{{ ps.year|ordinal }} year:</td>
+										<td>${{ ps.amount|floatformat:2 }} <small>{{ ps.get_salary_unit_display }}</small></td>
+									</tr>
+								{% endif %}
+							{% endfor %}
 						
 							{% if not pos.training_provided %}
-								<span class="alert">** INITIAL TRAINING NOT PROVIDED **</span>
+								<tr>
+									<td>
+										<span> class="alert">** INITIAL TRAINING NOT PROVIDED **</span>
+									</td>
+								</tr>
 							{% endif %}
-						</div>
+						</table>
 					{% endif %}
 					
 					<table class="position_mins">
@@ -132,26 +154,18 @@
 				{% endfor %}
 					
 				{% for ob in op.opbase_set.all %}
-					<div class="base b{{ ob.hiring_status }} a{{ ob.advertising }}">
+					<div class="base b{{ ob.hiring_status }}">
 						<div class="base_floats">
 							<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="/site-media/plus.png" alt="+"/>
 						</div>
 						<div class="base_floats">
 							<a title="{{ ob.base.get_location }}" class="base_link" href="../../airport/{{ ob.base.identifier }}">
 								{{ ob.base.display_name }}</a> {{ ob.get_hiring_status_display }}<br />
-								<small>{{ ob.base.city }}, {{ ob.base.sector }}</small>
+								<small>{{ ob.base.municipality }}, {{ ob.base.region }}{% ifnotequal ob.base.country "United States"%}, {{ ob.base.country }}{% endifnotequal %}</small>
 							
 							<div class="base_info" id="info_{{ob.pk}}" >
 								<div id="map_{{ob.pk}}" class="small_map"></div>
 							
-							
-								{% ifequal ob.flight_time 1 %}
-									<br /><br /><span class="alert">** FLIES MORE OFTEN THAN OTHER BASES **</span>
-								{% endifequal %}
-						
-								{% ifequal ob.flight_time 2 %}
-									<br /><br /><span class="alert">** FLIES LESS OFTEN THAN OTHER BASES **</span>
-								{% endifequal %}
 							
 								{% if ob.routes.all %}
 									<table class="routes_table">

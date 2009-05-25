@@ -79,8 +79,8 @@ def overlay(request, zoom, x, y):
 	
 	font = ImageFont.load_default()
 	
-	#im = Image.open("/home/chris/Websites/jobmap/media/myimage.png")
-	im = Image.new("RGB", (256,256), "green")
+	im = Image.open("/home/chris/Websites/jobmap/media/myimage.png")
+	#im = Image.new("RGB", (256,256), "green")
 	
 	#points = Base.objects.filter(lat__gte=str(coords[0])).filter(lat__lte=str(coords[2])).filter(long__gte=str(coords[1])).filter(long__lte=str(coords[3]))
 	#count = points.count()

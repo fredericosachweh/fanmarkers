@@ -34,7 +34,7 @@ class Mins(models.Model):
 	seniority	=	models.BooleanField(default=False)
 	rec		=	models.BooleanField("Internal Recommendation", default=False)
 	
-	SEL_cert_level	=	models.IntegerField(choices=CERT_LEVEL, default=3)
+	SEL_cert_level	=	models.IntegerField(choices=CERT_LEVEL, default=0)
 	MEL_cert_level	=	models.IntegerField(choices=CERT_LEVEL, default=0)	
 	SES_cert_level	=	models.IntegerField(choices=CERT_LEVEL, default=0)
 	MES_cert_level	=	models.IntegerField(choices=CERT_LEVEL, default=0)
