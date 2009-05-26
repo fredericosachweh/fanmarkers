@@ -38,27 +38,27 @@
 		<div id="small_map" class="small_map"></div>
 	
 		<div class="airport_positions">
-			<big>Positions based at this airport:</big>
+			<big>Operations based at this airport:</big>
 			<br /><br />
 
-			{% for pos in positions_base %}
-				<a href="../../company/{{ pos.company.pk }}">{{ pos.company }}</a> - {{ pos.name }} <br />
+			{% for op in ops_base %}
+				<a href="../../company/{{ op.company.pk }}#op{{ op.pk }}">{{ op.company }} - {{ op.all_fleet }}</a><br />
 			{% endfor %}
 		
-			{% if not positions_base %}
+			{% if not ops_base %}
 				<em>None</em>
 			{% endif %}
 		</div>
 	
 		<div class="airport_positions">
-			<big>Positions that fly to this airport:</big>
+			<big>Operations that fly to this airport:</big>
 			<br /><br />
 
-			{% for pos in positions_fly %}
-				<a href="../../company/{{ pos.company.pk }}">{{ pos.company }}</a> - {{ pos.name }} <br />
+			{% for op in ops_fly %}
+				<a href="../../company/{{ op.company.pk }}#op{{ op.pk }}">{{ op.company }} - {{ op.all_fleet }}</a><br />
 			{% endfor %}
 		
-			{% if not positions_fly %}
+			{% if not ops_fly %}
 				<em>None</em>
 			{% endif %}
 		</div>

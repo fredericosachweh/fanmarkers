@@ -1,11 +1,13 @@
 function ready_map(id)
 {
-	initialize_company("map_" + id);
+	initialize_company("map_" + id);				//id = the pk of the current opbase
 	
 	base_coord = bases[id];
 	opbase_routes = data[id];
 	
-	polys = []	
+	route_points = [];			//contains the points of each route; cleared after each route
+	all_points = []			//contains the points of all routes per opbase
+	small_points = [];
 	
 	/////////////////////////////////////////////////////////////////////
 
@@ -15,40 +17,48 @@ function ready_map(id)
 		for(r in opbase_routes)			//each route (each poly line)
 		{route = opbase_routes[r];
 	
-			polys.push(new GLatLng(base_coord[0],base_coord[1]));			//start the route at the base
+			route_points.push(new GLatLng(base_coord[0],base_coord[1]));			//start the route at the base
 		
 			for(p in route)		//each point
 			{point = route[p]
 		
-				polys.push(
-			
-					new GLatLng(point[0],point[1])
-				);
+				route_points.push(new GLatLng(point[0],point[1]));
+				small_points.push(new GLatLng(point[0],point[1]));
+				all_points.push(new GLatLng(point[0],point[1]));
 			}
 		
-			polys.push(new GLatLng(base_coord[0],base_coord[1]));			//end the route at the base
+			route_points.push(new GLatLng(base_coord[0],base_coord[1]));			//end the route at the base
 		
-			var polyline = new GPolyline(polys, "#ff0000", 3);
+			var polyline = new GPolyline(route_points, "#ff0000", 3);
 			maps["map_" + id].addOverlay(polyline);
+			
+			route_points = [];							//clears for the next route
 		}
 	}
 	
-	var marker_pos = new GLatLng(base_coord[0],base_coord[1]);			//a marker for the base
+	var marker = new GMarker(new GLatLng(base_coord[0],base_coord[1]), icon);
+	maps["map_" + id].addOverlay(marker);							//add the marker for the base
 	
-	var marker = new GMarker(marker_pos, icon);
-	maps["map_" + id].addOverlay(marker);					//add the marker to the map
+	all_points.push(new GLatLng(base_coord[0],base_coord[1]));
 	
-	polys.push(marker_pos);
-	
-	var latlngbounds = new GLatLngBounds( );
-
-	for ( var i = 0; i < polys.length; i++ ){
-		latlngbounds.extend( polys[ i ] );
+	for(p in small_points)									//make the small dots on each stop
+	{this_point = small_points[p];
+			
+		var marker = new GMarker(this_point, sicon);
+		maps["map_" + id].addOverlay(marker);
 	}
 	
+	///////// find the map center
+	
+	var latlngbounds = new GLatLngBounds( );
+	for ( var i = 0; i < all_points.length; i++ ){
+		latlngbounds.extend( all_points[ i ] );
+	}
 	maps["map_" + id].setCenter( latlngbounds.getCenter( ), maps["map_" + id].getBoundsZoomLevel( latlngbounds ) );
 	
-	if(polys.length == 1){			//if there are no lines, then set zoom to 6.
+	//////// set the map zoom
+	
+	if(all_points.length == 1){							//if there are no lines, then set zoom to 6.
 		maps["map_" + id].setZoom(6)
 	}
 }

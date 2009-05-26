@@ -56,7 +56,7 @@
 	var data = [];	//array of all the points, indexed by the opbase pk
 	
 {% for op in c.operation_set.all %}{% for ob in op.opbase_set.all %}
-	bases[{{ob.pk}}] = [{{ob.base.lat}},{{ob.base.long}}]; 
+	bases[{{ob.pk}}] = [{{ob.base.location.y}},{{ob.base.location.x}}]; 
 	data[{{ob.pk}}] = {% if ob.routes.all %}{{ob.routes_json}}{%else%}"None";{% endif %}
 {% endfor %}{% endfor %}
 
@@ -78,23 +78,31 @@
 			{% endif %}
 			
 			
+			
 			{% for op in c.operation_set.all %}
 			<div class="operation_box">
+			
+				{# ------------position box--------------------------------- #}
+			
 				{% for pos in op.positions.all %}
 				<div class="position_box hm{{ pos.hiring_method }}">
-					<div class="position_name">{{pos.name}}</div>
+					<div class="position_name">
+						{{pos.name}}
+						{% if forloop.first %}<a name="op{{op.pk}}"></a>{% endif %}
 					
-					{% if pos.payscaleyear_set %}
+					</div>
+					
+					{% if pos.payscaleyear_set.all %}
 						<table class="payscale">
 							{% for ps in pos.payscaleyear_set.all %}
 								{% if forloop.last and forloop.first %}
 									<tr>
-										<td>${{ ps.amount|floatformat:2 }} <small>{{ ps.get_salary_unit_display }}</small></td>
+										<td>${{ ps.amount|floatformat:2|intcomma }} <small>{{ ps.get_salary_unit_display }}</small></td>
 									</tr>
 								{% else %}
 									<tr>
 										<td>{{ ps.year|ordinal }} year:</td>
-										<td>${{ ps.amount|floatformat:2 }} <small>{{ ps.get_salary_unit_display }}</small></td>
+										<td>${{ ps.amount|floatformat:2|intcomma }} <small>{{ ps.get_salary_unit_display }}</small></td>
 									</tr>
 								{% endif %}
 							{% endfor %}
@@ -145,13 +153,15 @@
 					
 				{% endfor %}
 				
-				{# ---------------------------------------------- #}
+				{# ------------fleet below---------------------------------- #}
 					
 				{% for f in op.fleet.all %}
 					<div class="fleet_box">
 						<a href="../../aircraft/{{ f.aircraft.type }}">{{ f.aircraft }}</a> ({{ f.size }})
 					</div>
 				{% endfor %}
+				
+				{# -------------bases below--------------------------------- #}
 					
 				{% for ob in op.opbase_set.all %}
 					<div class="base b{{ ob.hiring_status }}">
@@ -160,7 +170,7 @@
 						</div>
 						<div class="base_floats">
 							<a title="{{ ob.base.get_location }}" class="base_link" href="../../airport/{{ ob.base.identifier }}">
-								{{ ob.base.display_name }}</a> {{ ob.get_hiring_status_display }}<br />
+								{{ ob.base.display_name }}</a> {{ ob.get_hiring_status_display }} ({{ob.workforce_size}})<br />
 								<small>{{ ob.base.municipality }}, {{ ob.base.region }}{% ifnotequal ob.base.country "United States"%}, {{ ob.base.country }}{% endifnotequal %}</small>
 							
 							<div class="base_info" id="info_{{ob.pk}}" >

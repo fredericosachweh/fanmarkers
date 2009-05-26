@@ -22,11 +22,18 @@ class OpBaseInline(admin.TabularInline):
 class PayScaleInline(admin.TabularInline):
 	model = PayscaleYear
 	extra = 10
-
+	
+class RouteBaseInline(admin.TabularInline):
+	model = RouteBase
+	extra = 3
+	raw_id_fields = ('base',)
 ######################################################################
 	
 class CompanyAdmin(admin.ModelAdmin):
 	inlines = (FleetInline, OperationInline, PositionInline)
+	
+class RouteAdmin(admin.ModelAdmin):
+	inlines = (RouteBaseInline,)
 
 class OperationAdmin(admin.ModelAdmin):
 	inlines = (OpBaseInline, )
@@ -45,7 +52,7 @@ class AircraftAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Position,		PositionAdmin)
-admin.site.register(Route, 		admin.GeoModelAdmin)
+admin.site.register(Route, 		RouteAdmin)
 admin.site.register(Base, 		BaseAdmin)
 admin.site.register(OpBase		)
 admin.site.register(Operation, 		OperationAdmin)

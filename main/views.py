@@ -41,31 +41,24 @@ def airport(request, airport_id):
 		return render_to_response('airport.html', c )
 		
 	###################
-	positions_base = []
-	positions_fly = []
+	ops_base = []
+	ops_fly = []
 	
 	op_based = 	Operation.objects.filter(opbase__in=OpBase.objects.filter(base=airport))
 	op_fly =	Operation.objects.filter(opbase__in=OpBase.objects.filter(routes__in=Route.objects.filter(bases=airport)))
 	
 	
 	for op in op_based:
-		for pos in op.positions.all():
-			positions_base.append(pos)
+		ops_base.append(op)
 		
 	for op in op_fly:
-		for pos in op.positions.all():
-			positions_fly.append(pos)
+		ops_fly.append(op)
 	
 	
-	c = RequestContext(request, {'a': airport, "positions_base": positions_base, "positions_fly": positions_fly, "not_found": fail} )
+	c = RequestContext(request, {'a': airport, "ops_base": ops_base, "ops_fly": ops_fly, "not_found": fail} )
 	return render_to_response('airport.html', c )
 	
 def data_import(request):
-	
-	from data import *
-	
-	
-
 	
 	c = RequestContext(request, {'c': company} )
 	return render_to_response('company.html', c )

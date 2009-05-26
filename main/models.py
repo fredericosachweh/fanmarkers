@@ -12,16 +12,12 @@ class Aircraft(models.Model):
 	cat_class	=	models.IntegerField(choices=CAT_CLASSES, default=1)	
 	
 	def __unicode__(self):
-		ret=[]
-		if self.manufacturer:
-			ret.append(self.manufacturer)
+		extra = ""
+	
+		if self.extra:
+			extra = " " + self.extra
 			
-		ret.append(self.type)
-		
-		if self.model:
-			ret.append(self.model)
-			
-		return " - ".join(ret)
+		return u'%s (%s %s%s)' % (self.type, self.manufacturer, self.model, extra)
 		
 class PayscaleYear(models.Model):
 	company		=	models.ForeignKey("Company")
@@ -66,11 +62,25 @@ class Base(models.Model):
 class Route(models.Model):
 	bases		=	models.ManyToManyField("Base", through="RouteBase", blank=True)
 	description	=	models.TextField(blank=True)
+	
+	def __unicode__(self):
+		ret = []
+		for base in self.bases.all():
+			ret.append(str(base.identifier))
+		
+		return "-".join(ret)
+		
+	def json(self):
+		ret = []
+		for base in self.bases.all():
+			ret.append('[' + str(base.location.y) + ', ' + str(base.location.x) + ']')
+		
+		return '[' + ",".join(ret) + ']'
 
 class RouteBase(models.Model):
-	bases		=	models.ForeignKey("Base")
+	base		=	models.ForeignKey("Base")
 	route		=	models.ForeignKey("Route")
-	sequency	=	models.IntegerField()
+	sequence	=	models.IntegerField()
 		
 	
 class Fleet(models.Model):
@@ -127,6 +137,13 @@ class Operation(models.Model):
 			airplane.append(fleet.aircraft.type)
 	
 		return u"%s - %s" % (self.company, ", ".join(airplane))
+		
+	def all_fleet(self):
+		ret = []
+		for fleet in self.fleet.all():
+			ret.append(unicode(fleet.aircraft))
+			
+		return ", ".join(ret)
 
 class OpBase(models.Model):
 	operation	=	models.ForeignKey("Operation")
@@ -138,7 +155,7 @@ class OpBase(models.Model):
 	def routes_json(self):
 		output = []
 		for route in self.routes.all():
-			output.append(route.js_lines())
+			output.append(route.json())
 		return "[" + ",".join(output) + "]"
 	
 	def __unicode__(self):	

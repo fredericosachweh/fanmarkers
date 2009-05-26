@@ -1,8 +1,14 @@
 var icon = new GIcon;
-	icon.image = "http://maps.google.com/mapfiles/kml/pal4/icon49.png";
-	icon.iconSize = new GSize(32, 32);
-	icon.iconAnchor = new GPoint(16, 16);
-	icon.infoWindowAnchor = new GPoint(16, 16);
+	icon.image = "/site-media/icons/yellowdot.png";
+	icon.iconSize = new GSize(16,16);
+	icon.iconAnchor = new GPoint(8,8);
+	icon.infoWindowAnchor = new GPoint(16,16);
+
+var sicon = new GIcon;
+	sicon.image = "/site-media/icons/smallblue.png";
+	sicon.iconSize = new GSize(8,8);
+	sicon.iconAnchor = new GPoint(4,4);
+	sicon.infoWindowAnchor = new GPoint(8,8);
 	
 function initialize_airport()
 {
@@ -52,7 +58,3 @@ function make_line(start_lat, start_long, end_lat, end_long, map_id)
 	
 	maps[map_id].addOverlay(line);
 }
-
-
-
-
