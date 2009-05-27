@@ -144,6 +144,14 @@ class Operation(models.Model):
 			ret.append(unicode(fleet.aircraft))
 			
 		return ", ".join(ret)
+		
+	def all_bases(self):
+		ret = []
+		for base in self.bases.all():
+			ret.append(unicode(base.identifier))
+			
+		return ", ".join(ret)
+
 
 class OpBase(models.Model):
 	operation	=	models.ForeignKey("Operation")

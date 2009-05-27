@@ -7,6 +7,8 @@
 <style type="text/css">
 	.alert			{color: darkred; font-weight: bold}
 	
+	.edit_link img		{border: 0px solid black}
+	
 	.operation_box		{border: 3px solid black; margin: 1em; padding: 1em; font-size: medium}
 	
 	.position_box		{border: 1px solid black; margin-bottom: .5em; padding: .5em; font-size: medium}
@@ -55,6 +57,9 @@
 	var maps = [];	//array of the Gmap2 objects
 	var data = [];	//array of all the points, indexed by the opbase pk
 	
+	var plus_path = '/site-media/icons/plus.png';
+	var minus_path = '/site-media/icons/minus.png';
+	
 {% for op in c.operation_set.all %}{% for ob in op.opbase_set.all %}
 	bases[{{ob.pk}}] = [{{ob.base.location.y}},{{ob.base.location.x}}]; 
 	data[{{ob.pk}}] = {% if ob.routes.all %}{{ob.routes_json}}{%else%}"None";{% endif %}
@@ -71,7 +76,16 @@
 			<h1>Company Does Not Exist</h1>
 		
 		{% endif %}
-			<div id="top_title">{{ c.name }}</div>
+		
+			{# ------------company info--------------------------------- #}
+		
+			<div id="top_title">
+				{% if user.is_authenticated %}
+				<a href="/edit/company/{{c.pk}}" class="edit_link"><img src="/site-media/icons/edit.png" alt="edit" /></a>
+				{% endif %}
+				
+				{{ c.name }}
+			</div>
 			{{ c.call_sign }}<br />
 			{% if c.website %}
 				<a href="{{c.website}}">{{c.website}}</a>
@@ -87,7 +101,9 @@
 				{% for pos in op.positions.all %}
 				<div class="position_box hm{{ pos.hiring_method }}">
 					<div class="position_name">
+						
 						{{pos.name}}
+						
 						{% if forloop.first %}<a name="op{{op.pk}}"></a>{% endif %}
 					
 					</div>
@@ -166,7 +182,7 @@
 				{% for ob in op.opbase_set.all %}
 					<div class="base b{{ ob.hiring_status }}">
 						<div class="base_floats">
-							<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="/site-media/plus.png" alt="+"/>
+							<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="/site-media/icons/plus.png" alt="+"/>
 						</div>
 						<div class="base_floats">
 							<a title="{{ ob.base.get_location }}" class="base_link" href="../../airport/{{ ob.base.identifier }}">

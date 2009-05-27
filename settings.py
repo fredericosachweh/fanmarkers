@@ -1,6 +1,4 @@
-# Django settings for jobmap project.
 import os
-#from googlemap.settings import *
 
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 DEBUG = True

@@ -58,10 +58,33 @@ def airport(request, airport_id):
 	c = RequestContext(request, {'a': airport, "ops_base": ops_base, "ops_fly": ops_fly, "not_found": fail} )
 	return render_to_response('airport.html', c )
 	
-def data_import(request):
+def edit_company(request, company_id):
+	from forms import CompanyForm
 	
-	c = RequestContext(request, {'c': company} )
-	return render_to_response('company.html', c )
+	company = Company.objects.get(pk=company_id)
+	company_form = CompanyForm(instance=company)
+	
+	operations = []
+	
+	for op in company.operation_set.all():
+		operations.append(op)
+	
+	c = RequestContext(request, {'c': company, 'company_form': company_form, 'operations': operations} )
+	return render_to_response('company_edit.html', c )
+	
+def edit_operation(request, op_id):
+	from forms import OpBaseForm
+	
+	op = Operation.objects.get(pk=op_id)
+	
+	opbase_forms = []
+	for opbase in op.opbase_set.all():
+		opbase_forms.append(OpBaseForm(instance=opbase))
+	
+	
+	
+	c = RequestContext(request, {'operation': op, 'opbase_forms': opbase_forms} )
+	return render_to_response('operation_edit.html', c )
 	
 def overlay(request, zoom, x, y):
 	import Image, ImageFont, ImageDraw

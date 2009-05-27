@@ -76,14 +76,14 @@ $(document).ready(function() {
 		
 		$("#info_" + id_num).toggle('fast');
 		
-		if($("#expand_" + id_num).attr('src') == '/site-media/plus.png'){
-			$("#expand_" + id_num).attr('src', '/site-media/minus.png');
+		if($("#expand_" + id_num).attr('src') == plus_path){
+			$("#expand_" + id_num).attr('src', minus_path);
 			if(!plusclick.done[id_num]){
 				ready_map(id_num);
 				plusclick.done[id_num] = true;			//record this function being ran so the map isnt initialized twice
 			}
 		}
-		else	$("#expand_" + id_num).attr('src', '/site-media/plus.png');
+		else	$("#expand_" + id_num).attr('src', plus_path);
 	});	
 
 });		

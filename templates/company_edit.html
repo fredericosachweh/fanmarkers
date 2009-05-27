@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block css %}
+	<style type="text/css">
+		#company_form_table input			{width: 20em}
+		.operation_form_table				{border: 3px double green}
+
+	</style>
+{% endblock %}
+
+{% block javascript %}
+
+
+
+{% endblock %}
+
+{% block body %}
+<div id="main_container">
+
+	<div id="top_title">
+		{{ c.name }}
+	</div>
+
+	<form action="." method="POST">
+	<table id="company_form_table">
+	{{ company_form }}
+	</table>
+	</form>
+	
+	<hr>
+	
+	<h2>Operations:</h2>
+	click to edit
+	<ul>
+	{% for op in operations %}
+		<li><a href="/edit/operation/{{op.pk}}">{{op.all_fleet}} - {{op.all_bases}}</a></li>
+	{% endfor %}
+	<li><a href="/new/operation">**Create new operation**</a></li>
+	</ul>
+
+</div>
+{% endblock %}

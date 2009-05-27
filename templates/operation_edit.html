@@ -19,5 +19,21 @@
 {% block body %}
 <div id="main_container">
 
+	<div id="top_title">
+			{{ operation }}
+		</div>
+
+	{% for opbase in opbase_forms%}
+	
+		<table>
+		{{opbase}}
+		<table>
+	
+	{% endfor %}
+
+
+
+
+
 </div>
 {% endblock %}
