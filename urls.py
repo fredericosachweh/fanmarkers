@@ -11,6 +11,8 @@ company_info = {
 }
 
 urlpatterns = patterns('',
+	
+	('^$', 									"jobmap.main.views.jobmap"),
 
 	(r'^site-media/(?P<path>.*)$',						'django.views.static.serve', {'document_root': '/home/chris/Websites/jobmap/media', 'show_indexes': True}),
 	(r'^admin/doc/',							include('django.contrib.admindocs.urls')),

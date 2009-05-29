@@ -74,44 +74,66 @@ def edit_company(request, company_id):
 	
 def edit_operation(request, op_id):
 	from forms import OpBaseForm
-	
+	from django.forms.models import modelformset_factory
+
+	OpBaseFormSet = modelformset_factory(OpBase, form=OpBaseForm)
 	op = Operation.objects.get(pk=op_id)
-	
-	opbase_forms = []
-	for opbase in op.opbase_set.all():
-		opbase_forms.append(OpBaseForm(instance=opbase))
-	
-	
-	
-	c = RequestContext(request, {'operation': op, 'opbase_forms': opbase_forms} )
+	formset = OpBaseFormSet(queryset=op.opbase_set.all())
+
+	c = RequestContext(request, {'operation': op, 'formset': formset} )
 	return render_to_response('operation_edit.html', c )
 	
 def overlay(request, zoom, x, y):
 	import Image, ImageFont, ImageDraw
-	from globalmaptiles import *
+	from globalmaptiles import GlobalMercator, GlobalGeodetic
+	from django.contrib.gis.geos import Point, LinearRing
+	from jobmap.settings import PROJECT_PATH
+	from django.contrib.gis.gdal.envelope import Envelope
+	import random
+	
+	ox, oy = x,y
 	
 	gmt = GlobalMercator()
-	coords = gmt.TileLatLonBounds(int(x), int(y), int(zoom))
+	gx,gy = gmt.GoogleTile(int(x), int(y), int(zoom))			#convert google XY image blocks to some other kind of image block format
+	W, N, E, S = gmt.TileLatLonBounds(int(gx), int(gy), int(zoom))		#convert this other image block format into lattitude/longitude bound values
+	bounds = Envelope((N + (N * (.01)), W + (W * (.01)), S + (S * (.01)), E + (E * (.01)), ))
+	#bounds = Envelope((N,W,S,E))
+	bases = list(Base.objects.filter(location__intersects=bounds.wkt)[:500])
+	random.shuffle(bases)
 	
+	im = Image.new("RGBA", (256,256))
+	#im =   Image.open(PROJECT_PATH + "/media/myimage.png")
 	font = ImageFont.load_default()
-	
-	im = Image.open("/home/chris/Websites/jobmap/media/myimage.png")
-	#im = Image.new("RGB", (256,256), "green")
-	
-	#points = Base.objects.filter(lat__gte=str(coords[0])).filter(lat__lte=str(coords[2])).filter(long__gte=str(coords[1])).filter(long__lte=str(coords[3]))
-	#count = points.count()
-	
 	draw = ImageDraw.Draw(im)
-	draw.text((10, 10), "lats:     (" + str(coords[0]) + ", " + str(coords[2])+")", font=font)
-	draw.text((10, 30), "longs:    (" + str(coords[1]) + ", " + str(coords[3])+")", font=font)
-	draw.text((10, 50), "zoom:      " + str(zoom), font=font)
-	draw.text((10, 70), "quadtree:  " + str(x) + " # " + str(y), font=font)
-	#draw.text((10, 90), "points:    " + str(count), font=font)
+
+	icon = Image.open(PROJECT_PATH + "/media/icons/small_red.png")
 	
-	if zoom==0 or zoom==1:
-		marker_size = 1
-	if zoom==2 or zoom==3:
-		marker_size = 2
+	if zoom<5:
+		icon = Image.open(PROJECT_PATH + "/media/icons/small_red.png")
+	if zoom>5:
+		icon = Image.open(PROJECT_PATH + "/media/icons/big_red.png")
+	
+	for base in bases:
+		lat = base.location.x
+		lng = base.location.y
+		
+		y = (lng - E) / (W - E) * 256
+		x = (lat - S) / (N - S) * 256
+		
+		im.paste(icon, (256-x, y), icon)
+		
+	#draw.text((10, 30), "W= " + str(W), font=font, fill='black')	
+	#draw.text((10, 50), "N= " + str(N), font=font, fill='black')
+	#draw.text((10, 70), "E= " + str(E), font=font, fill='black')
+	#draw.text((10, 90), "S= " + str(S), font=font, fill='black')
+	#draw.text((10, 130), "l/l:  x=" + str(bases[0].location.x) + " # y=" + str(bases[0].location.y), font=font, fill='black')
+	#draw.text((10, 150), "pix:  x=" + str(x) + " # y=" + str(y), font=font, fill='black')
+	
+	#draw.text((10, 170), "Z= " + str(zoom), font=font, fill='black')
+	#draw.text((10, 190), "BX= " + str(ox) + " BY= " + str(oy), font=font, fill='black')
+	#draw.text((10, 230), "C= " + str(count), font=font, fill='black')
+	
+	
 
 	response = HttpResponse(mimetype="image/png")
 	im.save(response, "PNG")

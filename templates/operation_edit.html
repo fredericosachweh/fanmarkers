@@ -4,7 +4,7 @@
 
 {% block css %}
 	<style type="text/css">
-
+		.opbase_formbox			{border: 2px solid green; margin: 1em; padding: .5em}
 
 
 	</style>
@@ -23,12 +23,21 @@
 			{{ operation }}
 		</div>
 
-	{% for opbase in opbase_forms%}
-	
-		<table>
-		{{opbase}}
-		<table>
-	
+	{% for form in formset.forms %}
+		<div class="opbase_formbox">
+			<form>
+				<table>
+					{{form}}
+				</table>
+				
+				<ul>
+				{% for route in form.instance.routes.all %}
+					<li><a href="/edit/route/{{route.pk}}">{{ route }}</a></li>
+				{% endfor %}
+					<li><a href="/new/route/">**Add route**</a></li>
+				</ul>
+			</form>
+		</div>
 	{% endfor %}
 
 

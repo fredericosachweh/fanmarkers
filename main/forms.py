@@ -10,8 +10,7 @@ class CompanyForm(ModelForm):
 		
 class OpBaseForm(ModelForm):
 	base = forms.CharField()
-	route= RouteField()
-	
+		
 	class Meta:
 		model = OpBase
-		exclude = ('operation')
+		exclude = ('operation', 'routes')
