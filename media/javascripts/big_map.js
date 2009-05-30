@@ -54,4 +54,3 @@ function initialize()
 }
 
 window.onunload = GUnload;
-//window.onload = initialize;

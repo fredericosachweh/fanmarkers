@@ -27,6 +27,6 @@ urlpatterns = patterns('',
 	(r'^edit/company/(?P<company_id>\d{1,4})/$',				"jobmap.main.views.edit_company"),
 	(r'^edit/operation/(?P<op_id>\d{1,4})/$',				"jobmap.main.views.edit_operation"),
 	
-	(r'^overlay_(?P<z>\d{1,2})_(?P<x>\d{1,5})_(?P<y>\d{1,5})_(?P<o>\S{1,5})/$',		"jobmap.main.views.overlay"),
+	(r'^base_overlay_(?P<z>\d{1,2})_(?P<x>\d{1,5})_(?P<y>\d{1,5})_(?P<o>\S{1,5})/$',		"jobmap.main.views.base_overlay"),
 	(r'^airport/(?P<airport_id>\S{1,7})/$',					"jobmap.main.views.airport"),
 )
