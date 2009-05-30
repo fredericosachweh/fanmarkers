@@ -54,6 +54,7 @@ class AircraftAdmin(admin.ModelAdmin):
 admin.site.register(Position,		PositionAdmin)
 admin.site.register(Route, 		RouteAdmin)
 admin.site.register(Base, 		BaseAdmin)
+admin.site.register(RouteBase, 		)
 admin.site.register(OpBase		)
 admin.site.register(Operation, 		OperationAdmin)
 admin.site.register(Fleet,		)

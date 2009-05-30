@@ -1,5 +1,3 @@
-
-
 function initialize()
 {
 	if (GBrowserIsCompatible())
@@ -52,23 +50,8 @@ function initialize()
 		//map.addOverlay(russia);
 		//map.addOverlay(scandanavia);
 		//map.addOverlay(usa);
-	
-		var tileLayerOverlay = new GTileLayerOverlay(
-			new GTileLayer(null, null, null, {
-				tileUrlTemplate: 'http://localhost:8000/overlay_{Z}_{X}_{Y}', 
-				isPng:true,
-				opacity:1.0
-				}
-			)
-		);
-		
-		map.addOverlay(tileLayerOverlay);
-
 	}
 }
-$(document).ready(function() {
-	
-});
 
 window.onunload = GUnload;
-window.onload = initialize;
+//window.onload = initialize;

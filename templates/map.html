@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 
 {% block css %}
-	<style>
-		#container				{height: 100%; overflow: hidden}
-		#map_canvas				{height: 100%; width: 100%; float: left; background: green;    border: 0px solid black}
-		#sidebar				{height: 100%; width: 100%; float: left; background: #FFDDFF;  border: 0px solid black; padding-top: 20px}
+		<style type="text/css">
+			#container				{height: 100%; overflow: hidden}
+			#map_canvas				{height: 100%; width: 100%; float: left; background: green;    border: 0px solid black}
+			#sidebar				{height: 100%; width: 100%; float: left; background: #FFDDFF;  border: 0px solid black; padding-top: 20px}
 		
-		#container table			{height: 100%; width: 100%; border-collapse: collapse}
-		#container table tr			{height: 100%}
-		#container table td:last-child		{width: 20em}
-	</style>
+			#container table			{height: 100%; width: 100%; border-collapse: collapse}
+			#container table tr			{height: 100%}
+			#container table td:last-child		{width: 20em}
+		
+			#submit_sidebar				{margin-left: auto; margin-right: auto}
+		</style>
 {% endblock %}
 
 {% block javascript %}
@@ -19,9 +21,26 @@
 	
 	<script type="text/javascript">
 	
+		var map					//map is in global scope
 	
+		$(document).ready(function() {
+		
+			initialize();
+			
+			var tileLayerOverlay = new GTileLayerOverlay(
+				new GTileLayer(null, null, null, {
+					tileUrlTemplate: 'http://localhost:8000/overlay_{Z}_{X}_{Y}_DMB/', 
+					isPng:true,
+					opacity:1.0
+					}
+				)
+			);
+		
+			map.addOverlay(tileLayerOverlay);
 	
-	
+		});
+		
+		
 	
 	</script>
 	
@@ -31,23 +50,34 @@
 	<div id="container">
 		<table>
 			<tr>
-				<td><div id="map_canvas">6666</div></td>
+				<td><div id="map_canvas"></div></td>
 				<td>
+					<form action="." method="get">
 					<div id="sidebar">
-					Show:<br />	<input type="checkbox">Advertising bases<br />
-							<input type="checkbox">Hiring Bases<br />
-							<input type="checkbox">Not hiring bases<br />
-							<input type="checkbox">Layoff/Furloughing bases<br />
+					Show:<br />	<input type="checkbox" id="c_bases" />Job bases<br />
+							<input type="checkbox" id="c_destinations" />Destination airports<br />
 							
+					<hr />
+							
+					Filter:		<select id="d_filter">
+								<option>Show All</option>
+								<option>Only Advertising</option>
+								<option>Only Hiring</option>
+								<option>Only Lay-off</option>
+								<option>Only no-status</option>
+							</select>
+														
 							<br />
 							
-					By Aircraft:	<select>
+					<hr />
+							
+					By Aircraft:	<select id="d_aircraft">
 								<option>All</option>
 							</select>
 							
 							<br />
 							
-					By Schedule:	<select>
+					By Schedule:	<select id="d_schedule">
 								<option>All</option>
 								<option>On Call</option>
 								<option>Scheduled</option>
@@ -55,17 +85,20 @@
 							
 							<br />
 							
-					Only show jobs I'm qualified for: <input type="checkbox"><br />
+					<hr />
+							
+					Only show jobs I'm qualified for: <input type="checkbox" /><br />
 							
 							<br />
 					
-					Search: <input type="text"><br />
+					Search: <input type="text" /><br />
 					
 					<br />
 					
-					<input type="button" value="Go">
+					<input id="submit_sidebar" type="submit" value="Go" />
 				
 					</div>
+					</form>
 				</td>
 			</tr>
 		</table>

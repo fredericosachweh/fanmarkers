@@ -81,6 +81,9 @@ class RouteBase(models.Model):
 	base		=	models.ForeignKey("Base")
 	route		=	models.ForeignKey("Route")
 	sequence	=	models.IntegerField()
+	
+	def __unicode__(self):
+		return u"%s" % (self.base,)
 		
 	
 class Fleet(models.Model):
