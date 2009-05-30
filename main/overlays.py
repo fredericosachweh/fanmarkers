@@ -20,6 +20,7 @@ class Overlay():
 	
 	icon_url = ""
 	icon_width = 0
+	icon = ""
 	
 	hard_limit = 100
 	
@@ -90,7 +91,7 @@ class Overlay():
 		bounds = self.create_envelope()
 		self.geobases = Base.objects.filter(location__intersects=bounds.wkt)[:self.hard_limit]		#get all bases in the square
 	
-		if(self.icon_width == 0):		#if no icon is set, just return the blank image
+		if(self.icon_width == 0 or self.geobases.count() < 1):		#if no icon is set, of there are no geobases, just return the blank image
 			return self.im
 	
 		self.create_queryset(self.o)

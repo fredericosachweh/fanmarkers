@@ -27,16 +27,26 @@
 		
 			initialize();
 			
-			var tileLayerOverlay = new GTileLayerOverlay(
+			var BaseOverlay = new GTileLayerOverlay(
 				new GTileLayer(null, null, null, {
-					tileUrlTemplate: 'http://localhost:8000/base_overlay_{Z}_{X}_{Y}_DMB/', 
+					tileUrlTemplate: 'http://localhost:8000/overlay_{Z}_{X}_{Y}_BMB/', 
+					isPng:true,
+					opacity:1.0
+					}
+				)
+			);
+			
+			var DestOverlay = new GTileLayerOverlay(
+				new GTileLayer(null, null, null, {
+					tileUrlTemplate: 'http://localhost:8000/overlay_{Z}_{X}_{Y}_DMB/', 
 					isPng:true,
 					opacity:1.0
 					}
 				)
 			);
 		
-			map.addOverlay(tileLayerOverlay);
+			map.addOverlay(BaseOverlay);
+			map.addOverlay(DestOverlay);
 	
 		});
 		

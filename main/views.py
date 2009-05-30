@@ -84,27 +84,37 @@ def edit_operation(request, op_id):
 	c = RequestContext(request, {'operation': op, 'formset': formset} )
 	return render_to_response('operation_edit.html', c )
 	
-def base_overlay(request, z, x, y, o):
+def overlay(request, z, x, y, o):
 	from main.overlays import *
 	
-	ov = AllOverlay(z, x, y, o)
+	if o[0] == "B":
+		ov = BaseOverlay(z, x, y, o)
+		ov.hard_limit = 10000
+		
+		if z<4:		#zoomed out
+			ov.icon(PROJECT_PATH + "/media/icons/map-far/tiny_dblue.png")
 	
-	ov.hard_limit = 10000
+		elif z>=4:		#zoomd in close
+			ov.icon(PROJECT_PATH + "/media/icons/map-close/big_dblue.png")
+			
+	#############################################################	
+		
+	elif o[0]=="D":
+		ov = DestinationOverlay(z, x, y, o)
+		ov.hard_limit = 10000
 	
-	if z<4:		#zoomed out
-		ov.icon(PROJECT_PATH + "/media/icons/map-close/small_dblue.png")
+		if z<4:		#zoomed out
+			ov.icon(PROJECT_PATH + "/media/icons/map-far/tiny_red.png")
 	
-	elif z>=4:		#zoomd in close
-		ov.icon(PROJECT_PATH + "/media/icons/map-close/big_blue.png")	
+		elif z>=4:		#zoomd in close
+			ov.icon(PROJECT_PATH + "/media/icons/map-close/small_red.png")	
 	
 	
 	response = HttpResponse(mimetype="image/png")
 	ov.output().save(response, "PNG")
 	return response
 	
-	
-	
-	
+
 	
 	
 	
