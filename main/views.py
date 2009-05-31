@@ -87,16 +87,17 @@ def edit_operation(request, op_id):
 	
 def overlay(request, z, x, y, o):
 	from main.overlays import *
+	from jobmap.settings import ICONS_DIR
 	
 	if o[0] == "B":
 		ov = BaseOverlay(z, x, y, o)
 		ov.hard_limit = 10000
 		
 		if z<4:		#zoomed out
-			ov.icon(ICONS['out'] + 'dblue.png')
+			ov.icon(ICONS_DIR + '/small/dblue.png')
 	
 		elif z>=4:		#zoomd in close
-			ov.icon(ICONS['in'] + 'dblue.png')
+			ov.icon(ICONS_DIR + '/big/dblue.png')
 			
 	#############################################################	
 		
@@ -105,10 +106,10 @@ def overlay(request, z, x, y, o):
 		ov.hard_limit = 10000
 	
 		if z<4:		#zoomed out
-			ov.icon(ICONS['out'] + 'red.png')
+			ov.icon(ICONS_DIR + '/tiny/red.png')
 	
 		elif z>=4:		#zoomd in close
-			ov.icon(ICONS['in'] + 'red.png')	
+			ov.icon(ICONS_DIR + '/small/red.png')	
 	
 	
 	response = HttpResponse(mimetype="image/png")

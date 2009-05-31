@@ -1,10 +1,14 @@
 from main.models import *
 
-def titles(request):
-	return {'site_name': "FlightJobb.in", 'tagline': "map of jobs", "domain": "flightjobb.in"}
+def google_maps(request):
+	from jobmap.settings import GOOGLE_MAPS_KEY
+	return {'GOOGLE_MAPS_KEY': GOOGLE_MAPS_KEY}
 	
 def top_numbers(request):
 	#hiring =	OpBase.objects.filter(hiring_status=2).count()
 	#advertising =	OpBase.objects.filter(hiring_status=3).count()
-	#return {'advertising': str(advertising), 'hiring': str(hiring)}
-	return {"dd": "SS"}
+	
+	hiring = "??"
+	advertising = "??"
+	
+	return {'advertising': str(advertising), 'hiring': str(hiring)}
