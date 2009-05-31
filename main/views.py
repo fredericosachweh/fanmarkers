@@ -8,7 +8,11 @@ from main.models import *
 
 def jobmap(request):
 	from settings import GOOGLE_MAPS_KEY
-	c = RequestContext(request, {'maps_key': GOOGLE_MAPS_KEY})
+	from django.contrib.sites.models import Site
+
+	Site.objects.clear_cache()
+	domain = Site.objects.get_current().domain
+	c = RequestContext(request, {'maps_key': GOOGLE_MAPS_KEY, 'domain': domain})
 	return render_to_response('map.html', c)
 	
 def company(request, company_id):

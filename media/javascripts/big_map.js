@@ -5,7 +5,7 @@ function initialize()
 		map = new GMap2(document.getElementById("map_canvas"));
 		var polyOptions = {geodesic:true};
 		
-		var topLeft = new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(10,30));		//move the controls down so they are below the menubar
+		var topLeft = new GControlPosition(G_ANCHOR_TOP_LEFT, new GSize(10,30));		//move the controls down so they are below the menu bar
 		var topRight = new GControlPosition(G_ANCHOR_TOP_RIGHT, new GSize(10,30));
 			
 		map.setCenter(new GLatLng(10,0), 2);
@@ -14,7 +14,7 @@ function initialize()
 		map.setMapType(G_PHYSICAL_MAP);
 		
 		map.addControl(new GScaleControl());
-		map.addControl(new GLargeMapControl(), topLeft);
+		map.addControl(new GLargeMapControl3D(), topLeft);
 		map.addControl(new GMapTypeControl(), topRight);
 		map.enableContinuousZoom();
 		map.enableScrollWheelZoom();
