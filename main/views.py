@@ -93,10 +93,10 @@ def overlay(request, z, x, y, o):
 		ov.hard_limit = 10000
 		
 		if z<4:		#zoomed out
-			ov.icon(PROJECT_PATH + "/media/icons/map-far/tiny_dblue.png")
+			ov.icon(ICONS['out'] + 'dblue.png')
 	
 		elif z>=4:		#zoomd in close
-			ov.icon(PROJECT_PATH + "/media/icons/map-close/big_dblue.png")
+			ov.icon(ICONS['in'] + 'dblue.png')
 			
 	#############################################################	
 		
@@ -105,10 +105,10 @@ def overlay(request, z, x, y, o):
 		ov.hard_limit = 10000
 	
 		if z<4:		#zoomed out
-			ov.icon(PROJECT_PATH + "/media/icons/map-far/tiny_red.png")
+			ov.icon(ICONS['out'] + 'red.png')
 	
 		elif z>=4:		#zoomd in close
-			ov.icon(PROJECT_PATH + "/media/icons/map-close/small_red.png")	
+			ov.icon(ICONS['in'] + 'red.png')	
 	
 	
 	response = HttpResponse(mimetype="image/png")

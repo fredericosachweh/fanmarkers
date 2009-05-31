@@ -15,8 +15,8 @@
 		airport_long = {{ a.location.x}};
 	</script>
 
-	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAtDznsRv92g_KZ0HK9mBD5RS3ydai3R5pSwWU_IHTQxn79Z9awhQaWXs60I2yGfPRz5z-Bs_CTn5lMg" type="text/javascript"></script>
-	<script type="text/javascript" src="/site-media/javascripts/small_map.js"></script>
+	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{map_key}}" type="text/javascript"></script>
+	<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/small_map.js"></script>
 	
 	<script type="text/javascript">
 		window.onunload = GUnload;
@@ -42,7 +42,7 @@
 			<br /><br />
 
 			{% for op in ops_base %}
-				<a href="../../company/{{ op.company.pk }}#op{{ op.pk }}">{{ op.company }} - {{ op.all_fleet }}</a><br />
+				<a href="/company/{{ op.company.pk }}#op{{ op.pk }}">{{ op.company }} - {{ op.all_fleet }}</a><br />
 			{% endfor %}
 		
 			{% if not ops_base %}
@@ -55,7 +55,7 @@
 			<br /><br />
 
 			{% for op in ops_fly %}
-				<a href="../../company/{{ op.company.pk }}#op{{ op.pk }}">{{ op.company }} - {{ op.all_fleet }}</a><br />
+				<a href="/company/{{ op.company.pk }}#op{{ op.pk }}">{{ op.company }} - {{ op.all_fleet }}</a><br />
 			{% endfor %}
 		
 			{% if not ops_fly %}

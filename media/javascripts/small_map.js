@@ -1,15 +1,3 @@
-	var icon = new GIcon;
-	icon.image = '/site-media/icons/big_red.png';
-	icon.iconSize = new GSize(16,16);
-	icon.iconAnchor = new GPoint(8,8);
-	icon.infoWindowAnchor = new GPoint(16,16);
-
-	var sicon = new GIcon;
-	sicon.image = "/site-media/icons/small_red.png";
-	sicon.iconSize = new GSize(8,8);
-	sicon.iconAnchor = new GPoint(4,4);
-	sicon.infoWindowAnchor = new GPoint(8,8);
-	
 function initialize_airport()
 {
 	if (GBrowserIsCompatible())
