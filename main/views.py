@@ -7,8 +7,9 @@ from django.template import RequestContext
 from main.models import *
 
 def jobmap(request):
-	c = RequestContext(request)
-	return render_to_response('map.html', c )
+	from settings import GOOGLE_MAPS_KEY
+	c = RequestContext(request, {'maps_key': GOOGLE_MAPS_KEY})
+	return render_to_response('map.html', c)
 	
 def company(request, company_id):
 
