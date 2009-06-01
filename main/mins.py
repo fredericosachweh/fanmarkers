@@ -73,7 +73,7 @@ class Mins(models.Model):
 			):
 		
 			if field[1] > 0:
-				certs.append((field[0], INSTRUCTOR_CERT_LEVEL[field[1]][1]))
+				instructor.append((field[0], INSTRUCTOR_CERT_LEVEL[field[1]][1]))
 				
 		return instructor
 				
