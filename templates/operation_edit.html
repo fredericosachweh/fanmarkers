@@ -5,7 +5,8 @@
 {% block css %}
 	<style type="text/css">
 		.opbase_formbox			{border: 2px solid green; margin: 1em; padding: .5em}
-
+		.opbase_new			{border: 2px solid red;margin-top: 3em; padding: .5em}
+		.opbase_new table td:first-child {text-align: center; font-weight: bold}
 
 	</style>
 {% endblock %}
@@ -21,24 +22,48 @@
 
 	<div id="top_title">
 			{{ operation }}
-		</div>
+	</div>
+	<div>
+	Return to <a href="/edit/company/{{ operation.company.pk }}">{{ operation.company }}</a> (without saving)
+	</div>
+<form action="." method="post">
+<div>
+{% for form in formset.forms %}
+	<div class="opbase_formbox">
+		
+			<table>
+				{{form}}
+			</table>
+		
+		
+		<ul>
+			
+			{% for route in form.instance.routes.all %}
+			<li><a href="/edit/route/{{route.pk}}">{{ route }}</a></li>
+			{% endfor %}
 
-	{% for form in formset.forms %}
-		<div class="opbase_formbox">
-			<form>
-				<table>
-					{{form}}
-				</table>
-				
-				<ul>
-				{% for route in form.instance.routes.all %}
-					<li><a href="/edit/route/{{route.pk}}">{{ route }}</a></li>
-				{% endfor %}
-					<li><a href="/new/route/">**Add route**</a></li>
-				</ul>
-			</form>
-		</div>
-	{% endfor %}
+			<li>**<a href="/new/route/">Add route</a>**</li>
+		</ul>
+		
+	</div>
+{% endfor %}
+	<input type="submit" value="Submit Changes" />
+</div>
+</form>
+
+<form action="." method="post">
+<div class="opbase_formbox opbase_new">
+	<table>
+		<tr>
+			<td colspan="2">New Operation Base</td>
+		</tr>
+		{{ new_form }}
+	</table>
+	
+	<input type="submit" value="Submit New" />
+	
+</div>
+</form>	
 
 
 

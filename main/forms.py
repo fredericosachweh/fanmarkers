@@ -13,4 +13,5 @@ class OpBaseForm(ModelForm):
 		
 	class Meta:
 		model = OpBase
-		exclude = ('operation', 'routes')
+		exclude = ['operation', 'routes']
+		extra = 0

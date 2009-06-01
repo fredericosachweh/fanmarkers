@@ -4,7 +4,11 @@ from main.models import *
 class PositionInline(admin.StackedInline):
 	model = Position
 	extra = 1
-	raw_id_fields = ('hiring_possible','hiring_direct')
+	
+class StatusBaseInline(admin.StackedInline):
+	model = StatusBase
+	extra = 1
+	raw_id_fields = ('base',)
 	
 class FleetInline(admin.TabularInline):
 	model = Fleet
@@ -37,10 +41,16 @@ class RouteAdmin(admin.ModelAdmin):
 
 class OperationAdmin(admin.ModelAdmin):
 	inlines = (OpBaseInline, )
+	#list_display = ('company', 'display_fleet')
 	
+class OpBaseAdmin(admin.ModelAdmin):
+	raw_id_fields = ('base', )
+	
+class HSAdmin(admin.ModelAdmin):	
+	inlines = (StatusBaseInline, )
+
 class PositionAdmin(admin.ModelAdmin):	
-	raw_id_fields = ('hiring_possible','hiring_direct')
-	inlines = (PayScaleInline,)
+	inlines = (PayScaleInline, )
 	
 class BaseAdmin(admin.GeoModelAdmin):
 	list_display = ('identifier', 'name', 'country', 'region', 'municipality',)
@@ -55,9 +65,10 @@ admin.site.register(Position,		PositionAdmin)
 admin.site.register(Route, 		RouteAdmin)
 admin.site.register(Base, 		BaseAdmin)
 admin.site.register(RouteBase, 		)
-admin.site.register(OpBase		)
+admin.site.register(OpBase,		OpBaseAdmin)
 admin.site.register(Operation, 		OperationAdmin)
 admin.site.register(Fleet,		)
 admin.site.register(Aircraft, 		AircraftAdmin)
 admin.site.register(Mins,		)
 admin.site.register(Company, 		CompanyAdmin)
+admin.site.register(HiringStatus, 	HSAdmin)

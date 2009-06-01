@@ -25,13 +25,9 @@ HIRING_STATUS	=	(	(1, "Not Hiring"),
 				(2, "Hiring"),
 				(3, "Lay-offs") )
 				
-BASE_FLYING	=	(	(0, "Same as any other base"),
-				(1, "More than most other bases"),
-				(2, "Less than most ohter bases") )
-				
 HIRING_METHOD	=	(	(0, "Unknown"),
-				(1, "Applications Only"),
-				(2, "Applications and from within"),
+				(1, "Outside Only"),
+				(2, "Anywhere"),
 				(3, "Only from within") )	
 				
 ENGINE_TYPE	=	(	(0, "None"),
@@ -94,7 +90,8 @@ SALARY_TYPE	=	(	(1, "/flight hour"),
 SCHEDULE_TYPE	=	(	(0, "Unknown"),
 				(1, "Scheduled"),
 				(2, "On Call"),
-				(3, "Little bit of both") )
+				(3, "You pick your schedule"),
+				(4, "Little bit of all three") )
 
 BUSINESS_TYPE	=	(	(1, "FBO-type flight school"),
 				(2, "Academy-type flight school"),
@@ -107,6 +104,7 @@ BUSINESS_TYPE	=	(	(1, "FBO-type flight school"),
 				(9, "Aerial Application"),
 				(10, "Aerial Photography"),
 				(11, "Aerial Survey"),
+				(12, "Scenic flights / Aerial Tours"),
 				(12, "Other") )
 				
 CAT_CLASSES	=	(	(1, "Airplane SEL"),
@@ -116,14 +114,5 @@ CAT_CLASSES	=	(	(1, "Airplane SEL"),
 				(5, "Glider"),
 				(6, "Helicopter"),
 				(7, "Airplane Simulator"),
-				(8, "Helicopter Simulator") )
-				
-FLEET_CONDITION=	(	(0, "Unknown"),
-				(1, "Beat the hell up"),
-				(2, "Old but in good condition"),
-				(3, "Fairly good condition"),
-				(4, "New and in great condition") )
-				
-ROUTE_OFTEN	=	(	(1, "Seldom"),
-				(2, "Often"),
-				(3, "Always") )
+				(8, "Helicopter Simulator"),
+				(9, "Other"), )

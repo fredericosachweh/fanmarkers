@@ -81,11 +81,13 @@ def edit_operation(request, op_id):
 	from forms import OpBaseForm
 	from django.forms.models import modelformset_factory
 
-	OpBaseFormSet = modelformset_factory(OpBase, form=OpBaseForm)
+	OpBaseFormSet = modelformset_factory(OpBase, form=OpBaseForm, exclude=['routes'], extra=0)
 	op = Operation.objects.get(pk=op_id)
 	formset = OpBaseFormSet(queryset=op.opbase_set.all())
+	
+	new_form = OpBaseForm()
 
-	c = RequestContext(request, {'operation': op, 'formset': formset} )
+	c = RequestContext(request, {'operation': op, 'formset': formset, 'new_form': new_form} )
 	return render_to_response('operation_edit.html', c )
 	
 def overlay(request, z, x, y, o):

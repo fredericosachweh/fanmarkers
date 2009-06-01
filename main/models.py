@@ -9,8 +9,11 @@ class Aircraft(models.Model):
 	extra		=	models.CharField(max_length=32, blank=True)
 	manufacturer	=	models.CharField(max_length=32)
 	engine_type	=	models.IntegerField(choices=ENGINE_TYPE, default=0)
-	cat_class	=	models.IntegerField(choices=CAT_CLASSES, default=1)	
+	cat_class	=	models.IntegerField(choices=CAT_CLASSES, default=1)
 	
+	class Meta:	
+		ordering = ["manufacturer", "type"]
+		
 	def __unicode__(self):
 		extra = ""
 	
@@ -25,6 +28,9 @@ class PayscaleYear(models.Model):
 	year		=	models.IntegerField()
 	amount		=	models.FloatField()
 	salary_unit	=	models.IntegerField(choices=SALARY_TYPE)
+	
+	def __unicode__(self):
+		return u"%s - %s (%s)" % (self.company.name, self.position.name, self.year)
 	
 class Base(models.Model):
 	identifier	=	models.CharField(max_length=8, primary_key=True)
@@ -43,7 +49,7 @@ class Base(models.Model):
 	objects		=	models.GeoManager()
 	
 	class Meta:
-		ordering = ["city", "sector"]
+		ordering = ["identifier", "sector"]
 		
 	def display_name(self):
 		ret = self.identifier
@@ -117,13 +123,9 @@ class Position(models.Model):
 	job_domain	=	models.IntegerField(choices=JOB_DOMAIN)
 	training_provided=	models.BooleanField(default=True)
 	schedule_type	=	models.IntegerField(choices=SCHEDULE_TYPE)
-	hiring_method	=	models.IntegerField(choices=HIRING_METHOD)	
 	
 	hard_mins	=	models.ForeignKey(Mins, related_name="hard", blank=True, null=True)
 	pref_mins	=	models.ForeignKey(Mins, related_name="pref", blank=True, null=True)
-	
-	hiring_direct	=	models.ManyToManyField("Base", related_name="direct", blank=True)
-	hiring_possible	=	models.ManyToManyField("Base", related_name="possible", blank=True)
 	
 	def __unicode__(self):
 		return u"%s %s" % (self.company.name, self.name)
@@ -133,6 +135,11 @@ class Operation(models.Model):
 	fleet		=	models.ManyToManyField("Fleet", blank=True, null=True)
 	bases		=	models.ManyToManyField("Base", through="OpBase", blank=True)
 	positions	=	models.ManyToManyField("Position", blank=True)
+	
+	display_fleet	=	""
+	
+	#def __init__(self):
+	#	self.display_fleet = self.all_fleet()
 	
 	def __unicode__(self):
 		airplane = []
@@ -157,7 +164,7 @@ class Operation(models.Model):
 
 
 class OpBase(models.Model):
-	operation	=	models.ForeignKey("Operation")
+	operation	=	models.ForeignKey("Operation", editable=False)
 	base		=	models.ForeignKey("Base")
 	
 	workforce_size	=	models.IntegerField(default=1)	
@@ -171,7 +178,24 @@ class OpBase(models.Model):
 	
 	def __unicode__(self):	
 		return u"%s - %s" % (self.base.identifier, self.operation.company.name)
+		
+class HiringStatus(models.Model):
 
+	position	=	models.ForeignKey("Position")
+	
+	status		=	models.IntegerField(choices=HIRING_STATUS, default=0)
+	reference	=	models.TextField(blank=True)
+	date		=	models.DateField()
+	
+	bases		=	models.ManyToManyField("Base", through="StatusBase", blank=True)
+	
+class StatusBase(models.Model):
+	
+	hiring_status	=	models.ForeignKey("HiringStatus")
+	base		=	models.ForeignKey("Base")
+	
+	base_entry	=	models.IntegerField(choices=BASE_ENTRY, default=0)
+	hiring_method	=	models.IntegerField(choices=HIRING_METHOD)
 		
 ######################################################################################################
 
