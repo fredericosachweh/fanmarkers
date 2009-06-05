@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block title %}{% endblock %}
+
+{% block css %}
+	<style type="text/css">
+	.base			{border: 1px solid black; margin-top: 1em; padding: 0.5em; overflow: hidden}
+	.base_link		{font-weight: bold}
+	.base_info		{display: none}
+	.base_floats		{float: left; padding-right: 1em}
+	
+	.plus			{cursor: pointer}
+	
+	.routes_table		{border-collapse: collapse; margin-top: 1em}
+	.routes_table td	{padding-right: 2em}
+
+	.position_box		{border: 1px solid black; margin-bottom: .5em; padding: .5em; font-size: medium}
+	.position_status	{font-size: medium}
+	.position_name		{font-size: x-large; font-weight: bold}
+	.payscale		{border-collapse: collapse; font-size: medium; margin-top: 1em}
+	.payscale td		{border: 1px solid gray;  padding: 3px}
+	
+	.position_mins		{margin-top: 1em; border-collapse: collapse}
+	.position_mins td	{border: 0px solid black; padding-right: 1em}
+	
+	.info_table		{border: 1px solid black; padding: 1em}
+	.info_table td:first-child	{width: 8em}
+	
+	</style>
+{% endblock %}
+
+{% block javascript %}
+
+<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}" type="text/javascript"></script>
+
+<script type="text/javascript">
+	var icon = new GIcon;
+	icon.image = '{{ MEDIA_URL }}/icons/big/red.png';
+	icon.iconSize = new GSize(16,16);
+	icon.iconAnchor = new GPoint(8,8);
+	icon.infoWindowAnchor = new GPoint(16,16);
+
+	var sicon = new GIcon;
+	sicon.image = "{{ MEDIA_URL }}/icons/small/red.png";
+	sicon.iconSize = new GSize(8,8);
+	sicon.iconAnchor = new GPoint(4,4);
+	sicon.infoWindowAnchor = new GPoint(8,8);
+</script>
+
+<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/small_map.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/company_doc_ready.js"></script>
+
+<script type="text/javascript">
+	var bases = [];	//lat longs of all bases, indexed by the pk of that opbase
+	var maps = [];	//array of the Gmap2 objects
+	var data = [];	//array of all the points, indexed by the opbase pk
+	
+	var plus_path = '{{ MEDIA_URL }}/icons/plus.png';
+	var minus_path = '{{ MEDIA_URL }}/icons/minus.png';
+	
+{% for ob in p.opbases %}
+	bases[{{ob.pk}}] = [{{ob.base.location.y}},{{ob.base.location.x}}]; 
+	data[{{ob.pk}}] = {% if ob.routes.all %}{{ob.routes_json}}{%else%}"None";{% endif %}
+{% endfor %}
+</script>
+
+{% endblock %}
+
+{% block body %}
+<div id="main_container">
+
+
+	<h2>
+		<a href="/company/{{p.company.pk}}">{{p.company.name}}</a> > <a href="/edit/position/{{p.pk}}" class="edit_link"><img src="{{ MEDIA_URL }}/icons/edit.png" alt="Click to edit" /></a> {{p.name}}
+	</h2>
+	<table class="info_table">
+	
+	{% if p.payscaleyear_set.all %}
+		<tr>
+			<td>Salary:</td>
+			<td>
+			<strong>
+				{% for ps in p.payscaleyear_set.all %}
+				{% if forloop.last and forloop.first %}
+					${{ ps.amount|floatformat:2|intcomma }} <small>{{ ps.get_salary_unit_display }}</small>		
+				{% else %}
+					{{ ps.year|ordinal }} year: ${{ ps.amount|floatformat:2|intcomma }} <small>{{ ps.get_salary_unit_display }}</small><br />
+				{% endif %}
+				{% endfor %}
+			</strong>
+			</td>
+		</tr>
+		
+	{% else %}
+		<tr><td><em>No known salary information</em></td></tr>
+	{% endif %}
+
+		<tr>
+			<td colspan="2"><hr /></td>
+		</tr>
+		
+		{% if p.hard_mins %}
+			<td>Hard Minimums:</td>
+			<td>
+			<strong>
+				{% for r in p.hard_mins.display_hard %}
+				{{r|join:" "}}<br />
+				{% endfor %}
+			</strong>
+			</td>
+		</tr>
+		{% endif %}
+
+		{% if p.pref_mins %}
+			<tr><td>&nbsp;</td></tr>
+		<tr>
+			<td>Preferred:</td>
+			<td>
+				{% for r in p.pref_mins.display_pref %}
+				{{r|join:" "}}<br />
+				{% endfor %}
+			</td>
+		</tr>
+		{% endif %}
+	
+		{% if not p.pref_mins and not p.hard_mins %}
+			<td colspan="2"><em>No known hiring minimums</em></td></tr>
+		{% endif %}
+	</table>
+
+
+{% for ob in p.opbases %}
+	<div class="base b{{ ob.hiring_status }}">
+		<div class="base_floats">
+			<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="{{ MEDIA_URL }}/icons/plus.png" alt="+"/>
+		</div>
+		<div class="base_floats">
+			<a title="{{ ob.base.get_location }}" class="base_link" href="/airport/{{ ob.base.identifier }}">
+				{{ ob.base.display_name }}</a> {{ ob.get_hiring_status_display }} ({{ob.workforce_size}})<br />
+				<small>{{ ob.base.municipality }}, {{ ob.base.region }}{% ifnotequal ob.base.country "United States"%}, {{ ob.base.country }}{% endifnotequal %}</small>
+			
+			<div class="base_info" id="info_{{ob.pk}}" >
+				<div id="map_{{ob.pk}}" class="small_map"></div>
+			
+			
+				{% if ob.routes.all %}
+					<table class="routes_table">
+					{% for r in ob.routes.all %}		{# new row, new route #}
+						<tr>
+						{% if forloop.first %}
+							<td>Routes:</td>
+						{% else %}
+							<td></td>
+						{% endif %}
+					
+						<td>
+						{{r.get_often_display}}
+						<a href="/airport/{{ ob.base.identifier }}" title="{{ ob.base.city }}, {{ ob.base.sector }}">{{ ob.base.identifier }}</a> &#8594; 
+						{% for b in r.routebase_set.all %}
+						<a href="/airport/{{ b.base.identifier }}" title="{{ b.base.city }}, {{ b.base.sector }}">{{ b.base.identifier }}</a> &#8594; 
+						{% if forloop.last%}
+						<a href="/airport/{{ ob.base.identifier }}" title="{{ ob.base.city }}, {{ ob.base.sector }}">{{ ob.base.identifier }}</a>
+						{% endif %}
+						{% endfor%}
+						</td>
+						</tr>
+					{% endfor %}
+					</table>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endfor %}
+	
+	
+</div>
+{% endblock %}

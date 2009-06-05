@@ -23,14 +23,13 @@ class Aircraft(models.Model):
 		return u'%s (%s %s%s)' % (self.type, self.manufacturer, self.model, extra)
 		
 class PayscaleYear(models.Model):
-	company		=	models.ForeignKey("Company")
 	position	=	models.ForeignKey("Position")
 	year		=	models.IntegerField()
 	amount		=	models.FloatField()
 	salary_unit	=	models.IntegerField(choices=SALARY_TYPE)
 	
 	def __unicode__(self):
-		return u"%s - %s (%s)" % (self.company.name, self.position.name, self.year)
+		return u"%s (%s)" % (self.position.name, self.year)
 	
 class Base(models.Model):
 	identifier	=	models.CharField(max_length=8, primary_key=True)
@@ -129,6 +128,12 @@ class Position(models.Model):
 	
 	def __unicode__(self):
 		return u"%s %s" % (self.company.name, self.name)
+
+	def opbases(self):
+		return self.operation_set.all()[0].opbase_set.all()
+
+	class Meta:	
+		ordering = ["job_domain"]
 		
 class Operation(models.Model):
 	company		=	models.ForeignKey("Company")
@@ -137,9 +142,6 @@ class Operation(models.Model):
 	positions	=	models.ManyToManyField("Position", blank=True)
 	
 	display_fleet	=	""
-	
-	#def __init__(self):
-	#	self.display_fleet = self.all_fleet()
 	
 	def __unicode__(self):
 		airplane = []

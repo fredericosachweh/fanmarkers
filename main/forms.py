@@ -15,3 +15,8 @@ class OpBaseForm(ModelForm):
 		model = OpBase
 		exclude = ['operation', 'routes']
 		extra = 0
+		
+class PositionForm(ModelForm):
+	class Meta:
+		model = Position
+		exclude = ('watchers',)

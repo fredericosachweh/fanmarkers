@@ -102,8 +102,9 @@ class Overlay():
 		return self.im
 		
 	def debug_messages(self):
-		font = ImageFont.load_default()
-		draw = ImageDraw.Draw(self.im)
+		pass
+		#font = ImageFont.load_default()
+		#draw = ImageDraw.Draw(self.im)
 	
 		#draw.text((0, 30), "Hns= " + str(self.S), font=font, fill='black')
 		#draw.text((10, 50), "Hew= " + str(self.E), font=font, fill='black')

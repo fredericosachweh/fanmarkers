@@ -19,13 +19,12 @@
 {% block body %}
 <div id="main_container">
 
-	<div id="top_title">
-		{{ c.name }}
-	</div>
+	<h2>Edit {{ company.name }}</h2>
+	<a href="/company/{{ company.pk }}">View {{ company.name }}</a>
 
 	<form action="." method="POST">
 	<table id="company_form_table">
-	{{ company_form }}
+	{{ form }}
 	</table>
 	<input type="submit" value="Submit"/>
 	</form>
@@ -35,10 +34,10 @@
 	<h2>Operations:</h2>
 	click to edit
 	<ul>
-	{% for op in operations %}
+	{% for op in form.instance.operation_set.all %}
 		<li><a href="/edit/operation/{{op.pk}}">{{op.all_fleet}} - {{op.all_bases}}</a></li>
 	{% endfor %}
-	<li><a href="/new/operation">**Create new operation**</a></li>
+	<li><a href="/new/operation/{{company.pk}}">**Create new operation**</a></li>
 	</ul>
 
 </div>

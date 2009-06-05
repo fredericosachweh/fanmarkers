@@ -11,30 +11,36 @@ def jobmap(request):
 	from django.contrib.sites.models import Site
 
 	domain = Site.objects.get_current().domain
-	c = RequestContext(request, {'maps_key': GOOGLE_MAPS_KEY, 'domain': domain})
-	return render_to_response('map.html', c)
+	c = RequestContext(request,)
+	return render_to_response('view/jobmap.html', c)
 	
-def company(request, company_id):
+def position(request, pk):
 
 	company=""
 	fail=""
 
 	try:
-		company = Company.objects.select_related().get(pk=company_id)
+		position = Position.objects.select_related().get(pk=pk)
+	except:
+		fail=True
+
+	c = RequestContext(request, {'p': position, "not_found": fail} )
+	return render_to_response('view/position.html', c )
+	
+def company(request, pk):
+
+	company=""
+	fail=""
+
+	try:
+		company = Company.objects.select_related().get(pk=pk)
 	except:
 		fail=True
 
 	c = RequestContext(request, {'c': company, "not_found": fail} )
-	return render_to_response('company.html', c )
+	return render_to_response('view/company.html', c )
 	
-def company_master_list(request):
-
-	companies = Company.objects.all()[:50]				# get the first 50 companies
-	
-	c = RequestContext(request, {'companies': companies} )
-	return render_to_response('company_master_list.html', c )
-	
-def airport(request, airport_id):
+def airport(request, pk):
 
 	airport=""
 	fail=""
@@ -43,9 +49,8 @@ def airport(request, airport_id):
 		airport = Base.objects.select_related().get(pk=airport_id)
 	except:
 		c = RequestContext(request, {"not_found": True} )
-		return render_to_response('airport.html', c )
+		return render_to_response('view/airport.html', c )
 		
-	###################
 	ops_base = []
 	ops_fly = []
 	
@@ -61,35 +66,109 @@ def airport(request, airport_id):
 	
 	
 	c = RequestContext(request, {'a': airport, "ops_base": ops_base, "ops_fly": ops_fly, "not_found": fail} )
-	return render_to_response('airport.html', c )
+	return render_to_response('view/airport.html', c )
 	
-def edit_company(request, company_id):
+
+#############################################################################################################################
+#############################################################################################################################
+#############################################################################################################################
+	
+def edit_company(request, pk):
 	from forms import CompanyForm
 	
-	company = Company.objects.get(pk=company_id)
+	company = Company.objects.get(pk=pk)
 	company_form = CompanyForm(instance=company)
 	
-	operations = []
+	c = RequestContext(request, {'company': company, 'form': company_form} )
+	return render_to_response('edit/edit_company.html', c )
 	
-	for op in company.operation_set.all():
-		operations.append(op)
-	
-	c = RequestContext(request, {'c': company, 'company_form': company_form, 'operations': operations} )
-	return render_to_response('company_edit.html', c )
-	
-def edit_operation(request, op_id):
+def edit_operation(request, pk):
 	from forms import OpBaseForm
 	from django.forms.models import modelformset_factory
 
 	OpBaseFormSet = modelformset_factory(OpBase, form=OpBaseForm, exclude=['routes'], extra=0)
-	op = Operation.objects.get(pk=op_id)
+	op = Operation.objects.get(pk=pk)
 	formset = OpBaseFormSet(queryset=op.opbase_set.all())
 	
 	new_form = OpBaseForm()
 
 	c = RequestContext(request, {'operation': op, 'formset': formset, 'new_form': new_form} )
-	return render_to_response('operation_edit.html', c )
+	return render_to_response('edit/edit_operation.html', c )
 	
+def edit_position(request, pk):
+	from forms import PositionForm
+
+	p = Position.objects.get(pk=pk)
+	form = PositionForm(instance=p)
+	
+	new_form = PositionForm()
+	
+	c = RequestContext(request, {'position': p, 'form': form, 'new_form': new_form} )
+	return render_to_response('edit/edit_position.html', c )
+	
+def edit_route(request, pk):
+	from forms import PositionForm
+
+	r = Route.objects.get(pk=pk)
+	form = RouteForm(instance=p)
+	
+	new_form = RouteForm()
+	
+	c = RequestContext(request, {'route': r, 'form': form, 'new_form': new_form} )
+	return render_to_response('edit/edit_route.html', c )
+
+#############################################################################################################################
+#############################################################################################################################
+#############################################################################################################################
+	
+def new_company(request):
+	from forms import CompanyForm
+	
+	form = CompanyForm()
+		
+	c = RequestContext(request, {'c': company, 'form': form} )
+	return render_to_response('new/new_company.html', c )
+	
+def new_operation(request, pk):
+	from forms import OpBaseForm
+	from django.forms.models import modelformset_factory
+
+	OpBaseFormSet = modelformset_factory(OpBase, form=OpBaseForm, exclude=['routes'], extra=0)
+	op = Operation.objects.get(pk=pk)
+	formset = OpBaseFormSet(queryset=op.opbase_set.all())
+	
+	new_form = OpBaseForm()
+
+	c = RequestContext(request, {'operation': op, 'formset': formset, 'new_form': new_form} )
+	return render_to_response('new/new_operation.html', c )
+	
+def new_position(request, pk):
+	from forms import PositionForm
+
+	p = Position.objects.get(pk=pk)
+	form = PositionForm(instance=p)
+	
+	new_form = PositionForm()
+	
+	c = RequestContext(request, {'position': p, 'form': form, 'new_form': new_form} )
+	return render_to_response('new/new_position.html', c )
+	
+def new_route(request, pk):
+	from forms import PositionForm
+
+	p = Position.objects.get(pk=pk)
+	form = PositionForm(instance=p)
+	
+	new_form = PositionForm()
+	
+	c = RequestContext(request, {'position': p, 'form': form, 'new_form': new_form} )
+	return render_to_response('new/new_route.html', c )
+
+
+#############################################################################################################################
+#############################################################################################################################
+#############################################################################################################################
+
 def overlay(request, z, x, y, o):
 	from main.overlays import *
 	from jobmap.settings import ICONS_DIR

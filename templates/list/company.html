@@ -29,9 +29,10 @@
 	</div>
 	{% for c in company_list %}
 	
-		<a href="../../company/{{c.pk}}">{{ c.name }}</a><br/>
+		<a href="/company/{{c.pk}}">{{ c.name }}</a><br/>
 	
 	{% endfor %}
+		**<a href="/new/company">Create New Company</a>**
 
 
 </div>

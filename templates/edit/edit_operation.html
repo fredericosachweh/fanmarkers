@@ -20,29 +20,25 @@
 {% block body %}
 <div id="main_container">
 
-	<div id="top_title">
-			{{ operation }}
-	</div>
-	<div>
-	Return to <a href="/edit/company/{{ operation.company.pk }}">{{ operation.company }}</a> (without saving)
-	</div>
+	<h2>
+	<a href="/edit/company/{{ operation.company.pk }}">Edit {{ operation.company }}</a> >> Edit {{operation.all_fleet}} Operation
+	</h2>
 <form action="." method="post">
 <div>
 {% for form in formset.forms %}
 	<div class="opbase_formbox">
+		<table>
+			{{form}}
+		</table>
 		
-			<table>
-				{{form}}
-			</table>
-		
+		<input type="checkbox" name="opbase{{operation.pk}}"/>Delete
 		
 		<ul>
-			
 			{% for route in form.instance.routes.all %}
-			<li><a href="/edit/route/{{route.pk}}">{{ route }}</a></li>
+			<li><a href="/edit/route/{{route.pk}}">{{form.instance.base.identifier}}-{{ route }}-{{form.instance.base.identifier}}</a></li>
 			{% endfor %}
 
-			<li>**<a href="/new/route/">Add route</a>**</li>
+			<li>**<a href="/new/route/{{form.instance.pk}}">Add route</a>**</li>
 		</ul>
 		
 	</div>
