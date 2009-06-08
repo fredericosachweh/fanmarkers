@@ -1,12 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}{% endblock %}
+{% block title %}Edit {{ company.name }}{% endblock %}
 
 {% block css %}
 	<style type="text/css">
-		#company_form_table input			{width: 20em}
-		.operation_form_table				{border: 3px double green}
-
+		
 	</style>
 {% endblock %}
 
@@ -19,17 +17,46 @@
 {% block body %}
 <div id="main_container">
 
-	<h2>Edit {{ company.name }}</h2>
-	<a href="/company/{{ company.pk }}">View {{ company.name }}</a>
+	<h1>Edit {{ company.name }}</h1>
+	<a href="/company/{{ form.instance.pk }}">View {{ company.name }}</a>
 
 	<form action="." method="POST">
-	<table id="company_form_table">
-	{{ form }}
-	</table>
-	<input type="submit" value="Submit"/>
+	<div>
+		<table class="formtable">
+			{{form}}
+		
+			<tr>
+				<td colspan="2">
+					<input type="submit" value="Submit">
+				</td>
+			</tr>
+		</table>
+	</div>
 	</form>
 	
-	<hr>
+	<hr />
+	
+	<h2>Fleets:</h2>
+	click to edit
+	<ul>
+	{% for fleet in form.instance.fleet_set.all %}
+		<li><a href="/edit/fleet/{{fleet.pk}}">{{fleet.aircraft}} - {{fleet.size}}</a></li>
+	{% endfor %}
+	<li>**<a href="/new/fleet/{{company.pk}}">Create new fleet</a>**</li>
+	</ul>
+	
+	<hr />
+	
+	<h2>Positions:</h2>
+	click to edit
+	<ul>
+	{% for pos in form.instance.position_set.all %}
+		<li><a href="/edit/position/{{pos.pk}}">{{pos.name}}</a></li>
+	{% endfor %}
+	<li>**<a href="/new/position/{{company.pk}}">Create new position</a>**</li>
+	</ul>
+	
+	<hr />
 	
 	<h2>Operations:</h2>
 	click to edit
@@ -37,8 +64,13 @@
 	{% for op in form.instance.operation_set.all %}
 		<li><a href="/edit/operation/{{op.pk}}">{{op.all_fleet}} - {{op.all_bases}}</a></li>
 	{% endfor %}
-	<li><a href="/new/operation/{{company.pk}}">**Create new operation**</a></li>
+	<li>**<a href="/new/operation/{{company.pk}}">Create new operation</a>**</li>
 	</ul>
+	
+	
+	
+		
+	
 
 </div>
 {% endblock %}

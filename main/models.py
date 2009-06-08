@@ -16,14 +16,20 @@ class Aircraft(models.Model):
 		
 	def __unicode__(self):
 		extra = ""
+		name = ""
 	
 		if self.extra:
 			extra = " " + self.extra
 			
-		return u'%s (%s %s%s)' % (self.type, self.manufacturer, self.model, extra)
+		if not self.model and self.type:
+			name = self.type
+		else:
+			name = self.model
+			
+		return u'%s %s%s' % (self.manufacturer, name, extra)
 		
 class PayscaleYear(models.Model):
-	position	=	models.ForeignKey("Position")
+	position	=	models.ForeignKey("Position", editable=False)
 	year		=	models.IntegerField()
 	amount		=	models.FloatField()
 	salary_unit	=	models.IntegerField(choices=SALARY_TYPE)
@@ -92,13 +98,13 @@ class RouteBase(models.Model):
 		
 	
 class Fleet(models.Model):
-	company		=	models.ForeignKey("Company")
+	company		=	models.ForeignKey("Company", editable=False)
 	aircraft	=	models.ForeignKey("Aircraft")
 	size		=	models.IntegerField(default=1)
 	description	=	models.TextField(blank=True)
-	
+
 	def __unicode__(self):
-		return u"%s - %s" % (self.aircraft.model, self.company.name)
+		return u"%s" % (self.aircraft, )
 
 class Company(models.Model):
 	name		=	models.CharField(max_length=64)
@@ -106,7 +112,7 @@ class Company(models.Model):
 	website		=	models.URLField(blank=True)
 	description	=	models.TextField(blank=True)
 	type		=	models.IntegerField(choices=BUSINESS_TYPE, default=0)
-	watchers	=	models.ManyToManyField(User, blank=True)
+	watchers	=	models.ManyToManyField(User, blank=True, editable=False)
 	
 	def __unicode__(self):
 		return u"%s" % (self.name)
@@ -115,7 +121,7 @@ class Company(models.Model):
         	verbose_name_plural = "Companies"
         	
 class Position(models.Model):
-	company		=	models.ForeignKey("Company")
+	company		=	models.ForeignKey("Company", editable=False)
 	name		=	models.CharField(max_length=32, blank=True)
 	description	=	models.TextField(blank=True)
 	
@@ -127,7 +133,7 @@ class Position(models.Model):
 	pref_mins	=	models.ForeignKey(Mins, related_name="pref", blank=True, null=True)
 	
 	def __unicode__(self):
-		return u"%s %s" % (self.company.name, self.name)
+		return u"%s" % (self.name,)
 
 	def opbases(self):
 		return self.operation_set.all()[0].opbase_set.all()
@@ -136,7 +142,7 @@ class Position(models.Model):
 		ordering = ["job_domain"]
 		
 class Operation(models.Model):
-	company		=	models.ForeignKey("Company")
+	company		=	models.ForeignKey("Company", editable=False)
 	fleet		=	models.ManyToManyField("Fleet", blank=True, null=True)
 	bases		=	models.ManyToManyField("Base", through="OpBase", blank=True)
 	positions	=	models.ManyToManyField("Position", blank=True)

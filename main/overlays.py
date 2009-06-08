@@ -93,7 +93,7 @@ class Overlay():
 	
 		if(self.icon_width == 0 or self.geobases.count() < 1):		#if no icon is set, of there are no geobases, just return the blank image
 			return self.im
-	
+				
 		self.create_queryset(self.o)
 		bases = self.shuffle()
 		self.put_points(bases)

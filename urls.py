@@ -32,9 +32,11 @@ urlpatterns = patterns('',
 	(r'^edit/operation/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_operation"),
 	(r'^edit/position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_position"),
 	(r'^edit/route/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_route"),
+	(r'^edit/fleet/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_fleet"),
 	
 	(r'^new/company/$',						"jobmap.main.views.new_company"),
 	(r'^new/operation/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_operation"),
 	(r'^new/position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_position"),
 	(r'^new/route/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_route"),
+	(r'^new/fleet/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_fleet"),
 )

@@ -41,11 +41,11 @@
 {% block body %}
 <div id="main_container">
 	{% if not_found %}
-		<div id="top_title">Airport Not Found</div>
+		<h1>Airport Not Found</h1>
 	{% else %}
 
 
-		<div id="top_title">{{ a.identifier }} - {{ a.name }}</div>
+		<h1>{{ a.identifier }} - {{ a.name }}</h1>
 		<div>{%if a.municipality%}{{a.municipality}}, {%endif%}{{a.region}}, {{a.country}}</div>
 	
 		<div id="small_map" class="small_map"></div>

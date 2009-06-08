@@ -1,11 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}{% endblock %}
+{% block title %}Add New Company{% endblock %}
 
 {% block css %}
 	<style type="text/css">
-
-
 
 	</style>
 {% endblock %}
@@ -18,6 +16,20 @@
 
 {% block body %}
 <div id="main_container">
+	<h1>New Company</h1>
 
+	<form action="." method="POST">
+	<div>
+		<table class="formtable">
+			{{form}}
+		
+			<tr>
+				<td colspan="2">
+					<input type="submit" value="Submit">
+				</td>
+			</tr>
+		</table>
+	</div>
+	</form>
 </div>
 {% endblock %}
