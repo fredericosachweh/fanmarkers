@@ -2,67 +2,70 @@ from django.db import models
 from constants import *
 
 def merge(*input):
-    return reduce(list.__add__, input, list())
-
-class Mins(models.Model):
+	return reduce(list.__add__, input, list())
+    
+class CatClassMins(models.Model):
 	total		=	models.IntegerField(default=0)
 	night		=	models.IntegerField(default=0)
 	instrument	=	models.IntegerField(default=0)
-	dual_given	=	models.IntegerField(default=0)
-	pic		=	models.IntegerField(default=0)
+	dual_given	=	models.IntegerField("Instruction Given", default=0)
 	xc		=	models.IntegerField("Cross Country", default=0)
 	
+	pic		=	models.IntegerField("PIC", default=0)
+	t_pic		=	models.IntegerField("Turbine-PIC", default=0)
+	jet_pic		=	models.IntegerField("Jet-PIC", default=0)
+	
+	cert_level	=	models.IntegerField("Certificate Level", choices=CERT_LEVEL, default=0)
+	
 	jet		=	models.IntegerField(default=0)
-	ses		=	models.IntegerField(default=0)
-	mes		=	models.IntegerField(default=0)
-	heli		=	models.IntegerField(default=0)
 	turbine		=	models.IntegerField(default=0)
-	multi		=	models.IntegerField(default=0)
-	on_type		=	models.IntegerField(default=0)
 	
-	m_pic		=	models.IntegerField(default=0)
-	t_pic		=	models.IntegerField(default=0)
-	s_pic		=	models.IntegerField(default=0)
-	h_pic		=	models.IntegerField(default=0)
-	mes_pic		=	models.IntegerField(default=0)
-	mt_pic		=	models.IntegerField(default=0)
-	jet_pic		=	models.IntegerField(default=0)
+	instructor	=	models.BooleanField(default=False)
+	instrument_instructor=	models.BooleanField(default=False)
 	
-	years_exp	=	models.DecimalField(max_digits=4, decimal_places=2, default=0)
-	years_company	=	models.DecimalField(max_digits=4, decimal_places=2, default=0)
+class Mins(models.Model):
+	airplane_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="airplane")	
+	
+	SEL_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="sel")
+	MEL_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="mel")
+	SES_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="ses")
+	MES_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="mes")
+	
+	heli_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="heli")
+	glider_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="glider")
+	any_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="any")
+	
+	sim_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="sim")
+	
+	#############################################################
+	
+	on_type		=	models.IntegerField("On Type", default=0)
+
+	years_exp	=	models.DecimalField("Years of Experience", max_digits=4, decimal_places=2, default=0)
+	years_company	=	models.DecimalField("Years with this Company", max_digits=4, decimal_places=2, default=0)
 	
 	seniority	=	models.BooleanField(default=False)
 	rec		=	models.BooleanField("Internal Recommendation", default=False)
 	
-	SEL_cert_level	=	models.IntegerField(choices=CERT_LEVEL, default=0)
-	MEL_cert_level	=	models.IntegerField(choices=CERT_LEVEL, default=0)	
-	SES_cert_level	=	models.IntegerField(choices=CERT_LEVEL, default=0)
-	MES_cert_level	=	models.IntegerField(choices=CERT_LEVEL, default=0)
-	
-	heli_cert_level	=	models.IntegerField(choices=CERT_LEVEL, default=0)
-	glider_cert_level=	models.IntegerField(choices=CERT_LEVEL, default=0)
-	
-	air_cfi_cert_level=	models.IntegerField(choices=INSTRUCTOR_CERT_LEVEL, default=0)
-	heli_cfi_cert_level=	models.IntegerField(choices=INSTRUCTOR_CERT_LEVEL, default=0)
-	glider_cfi_cert_level=	models.IntegerField(choices=INSTRUCTOR_CERT_LEVEL, default=0)
-	
-	mech_cert_level	=	models.IntegerField(choices=MECH_CERT_LEVEL, default=0)
+	mech_cert_level	=	models.IntegerField("Mechanic", choices=MECH_CERT_LEVEL, default=0)
 	
 	cert_agency	=	models.IntegerField(choices=CERT_AGENCY, default=0)
-	atp_mins	=	models.BooleanField(default=False)
-	i135_mins	=	models.BooleanField(default=False)
-	v135_mins	=	models.BooleanField(default=False)
-	tailwheel	=	models.BooleanField(default=False)
+	atp_mins	=	models.BooleanField("ATP Minimums", default=False)
+	i135_mins	=	models.BooleanField("Part 135 IFR Minimums", default=False)
+	v135_mins	=	models.BooleanField("Part 135 VFR Minimums", default=False)
+	tailwheel	=	models.BooleanField("Tailwheel Endorsement", default=False)
 	
-	degree		=	models.IntegerField(choices=DEGREE, default=0)
+	degree		=	models.IntegerField("Education", choices=DEGREE, default=0)
 	
 	type_rating	=	models.ForeignKey("Aircraft", null=True, blank=True)
 	
-	def __unicode__(self):
-		return str(self.bools())
-		
+	#############################################################
+	
 	class Meta:
         	verbose_name_plural = "Mins"
+		
+	def __unicode__(self):
+		return "mins"
 		
 	def instructor_certs(self):
 		instructor = []		

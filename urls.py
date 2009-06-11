@@ -33,6 +33,7 @@ urlpatterns = patterns('',
 	(r'^edit/position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_position"),
 	(r'^edit/route/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_route"),
 	(r'^edit/fleet/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_fleet"),
+	(r'^edit/hiring_status/(?P<pk>\d{1,4})/$',			"jobmap.main.views.edit_hiring_status"),
 	
 	(r'^new/company/$',						"jobmap.main.views.new_company"),
 	(r'^new/operation/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_operation"),

@@ -1,7 +1,7 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 from constants import *
-from mins import Mins
+from mins import Mins, CatClassMins
 
 class Aircraft(models.Model):
 	model		=	models.CharField(max_length=64, blank=True)

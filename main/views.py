@@ -5,28 +5,42 @@ from django.http import *
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from main.models import *
+from annoying.decorators import render_to
+from annoying.functions import get_object_or_None
 
+
+@render_to('view/jobmap.html')
 def jobmap(request):
-	from settings import GOOGLE_MAPS_KEY
 	from django.contrib.sites.models import Site
 
 	domain = Site.objects.get_current().domain
-	c = RequestContext(request,{"domain": domain})
-	return render_to_response('view/jobmap.html', c)
 	
+	#usa_jobs = OpBase.objects.filter(
+
+	return {"domain": domain}
+
+###############################################################################	
+	
+@render_to('view/position.html')		
 def position(request, pk):
 
-	company=""
-	fail=""
-
-	try:
-		position = Position.objects.select_related().get(pk=pk)
-	except:
-		fail=True
-
-	c = RequestContext(request, {'p': position, "not_found": fail} )
-	return render_to_response('view/position.html', c )
+	position = get_object_or_None(Position, pk=pk)
 	
+	if not position:
+		fail = True
+	else:
+		fail = False
+
+	#try:
+	#	position = Position.objects.select_related().get(pk=pk)
+	#except:
+	#	fail=True
+
+	return {'p': position, "not_found": fail}
+
+###############################################################################	
+	
+@render_to('view/company.html')		
 def company(request, pk):
 
 	company=""
@@ -36,40 +50,42 @@ def company(request, pk):
 		company = Company.objects.select_related().get(pk=pk)
 	except:
 		fail=True
+		
+	return {'c': company, "not_found": fail}
 
-	c = RequestContext(request, {'c': company, "not_found": fail} )
-	return render_to_response('view/company.html', c )
+###############################################################################	
 	
+@render_to('view/airport.html')
 def airport(request, pk):
 
-	try:
-		airport = Base.objects.select_related().get(pk=pk)
-	except:
-		c = RequestContext(request, {"not_found": True} )
-		return render_to_response('view/airport.html', c )
-		
-	ops_base = []
-	ops_fly = []
+	airport = get_object_or_None(Base, pk=pk)
 	
-	op_based = 	Operation.objects.filter(opbase__in=OpBase.objects.filter(base=airport))
+	if not airport:
+		fail = True
+	else:
+		fail = False
+		
+	#ops_base = []
+	#ops_fly = []
+	
+	op_base = 	Operation.objects.filter(opbase__in=OpBase.objects.filter(base=airport))
 	op_fly =	Operation.objects.filter(opbase__in=OpBase.objects.filter(routes__in=Route.objects.filter(bases=airport)))
 	
 	
-	for op in op_based:
-		ops_base.append(op)
+	#for op in op_base:
+	#	ops_base.append(op)
 		
-	for op in op_fly:
-		ops_fly.append(op)
+	#for op in op_fly:
+	#	ops_fly.append(op)
 	
-	
-	c = RequestContext(request, {'a': airport, "ops_base": ops_base, "ops_fly": ops_fly, "not_found": False} )
-	return render_to_response('view/airport.html', c )
+	return {'a': airport, "ops_base": op_base, "ops_fly": op_fly}
 	
 
 #############################################################################################################################
 #############################################################################################################################
 #############################################################################################################################
-	
+
+@render_to('edit/edit_company.html')	
 def edit_company(request, pk):
 	from forms import CompanyForm
 	
@@ -83,33 +99,62 @@ def edit_company(request, pk):
 	else:
 		form = CompanyForm(instance=company)
 	
-	c = RequestContext(request, {'company': company, 'form': form} )
-	return render_to_response('edit/edit_company.html', c )
+	return {'company': company, 'form': form}
 	
+###############################################################################		
+
+@render_to('edit/edit_operation.html')		
 def edit_operation(request, pk):
 	from forms import OpBaseForm
 	from django.forms.models import modelformset_factory
 
-	OpBaseFormSet = modelformset_factory(OpBase, form=OpBaseForm, exclude=['routes'], extra=0)
 	op = Operation.objects.get(pk=pk)
+	OpBaseFormSet = modelformset_factory(OpBase, form=OpBaseForm, exclude=['routes'], extra=0)
+	
+	if request.method == "POST":
+		formset = OpBaseFormSet(request.POST)
+	
+	
 	formset = OpBaseFormSet(queryset=op.opbase_set.all())
 	
 	new_form = OpBaseForm()
 
-	c = RequestContext(request, {'operation': op, 'formset': formset, 'new_form': new_form} )
-	return render_to_response('edit/edit_operation.html', c )
-	
+	return {'operation': op, 'formset': formset, 'new_form': new_form}
+
+###############################################################################	
+
+@render_to('edit/edit_position.html')		
 def edit_position(request, pk):
-	from forms import PositionForm
+	from forms import PositionForm, MinsForm
 
 	p = Position.objects.get(pk=pk)
-	form = PositionForm(instance=p)
 	
-	new_form = PositionForm()
+	if request.method == "POST":
+		form = PositionForm(request.POST, instance=p)
+		
+		if not form.errors:
+			form.save()
+	else:
+		try:
+			base_mins = p.base_mins
+			
+		except:
+			base_mins = Mins()
+			
+		try:
+			pref_mins = p.pref_mins
+		except:
+			pref_mins = Mins()
 	
-	c = RequestContext(request, {'position': p, 'form': form, 'new_form': new_form} )
-	return render_to_response('edit/edit_position.html', c )
-	
+		pos_form = PositionForm(instance=p)
+		hard_form= MinsForm(instance=base_mins)
+		pref_form= MinsForm(instance=pref_mins)
+		
+	return {'position': p, 'pos_form': pos_form, "hard_form": hard_form, "pref_form": pref_form}
+
+###############################################################################	
+
+@render_to('edit/edit_route.html')		
 def edit_route(request, pk):
 	from forms import PositionForm
 
@@ -118,9 +163,11 @@ def edit_route(request, pk):
 	
 	new_form = RouteForm()
 	
-	c = RequestContext(request, {'route': r, 'form': form, 'new_form': new_form} )
-	return render_to_response('edit/edit_route.html', c )
+	return {'route': r, 'form': form, 'new_form': new_form}
+	
+###############################################################################	
 
+@render_to('edit/edit_fleet.html')	
 def edit_fleet(request, pk):
 	from forms import PositionForm
 
@@ -129,13 +176,25 @@ def edit_fleet(request, pk):
 	
 	new_form = RouteForm()
 	
-	c = RequestContext(request, {'route': r, 'form': form, 'new_form': new_form} )
-	return render_to_response('edit/edit_route.html', c )
+	return {'route': r, 'form': form, 'new_form': new_form}
+	
+###############################################################################	
+
+@render_to('edit/edit_hiring_status.html')		
+def edit_hiring_status(request, pk):
+	from forms import HiringStatusForm
+
+	company = Company.objects.get(pk=pk)
+	
+	form = HiringStatusForm()
+	
+	return {"form": form}
 
 #############################################################################################################################
 #############################################################################################################################
 #############################################################################################################################
-	
+
+@render_to('new/new_company.html')	
 def new_company(request):
 	from forms import CompanyForm
 	
@@ -145,12 +204,14 @@ def new_company(request):
 		if not form.errors:
 			form.save()
 			return HttpResponseRedirect('/edit/company/' + str(form.instance.id)) # Redirect after POST
-	else:
-		form = CompanyForm()
-		
-	c = RequestContext(request, {'company': company, 'form': form} )
-	return render_to_response('new/new_company.html', c )
 	
+	form = CompanyForm()
+		
+	return {'company': company, 'form': form}
+	
+###############################################################################	
+
+@render_to('new/new_operation.html')	
 def new_operation(request, pk):
 	from forms import OperationForm
 	
@@ -163,12 +224,14 @@ def new_operation(request, pk):
 		if not form.errors:
 			form.save()
 			return HttpResponseRedirect('/edit/company/' + str(pk)) # Redirect after POST
-	else:
-		form = OperationForm(instance=Operation(company=company))
-		
-	c = RequestContext(request, {'company': company, 'form': form} )
-	return render_to_response('new/new_operation.html', c )
 	
+	form = OperationForm(instance=Operation(company=company))
+		
+	return {'company': company, 'form': form}
+	
+###############################################################################	
+
+@render_to('new/new_position.html')	
 def new_position(request, pk):
 	from forms import PositionForm
 
@@ -181,23 +244,14 @@ def new_position(request, pk):
 		if form.is_valid():
 			form.save()
 			return HttpResponseRedirect('/edit/company/' + str(pk)) # Redirect after POST
-	else:
-		form = PositionForm()
+			
+	form = PositionForm()
 	
-	c = RequestContext(request, {'company': company, 'form': form} )
-	return render_to_response('new/new_position.html', c )
+	return {'company': company, 'form': form}
 	
-def new_route(request, pk):
-	from forms import PositionForm
+###############################################################################	
 
-	p = Position.objects.get(pk=pk)
-	form = PositionForm(instance=p)
-	
-	new_form = PositionForm()
-	
-	c = RequestContext(request, {'position': p, 'form': form, 'new_form': new_form} )
-	return render_to_response('new/new_route.html', c )
-	
+@render_to('new/new_fleet.html')	
 def new_fleet(request, pk):
 	from forms import FleetForm
 
@@ -210,14 +264,30 @@ def new_fleet(request, pk):
 		if form.is_valid():
 			form.save()
 			return HttpResponseRedirect('/edit/company/' + str(pk)) # Redirect after POST
-		else:
-			return HttpResponseRedirect('/error/') # Redirect after POST
 	
-	else:
-		form = FleetForm()
+	form = FleetForm()
 		
-	c = RequestContext(request, {'company': company, 'form': form} )
-	return render_to_response('new/new_fleet.html', c )
+	return {'company': company, 'form': form}
+	
+###############################################################################	
+
+@render_to('new/new_route.html')
+def new_route(request, pk):
+	from forms import RouteForm
+
+	ob = OpBase.objects.get(pk=pk)
+	
+	if request.method == "POST":
+		route = Route(opbase=ob)
+		form = RouteForm(request.POST, instance=route)
+	
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect('/edit/operation/' + str(pk)) # Redirect after POST
+	
+	form = RouteForm()
+	
+	return {'opbase': ob, 'form': form}
 
 
 #############################################################################################################################

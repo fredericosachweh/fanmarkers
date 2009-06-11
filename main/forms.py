@@ -19,7 +19,7 @@ class OpBaseForm(ModelForm):
 class PositionForm(ModelForm):
 	class Meta:
 		model = Position
-		exclude = ('watchers','company')
+		exclude = ('watchers','hard_mins', 'pref_mins')
 		
 class FleetForm(ModelForm):
 	class Meta:
@@ -49,6 +49,15 @@ class OperationForm(ModelForm):
 			fleet = Fleet.objects.filter(company=op.company.pk)
 			self.fields['fleet'].queryset = fleet
 			self.fields['positions'].queryset = pos
+			
+class HiringStatusForm(ModelForm):
+	class Meta:
+		model = HiringStatus
+		exclude = ('company','bases')
 		
-		
+class MinsForm(ModelForm):
+	class Meta:
+		model = Mins
+		exclude = ('company',)
+				
 

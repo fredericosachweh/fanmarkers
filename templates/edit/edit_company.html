@@ -19,18 +19,17 @@
 
 	<h1>Edit {{ company.name }}</h1>
 	<a href="/company/{{ form.instance.pk }}">View {{ company.name }}</a>
+	
+	<hr />
 
 	<form action="." method="POST">
 	<div>
 		<table class="formtable">
 			{{form}}
-		
-			<tr>
-				<td colspan="2">
-					<input type="submit" value="Submit">
-				</td>
-			</tr>
 		</table>
+		
+		<input type="submit" value="Submit">
+		
 	</div>
 	</form>
 	
@@ -65,12 +64,7 @@
 		<li><a href="/edit/operation/{{op.pk}}">{{op.all_fleet}} - {{op.all_bases}}</a></li>
 	{% endfor %}
 	<li>**<a href="/new/operation/{{company.pk}}">Create new operation</a>**</li>
-	</ul>
-	
-	
-	
-		
-	
+	</ul>	
 
 </div>
 {% endblock %}

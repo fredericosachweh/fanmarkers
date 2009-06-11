@@ -11,7 +11,7 @@
 			#container table			{height: 100%; width: 100%; border-collapse: collapse}
 			#container table tr			{height: 100%}
 			td					{height: 100%}
-			#container table td:last-child		{width: 20em}
+			#container table td:last-child		{width: 20em; height: 100%}
 		
 			#submit_sidebar				{margin-left: auto; margin-right: auto}
 		</style>
@@ -19,42 +19,61 @@
 
 {% block javascript %}
 
-	<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}" type="text/javascript"></script>
-	<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/big_map.js"></script>
+	
+
+	<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}" type="text/javascript">
+	</script>
 	
 	<script type="text/javascript">
-	
-		var map					//map is in global scope
-	
-		$(document).ready(function() {
+		var map;		//map is in global scope
+		var domain = "{{ domain }}";
 		
-			initialize();
-			
-			var BaseOverlay = new GTileLayerOverlay(
-				new GTileLayer(null, null, null, {
-					tileUrlTemplate: 'http://{{ domain }}/overlay_{Z}_{X}_{Y}_BMB/', 
-					isPng:true,
-					opacity:1.0
+		var CustomGetTileUrl = function(point,zoom){
+		
+			if ( zoom == 9 )	// Only retrieve a tile from the script on zoom level 9
+				return "overlay_" + zoom + "_" + point.x + "_" + point.y + "_" + sessionKey;
+			else
+				return "overlay_0_0_0" ;	// Otherwise, use a blank image
+		}
+
+		
+		var DestOverlay = new GTileLayerOverlay(
+			new GTileLayer(null, null, null, {
+				tileUrlTemplate: 'http://' + domain + '/overlay_{Z}_{X}_{Y}_DMB/', 
+				isPng:true,
+				opacity:1.0
+				}
+			)
+		);
+		
+		var BaseOverlay = new GTileLayerOverlay(
+			new GTileLayer(null, null, null, {
+				tileUrlTemplate: 'http://' + domain + '/overlay_{Z}_{X}_{Y}_BMB/', 
+				isPng:true,
+				opacity:1.0
 					}
-				)
-			);
-			
-			var DestOverlay = new GTileLayerOverlay(
-				new GTileLayer(null, null, null, {
-					tileUrlTemplate: 'http://{{ domain }}/overlay_{Z}_{X}_{Y}_DMB/', 
-					isPng:true,
-					opacity:1.0
-					}
-				)
-			);
+			)
+		);
 		
-			map.addOverlay(BaseOverlay);
-			map.addOverlay(DestOverlay);
+		africa = new GGeoXml('http://other.flightlogg.in/kml/africa.kmz');
+		americas = new GGeoXml('http://other.flightlogg.in/kml/americas.kmz');
+		carribean = new GGeoXml('http://other.flightlogg.in/kml/carribean.kmz');
+		alaska = new GGeoXml('http://other.flightlogg.in/kml/alaska.kmz');
+		austrailia = new GGeoXml('http://other.flightlogg.in/kml/austrailia.kmz');
+		canada = new GGeoXml('http://other.flightlogg.in/kml/canada.kmz');
+		china = new GGeoXml('http://other.flightlogg.in/kml/china.kmz');
+		eastern_europe = new GGeoXml('http://other.flightlogg.in/kml/eastern_europe.kmz');
+		europe = new GGeoXml('http://other.flightlogg.in/kml/europe.kmz');
+		india = new GGeoXml('http://other.flightlogg.in/kml/india.kmz');
+		indonesia = new GGeoXml('http://other.flightlogg.in/kml/indonesia.kmz');
+		middle_east = new GGeoXml('http://other.flightlogg.in/kml/middle_east.kmz');
+		russia = new GGeoXml('http://other.flightlogg.in/kml/russia.kmz');
+		scandanavia = new GGeoXml('http://other.flightlogg.in/kml/scandanavia.kmz');
+		usa = new GGeoXml('http://other.flightlogg.in/kml/usa.kmz');
+		
+	</script>
 	
-		});
-		
-		
-	
+	<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/big_map.js">
 	</script>
 	
 {% endblock %}

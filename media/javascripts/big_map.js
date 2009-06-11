@@ -19,38 +19,50 @@ function initialize()
 		map.enableContinuousZoom();
 		map.enableScrollWheelZoom();
 		
-		africa = new GGeoXml('http://other.flightlogg.in/kml/africa.kmz');
-		americas = new GGeoXml('http://other.flightlogg.in/kml/americas.kmz');
-		carribean = new GGeoXml('http://other.flightlogg.in/kml/carribean.kmz');
-		alaska = new GGeoXml('http://other.flightlogg.in/kml/alaska.kmz');
-		austrailia = new GGeoXml('http://other.flightlogg.in/kml/austrailia.kmz');
-		canada = new GGeoXml('http://other.flightlogg.in/kml/canada.kmz');
-		china = new GGeoXml('http://other.flightlogg.in/kml/china.kmz');
-		eastern_europe = new GGeoXml('http://other.flightlogg.in/kml/eastern_europe.kmz');
-		europe = new GGeoXml('http://other.flightlogg.in/kml/europe.kmz');
-		india = new GGeoXml('http://other.flightlogg.in/kml/india.kmz');
-		indonesia = new GGeoXml('http://other.flightlogg.in/kml/indonesia.kmz');
-		middle_east = new GGeoXml('http://other.flightlogg.in/kml/middle_east.kmz');
-		russia = new GGeoXml('http://other.flightlogg.in/kml/russia.kmz');
-		scandanavia = new GGeoXml('http://other.flightlogg.in/kml/scandanavia.kmz');
-		usa = new GGeoXml('http://other.flightlogg.in/kml/usa.kmz');
+		figure_zoom();
 		
-		//map.addOverlay(africa);
-		//map.addOverlay(americas);
-		//map.addOverlay(carribean);
-		//map.addOverlay(alaska);
-		//map.addOverlay(austrailia);
-		//map.addOverlay(canada);
-		//map.addOverlay(china);
-		//map.addOverlay(eastern_europe);
-		//map.addOverlay(europe);
-		//map.addOverlay(india);
-		//map.addOverlay(indonesia);
-		//map.addOverlay(middle_east);
-		//map.addOverlay(russia);
-		//map.addOverlay(scandanavia);
-		//map.addOverlay(usa);
+		GEvent.addListener(map, "zoomend", figure_zoom);
 	}
 }
+
+function figure_zoom()
+{	
+	map.clearOverlays();
+	
+	if(map.getZoom() < 3 ){
+		map.addOverlay(africa);
+		map.addOverlay(americas);
+		map.addOverlay(carribean);
+		map.addOverlay(alaska);
+		map.addOverlay(austrailia);
+		map.addOverlay(canada);
+		map.addOverlay(china);
+		map.addOverlay(eastern_europe);
+		map.addOverlay(europe);
+		map.addOverlay(india);
+		map.addOverlay(indonesia);
+		map.addOverlay(middle_east);
+		map.addOverlay(russia);
+		map.addOverlay(scandanavia);
+		map.addOverlay(usa);
+	}
+
+	else if(map.getZoom() < 6){
+		map.addOverlay(BaseOverlay);
+		map.addOverlay(DestOverlay);
+	}
+	else{
+	
+		map.addOverlay(MarkerLayer);
+	
+	}
+	
+}
+
+$(document).ready(function() {
+		
+	initialize();
+	
+});
 
 window.onunload = GUnload;
