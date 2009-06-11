@@ -6,13 +6,28 @@
 	<style type="text/css">
 		fieldset input[type="text"]		{width: 3em; margin-right: 2em}
 		legend					{font-size: large}
-
+		.plus					{cursor: pointer}
+		
+		#base_mins				{display: none}
+		#pref_mins				{display: none}
 
 	</style>
 {% endblock %}
 
 {% block javascript %}
-
+	<script type="text/javascript">
+	$(document).ready(function() {
+	
+		$("#base_toggle").click(function(){
+			$("#base_mins").toggle();
+		});
+		
+		$("#pref_toggle").click(function(){
+			$("#pref_mins").toggle();
+		});
+		
+	});	
+	</script>
 
 
 {% endblock %}
@@ -34,7 +49,32 @@
 		
 		<hr />
 		
+		<div id="base_toggle">
+			<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="{{ MEDIA_URL }}/icons/plus.png" alt="+"/>
+			<strong>Hard Minimums</strong>
+		</div>
+		{% with base_form as form %}
+		<div id="base_mins">
 		{% include "mins.html" %}
+		</div>
+		{% endwith %}
+		
+		<div id="pref_toggle">
+			<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="{{ MEDIA_URL }}/icons/plus.png" alt="+"/>
+			<strong>Preffered Minimums</strong>
+		</div>
+		
+		{% with pref_form as form %}
+		<div id="pref_mins">
+		{% include "mins.html" %}
+		</div>
+		{% endwith %}
+		
+		<hr />
+		
+		<table>
+		{{salary_form}}
+		</table>
 		
 	</form>
 

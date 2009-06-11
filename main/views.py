@@ -60,25 +60,12 @@ def airport(request, pk):
 
 	airport = get_object_or_None(Base, pk=pk)
 	
-	if not airport:
-		fail = True
-	else:
-		fail = False
-		
-	#ops_base = []
-	#ops_fly = []
+	fail = not airport	#if airport = None, then fail = true.
 	
-	op_base = 	Operation.objects.filter(opbase__in=OpBase.objects.filter(base=airport))
-	op_fly =	Operation.objects.filter(opbase__in=OpBase.objects.filter(routes__in=Route.objects.filter(bases=airport)))
+	ops_base = 	Operation.objects.filter(opbase__in=OpBase.objects.filter(base=airport))	#ops where this airport is a base
+	ops_fly =	Operation.objects.filter(opbase__in=OpBase.objects.filter(routes__in=Route.objects.filter(bases=airport)))	#ops where this airport is part of a route
 	
-	
-	#for op in op_base:
-	#	ops_base.append(op)
-		
-	#for op in op_fly:
-	#	ops_fly.append(op)
-	
-	return {'a': airport, "ops_base": op_base, "ops_fly": op_fly}
+	return {'a': airport, "ops_base": ops_base, "ops_fly": ops_fly, "not_found": fail}
 	
 
 #############################################################################################################################
@@ -105,21 +92,32 @@ def edit_company(request, pk):
 
 @render_to('edit/edit_operation.html')		
 def edit_operation(request, pk):
-	from forms import OpBaseForm
+	from forms import OpBaseForm, OperationForm
 	from django.forms.models import modelformset_factory
 
 	op = Operation.objects.get(pk=pk)
-	OpBaseFormSet = modelformset_factory(OpBase, form=OpBaseForm, exclude=['routes'], extra=0)
+	
+	OpBaseFormSet = modelformset_factory(OpBase, form=OpBaseForm, exclude=['routes', 'operation', ], extra=3, can_delete=True, )
 	
 	if request.method == "POST":
-		formset = OpBaseFormSet(request.POST)
-	
-	
-	formset = OpBaseFormSet(queryset=op.opbase_set.all())
-	
-	new_form = OpBaseForm()
+		opform  = OperationForm(request.POST, instance=op)
+		formset = OpBaseFormSet(request.POST, queryset=op.opbase_set.all())
+		
+		if formset.is_valid() and opform.is_valid():
+			opform.save()
+			
+			instances = formset.save(commit=False)
+			
+			for instance in instances:
+				instance.operation = op
+				instance.save()
+			
+			return HttpResponseRedirect('/edit/company/' + str(op.company.pk)) # Redirect after POST
+	else:
+		formset = OpBaseFormSet(queryset=op.opbase_set.all())
+		opform  = OperationForm(instance=op)
 
-	return {'operation': op, 'formset': formset, 'new_form': new_form}
+	return {'operation': op, 'opform': opform, 'formset': formset}
 
 ###############################################################################	
 
@@ -130,25 +128,15 @@ def edit_position(request, pk):
 	p = Position.objects.get(pk=pk)
 	
 	if request.method == "POST":
-		form = PositionForm(request.POST, instance=p)
+		pos_form = PositionForm(request.POST, instance=p)
 		
-		if not form.errors:
-			form.save()
+		if not pos_form.errors:
+			pos_form.save()
 	else:
-		try:
-			base_mins = p.base_mins
-			
-		except:
-			base_mins = Mins()
-			
-		try:
-			pref_mins = p.pref_mins
-		except:
-			pref_mins = Mins()
-	
-		pos_form = PositionForm(instance=p)
-		hard_form= MinsForm(instance=base_mins)
-		pref_form= MinsForm(instance=pref_mins)
+		hard_form = MinsForm()
+		pref_form = ""
+		pos_form = PositionForm()
+		
 		
 	return {'position': p, 'pos_form': pos_form, "hard_form": hard_form, "pref_form": pref_form}
 

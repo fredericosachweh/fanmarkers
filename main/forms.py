@@ -9,22 +9,28 @@ class CompanyForm(ModelForm):
 		exclude = ('watchers',)
 		
 class OpBaseForm(ModelForm):
-	base = forms.CharField()
-		
+
+	base = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.TextInput)
+	
 	class Meta:
 		model = OpBase
-		exclude = ['operation', 'routes']
+		exclude = ['routes', ]
 		extra = 0
 		
 class PositionForm(ModelForm):
 	class Meta:
 		model = Position
-		exclude = ('watchers','hard_mins', 'pref_mins')
+		exclude = ('watchers','hard_mins', 'pref_mins', 'company')
 		
 class FleetForm(ModelForm):
 	class Meta:
 		model = Fleet
 		exclude = ('watchers', 'company')
+		
+class RouteForm(ModelForm):
+	class Meta:
+		model = Route
+		exclude = ('opbase', )
 		
 class OperationForm(ModelForm):
 	positions = forms.ModelMultipleChoiceField(

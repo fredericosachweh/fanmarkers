@@ -20,11 +20,11 @@
 	<h1>Edit {{ company.name }}</h1>
 	<a href="/company/{{ form.instance.pk }}">View {{ company.name }}</a>
 	
-	<hr />
+	<hr class="top_divider" />
 
 	<form action="." method="POST">
 	<div>
-		<table class="formtable">
+		<table>
 			{{form}}
 		</table>
 		
@@ -36,34 +36,31 @@
 	<hr />
 	
 	<h2>Fleets:</h2>
-	click to edit
+	<a href="/new/fleet/{{company.pk}}">Create New Fleet</a>
 	<ul>
 	{% for fleet in form.instance.fleet_set.all %}
 		<li><a href="/edit/fleet/{{fleet.pk}}">{{fleet.aircraft}} - {{fleet.size}}</a></li>
 	{% endfor %}
-	<li>**<a href="/new/fleet/{{company.pk}}">Create new fleet</a>**</li>
 	</ul>
 	
 	<hr />
 	
 	<h2>Positions:</h2>
-	click to edit
+	<a href="/new/position/{{company.pk}}">Create New Position</a>
 	<ul>
 	{% for pos in form.instance.position_set.all %}
 		<li><a href="/edit/position/{{pos.pk}}">{{pos.name}}</a></li>
 	{% endfor %}
-	<li>**<a href="/new/position/{{company.pk}}">Create new position</a>**</li>
 	</ul>
 	
 	<hr />
 	
 	<h2>Operations:</h2>
-	click to edit
+	<a href="/new/operation/{{company.pk}}">Create New Operation</a>
 	<ul>
 	{% for op in form.instance.operation_set.all %}
 		<li><a href="/edit/operation/{{op.pk}}">{{op.all_fleet}} - {{op.all_bases}}</a></li>
 	{% endfor %}
-	<li>**<a href="/new/operation/{{company.pk}}">Create new operation</a>**</li>
 	</ul>	
 
 </div>

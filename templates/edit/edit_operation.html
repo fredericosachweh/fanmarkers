@@ -4,9 +4,10 @@
 
 {% block css %}
 	<style type="text/css">
-		.opbase_formbox			{border: 2px solid green; margin: 1em; padding: .5em}
-		.opbase_new			{border: 2px solid red;margin-top: 3em; padding: .5em}
-		.opbase_new table td:first-child {text-align: center; font-weight: bold}
+		.opbase_formbox				{border: 0px solid green; margin: 1em; padding: .5em}
+		.opbase_new				{border: 2px solid red;margin-top: 3em; padding: .5em}
+		.opbase_new table td:first-child	{text-align: center; font-weight: bold}
+		input[type="text"]					{width: 4em}
 
 	</style>
 {% endblock %}
@@ -23,16 +24,34 @@
 	<h2>
 	<a href="/edit/company/{{ operation.company.pk }}">Edit {{ operation.company }}</a> >> Edit {{operation.all_fleet}} Operation
 	</h2>
-<form action="." method="post">
-<div>
-{% for form in formset.forms %}
-	<div class="opbase_formbox">
+	
+	<hr class="top_divider" />
+	
+	<form action="." method="post">
+	<div>
+		{{ formset.management_form }}
+	</div>
+	<div>
 		<table>
+			{{opform}}
+		</table>
+	</div>
+
+
+	<div>
+{% for form in formset.forms %}
+
+	{% ifchanged form.instance.pk %}
+	<hr/>
+	{% endifchanged %}
+	
+	<div class="opbase_formbox">
+		
+		<table summary="{{form.instance.base.identifier}}">
 			{{form}}
 		</table>
 		
-		<input type="checkbox" name="opbase{{operation.pk}}"/>Delete
-		
+		{% if form.instance.pk %}
 		<ul>
 			{% for route in form.instance.routes.all %}
 			<li><a href="/edit/route/{{route.pk}}">{{form.instance.base.identifier}}-{{ route }}-{{form.instance.base.identifier}}</a></li>
@@ -40,26 +59,13 @@
 
 			<li>**<a href="/new/route/{{form.instance.pk}}">Add route</a>**</li>
 		</ul>
-		
+		{% endif %}
+	
 	</div>
 {% endfor %}
 	<input type="submit" value="Submit Changes" />
 </div>
 </form>
-
-<form action="." method="post">
-<div class="opbase_formbox opbase_new">
-	<table>
-		<tr>
-			<td colspan="2">New Operation Base</td>
-		</tr>
-		{{ new_form }}
-	</table>
-	
-	<input type="submit" value="Submit New" />
-	
-</div>
-</form>	
 
 
 

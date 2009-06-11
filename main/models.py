@@ -29,7 +29,7 @@ class Aircraft(models.Model):
 		return u'%s %s%s' % (self.manufacturer, name, extra)
 		
 class PayscaleYear(models.Model):
-	position	=	models.ForeignKey("Position", editable=False)
+	position	=	models.ForeignKey("Position", )
 	year		=	models.IntegerField()
 	amount		=	models.FloatField()
 	salary_unit	=	models.IntegerField(choices=SALARY_TYPE)
@@ -98,7 +98,7 @@ class RouteBase(models.Model):
 		
 	
 class Fleet(models.Model):
-	company		=	models.ForeignKey("Company", editable=False)
+	company		=	models.ForeignKey("Company", )
 	aircraft	=	models.ForeignKey("Aircraft")
 	size		=	models.IntegerField(default=1)
 	description	=	models.TextField(blank=True)
@@ -112,7 +112,7 @@ class Company(models.Model):
 	website		=	models.URLField(blank=True)
 	description	=	models.TextField(blank=True)
 	type		=	models.IntegerField(choices=BUSINESS_TYPE, default=0)
-	watchers	=	models.ManyToManyField(User, blank=True, editable=False)
+	watchers	=	models.ManyToManyField(User, blank=True, )
 	
 	def __unicode__(self):
 		return u"%s" % (self.name)
@@ -121,7 +121,7 @@ class Company(models.Model):
         	verbose_name_plural = "Companies"
         	
 class Position(models.Model):
-	company		=	models.ForeignKey("Company", editable=False)
+	company		=	models.ForeignKey("Company", )
 	name		=	models.CharField(max_length=32, blank=True)
 	description	=	models.TextField(blank=True)
 	
@@ -136,18 +136,19 @@ class Position(models.Model):
 		return u"%s" % (self.name,)
 
 	def opbases(self):
-		return self.operation_set.all()[0].opbase_set.all()
+		try:
+			return self.operation_set.all()[0].opbase_set.all()
+		except:
+			return None
 
 	class Meta:	
-		ordering = ["job_domain"]
+		ordering = ["job_domain"]		#so captain shows up first when displayed on the page
 		
 class Operation(models.Model):
-	company		=	models.ForeignKey("Company", editable=False)
+	company		=	models.ForeignKey("Company",)
 	fleet		=	models.ManyToManyField("Fleet", blank=True, null=True)
 	bases		=	models.ManyToManyField("Base", through="OpBase", blank=True)
 	positions	=	models.ManyToManyField("Position", blank=True)
-	
-	display_fleet	=	""
 	
 	def __unicode__(self):
 		airplane = []
@@ -172,10 +173,10 @@ class Operation(models.Model):
 
 
 class OpBase(models.Model):
-	operation	=	models.ForeignKey("Operation", editable=False)
+	operation	=	models.ForeignKey("Operation", )
 	base		=	models.ForeignKey("Base")
 	
-	workforce_size	=	models.IntegerField(default=1)	
+	workforce_size	=	models.IntegerField(default=0)	
 	routes		=	models.ManyToManyField("Route", related_name="route_opbase", blank=True)
 	
 	def routes_json(self):
