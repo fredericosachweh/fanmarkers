@@ -43,6 +43,12 @@
 		<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/jquery/jquery-1.3.2.min.js"></script>		
 		<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/jquery/jquery-ui-1.7.1.custom.min.js"></script>
 		
+		<script type="text/javascript">
+		
+			var plus_path = '{{ MEDIA_URL }}/icons/plus.png';
+			var minus_path = '{{ MEDIA_URL }}/icons/minus.png';
+		
+		</script>
 		
 		{% block javascript %}
 		{% endblock %}
@@ -66,7 +72,7 @@
 	<body>
 		<div id="fullscreen">
 			<div id="top_bar">
-				<table>
+				<table summary="navigation bar">
 					<tr>
 						<td><a href="/jobmap">Map</a></td>
 						<td><a href="/company">Company Profiles</a></td>

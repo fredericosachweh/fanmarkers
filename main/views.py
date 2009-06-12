@@ -62,10 +62,24 @@ def airport(request, pk):
 	
 	fail = not airport	#if airport = None, then fail = true.
 	
-	ops_base = 	Operation.objects.filter(opbase__in=OpBase.objects.filter(base=airport))	#ops where this airport is a base
+	ops_base = 	Operation.objects.filter(opbase__in=OpBase.objects.filter(base=airport))					#ops where this airport is a base
 	ops_fly =	Operation.objects.filter(opbase__in=OpBase.objects.filter(routes__in=Route.objects.filter(bases=airport)))	#ops where this airport is part of a route
 	
 	return {'a': airport, "ops_base": ops_base, "ops_fly": ops_fly, "not_found": fail}
+	
+###############################################################################	
+	
+@render_to('view/aircraft.html')
+def aircraft(request, pk):
+
+	aircraft = get_object_or_None(Aircraft, pk=pk)
+	
+	if not aircraft:				#if aircraft = None, then return 404.
+		return {"not_found": True}
+		
+	operations = Operation.objects.filter(fleet__in=Fleet.objects.filter(aircraft=aircraft))
+	
+	return {'aircraft': aircraft, "operations": operations}
 	
 
 #############################################################################################################################
@@ -123,22 +137,26 @@ def edit_operation(request, pk):
 
 @render_to('edit/edit_position.html')		
 def edit_position(request, pk):
-	from forms import PositionForm, MinsForm
+	from forms import PositionForm, HiringStatusForm
 
 	p = Position.objects.get(pk=pk)
 	
+	try:
+		hs= p.hiringstatus_set.all()[0]
+	except:
+		hs=HiringStatus(position=p)
+		
 	if request.method == "POST":
 		pos_form = PositionForm(request.POST, instance=p)
 		
 		if not pos_form.errors:
 			pos_form.save()
+			return HttpResponseRedirect('/edit/company/' + str(op.company.pk)) # Redirect after POST
 	else:
-		hard_form = MinsForm()
-		pref_form = ""
-		pos_form = PositionForm()
+		pos_form = PositionForm(instance=p)
 		
 		
-	return {'position': p, 'pos_form': pos_form, "hard_form": hard_form, "pref_form": pref_form}
+	return {'position': p, 'pos_form': pos_form}
 
 ###############################################################################	
 
@@ -157,27 +175,86 @@ def edit_route(request, pk):
 
 @render_to('edit/edit_fleet.html')	
 def edit_fleet(request, pk):
-	from forms import PositionForm
+	from forms import FleetForm
 
-	r = Route.objects.get(pk=pk)
-	form = RouteForm(instance=p)
+	fleet = Fleet.objects.get(pk=pk)
 	
-	new_form = RouteForm()
 	
-	return {'route': r, 'form': form, 'new_form': new_form}
+	if request.method == "POST":
+		form = FleetForm(request.POST, instance=fleet)
+		
+		if not form.errors:
+			form.save()
+			return HttpResponseRedirect('/edit/company/' + str(fleet.company.pk)) # Redirect after POST
+	else:
+		form = FleetForm(instance=fleet)
+	
+	return {'fleet': fleet, 'form': form}
 	
 ###############################################################################	
 
-@render_to('edit/edit_hiring_status.html')		
-def edit_hiring_status(request, pk):
+@render_to('edit/edit_status.html')		
+def edit_status(request, pk):
 	from forms import HiringStatusForm
 
-	company = Company.objects.get(pk=pk)
+	pos = Position.objects.get(pk=pk)
+	op = Operation.objects.get(positions=pos)
+	opbases = op.opbase_set.all()
+	bases = Base.objects.filter(opbase__in=opbases)
 	
-	form = HiringStatusForm()
+	form = HiringStatusForm(bases_queryset=bases)
 	
-	return {"form": form}
-
+	return {"form": form, "position": pos}
+	
+###############################################################################	
+	
+@render_to('edit/edit_mins.html')	
+def edit_mins(request, pk, min_type):
+	from forms import CatClassMinsForm
+	
+	position = Position.objects.get(pk=pk)
+	
+	#############################
+	
+	if min_type == "Hard":
+		mins_object = position.hard_mins
+	else:
+		mins_object = position.pref_mins
+	
+	#############################
+	
+	if not mins_object:
+		mins_object = Mins()
+		
+	anyy =		mins_object.any_mins
+	airplane =	mins_object.airplane_mins
+	se =		mins_object.se_mins
+	me =		mins_object.me_mins
+	sea =		mins_object.sea_mins
+	mes =		mins_object.mes_mins
+	heli =		mins_object.heli_mins
+	glider =	mins_object.glider_mins
+	sim =		mins_object.sim_mins
+	
+	if request.method == "POST":
+		form = FleetForm(request.POST, instance=fleet)
+		
+		if not form.errors:
+			form.save()
+			return HttpResponseRedirect('/edit/company/' + str(fleet.company.pk)) # Redirect after POST
+	else:
+		any_mins = CatClassMinsForm(instance=anyy, prefix="any")
+		airplane_mins = CatClassMinsForm(instance=airplane, prefix="airplane")
+		se_mins = CatClassMinsForm(instance=se, prefix="se")
+		me_mins = CatClassMinsForm(instance=me, prefix="me")
+		sea_mins = CatClassMinsForm(instance=sea, prefix="sea")
+		mes_mins = CatClassMinsForm(instance=mes, prefix="mes")
+		heli_mins = CatClassMinsForm(instance=heli, prefix="heli")
+		glider_mins = CatClassMinsForm(instance=glider, prefix="glider")
+		sim_mins = CatClassMinsForm(instance=sim, prefix="sim")
+	
+	return locals()
+	
 #############################################################################################################################
 #############################################################################################################################
 #############################################################################################################################

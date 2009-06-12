@@ -45,11 +45,7 @@
 			{% for op in c.operation_set.all %}
 			<div class="operation_box">
 				{% if user.is_authenticated %}
-				<div class="edit_op_icon">
-					<a href="/edit/operation/{{op.pk}}" class="edit_link">
-						<img src="{{ MEDIA_URL }}/icons/edit.png" alt="Click to edit" />
-					</a>
-				</div>
+				
 				{% endif %}
 			
 				{# ------------position box--------------------------------- #}
@@ -65,7 +61,7 @@
 					
 				{% for f in op.fleet.all %}
 				<div class="fleet_box">
-					<a href="/aircraft/{{ f.aircraft.type }}">{{ f.aircraft }}</a> ({{ f.size }})
+					<a href="/aircraft/{{ f.aircraft.pk }}">{{ f.aircraft }}</a> ({{ f.size }})
 				</div>
 				{% endfor %}
 				

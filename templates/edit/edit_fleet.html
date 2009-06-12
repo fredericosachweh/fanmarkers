@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block css %}
+	<style type="text/css">
+		fieldset input[type="text"]		{width: 3em; margin-right: 2em}
+		legend					{font-size: large}
+		.plus					{cursor: pointer}
+		
+		#base_mins				{display: none}
+		#pref_mins				{display: none}
+
+	</style>
+{% endblock %}
+
+{% block javascript %}
+	
+{% endblock %}
+
+{% block body %}
+<div id="main_container">
+
+	<h1>Editing: <em>{{fleet.company.name}} > {{fleet}}</em></h1>
+	<a href="/company/{{ fleet.company.pk }}">View {{ fleet.company.name }}</a> <br />
+	<a href="/edit/company/{{ fleet.company.pk }}">Edit {{ fleet.company.name }}</a>
+	
+	<hr class="top_divider" />
+	
+	<form action="." method="POST">
+		<table>
+		{{form}}
+		</table>
+		
+		<input type="submit" value="Submit">		
+	</form>
+
+</div>
+{% endblock %}

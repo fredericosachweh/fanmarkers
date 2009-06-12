@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{% endblock %}
+{% block title %}Editing: {{position.company.name}} > {{position.name}}{% endblock %}
 
 {% block css %}
 	<style type="text/css">
@@ -20,10 +20,20 @@
 	
 		$("#base_toggle").click(function(){
 			$("#base_mins").toggle();
+			
+			if( $("#base_toggle img").attr('src') == plus_path )
+				$("#base_toggle img").attr('src', minus_path);
+			else
+				$("#base_toggle img").attr('src', plus_path);
 		});
 		
 		$("#pref_toggle").click(function(){
 			$("#pref_mins").toggle();
+			
+			if( $("#pref_toggle img").attr('src') == plus_path )
+				$("#pref_toggle img").attr('src', minus_path);
+			else
+				$("#pref_toggle img").attr('src', plus_path);
 		});
 		
 	});	
@@ -35,47 +45,40 @@
 {% block body %}
 <div id="main_container">
 
-	<h1>{{position.company.name}} > {{position.name}}</h1>
+	<h1>Editing: <em>{{position.company.name}} > {{position.name}}</em></h1>
 	<a href="/position/{{ position.pk }}">View {{ position.name }}</a> <br />
 	<a href="/position/{{ position.pk }}">Edit {{ position.company.name }}</a>
-	<hr />
 	
-	<form action="." method="POST">
-		<table>
-		{{pos_form}}
-		</table>
+	<hr class="top_divider" />
+	
+	<form action="." method="post">
+		<div>
+			<table summary="position details">
+			{{pos_form}}
+			</table>
 		
-		<input type="submit" value="Submit">
+			<input type="submit" value="Submit" />
 		
-		<hr />
+			<hr />
 		
-		<div id="base_toggle">
-			<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="{{ MEDIA_URL }}/icons/plus.png" alt="+"/>
-			<strong>Hard Minimums</strong>
+			<h2>Hiring Minimums</h2>
+		
+			<a href="/edit/mins/hard/{{position.pk}}">Click here to edit <strong>hard minimums</strong> info</a>
+			<br />
+			<a href="/edit/mins/pref/{{position.pk}}">Click here to edit <strong>preferred minimums</strong> info</a>
+		
+			<hr />
+		
+			<h2>Salary</h2>
+		
+			<a href="/edit/salary/{{position.pk}}">Click here to edit salary info</a>
+		
+			<hr />
+			
+			<h2>Hiring Status</h2>
+		
+			<a href="/edit/status/{{position.pk}}">click here to edit Hiring Status info</a>
 		</div>
-		{% with base_form as form %}
-		<div id="base_mins">
-		{% include "mins.html" %}
-		</div>
-		{% endwith %}
-		
-		<div id="pref_toggle">
-			<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="{{ MEDIA_URL }}/icons/plus.png" alt="+"/>
-			<strong>Preffered Minimums</strong>
-		</div>
-		
-		{% with pref_form as form %}
-		<div id="pref_mins">
-		{% include "mins.html" %}
-		</div>
-		{% endwith %}
-		
-		<hr />
-		
-		<table>
-		{{salary_form}}
-		</table>
-		
 	</form>
 
 </div>

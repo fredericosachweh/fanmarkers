@@ -15,25 +15,58 @@ class CatClassMins(models.Model):
 	t_pic		=	models.IntegerField("Turbine-PIC", default=0)
 	jet_pic		=	models.IntegerField("Jet-PIC", default=0)
 	
-	cert_level	=	models.IntegerField("Certificate Level", choices=CERT_LEVEL, default=0)
-	
 	jet		=	models.IntegerField(default=0)
 	turbine		=	models.IntegerField(default=0)
 	
+	cert_level	=	models.IntegerField("Certificate Level", choices=CERT_LEVEL, default=0)
 	instructor	=	models.BooleanField(default=False)
 	instrument_instructor=	models.BooleanField(default=False)
 	
-class Mins(models.Model):
-	airplane_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="airplane")	
+	def __unicode__(self):
+		
+		ret = []
+		
+		for item in self.time_array:
+			ret.append(item[0] + ": " + item[1])
+		
+		return ", ".join(ret)
 	
-	SEL_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="sel")
-	MEL_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="mel")
-	SES_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="ses")
-	MES_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="mes")
+	def _time_array(self):
+		time = []
+		
+		for field in (	("Total",		self.total),
+				("Night",		self.night),
+				("Istrument",		self.instrument),
+				("Instruction Given",	self.dual_given),
+				("Cross Country",	self.xc),
+				("PIC",			self.pic),
+				("Turbine-PIC",		self.t_pic),
+				("Jet-PIC",		self.jet_pic),
+				("Certification Level",	self.get_cert_level_display()),
+				("Jet",			self.jet),
+				("Turbine",		self.turbine),
+				("Instructor",		self.instructor),
+				("Instrument Instructor",self.instrument_instructor),):
+
+			if field[1] > 0 and not field[1] == "None":
+				time.append(    (   str(field[0])    ,    str(field[1])   )          )
+				
+		return time
+		
+	time_array = property(_time_array)
+	
+class Mins(models.Model):
+
+	any_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="any")
+	airplane_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="airplane")
+	
+	se_mins		=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="se")
+	me_mins		=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="me")
+	sea_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="sea")
+	mes_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="mes")
 	
 	heli_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="heli")
 	glider_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="glider")
-	any_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="any")
 	
 	sim_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="sim")
 	
@@ -63,25 +96,17 @@ class Mins(models.Model):
 	
 	class Meta:
         	verbose_name_plural = "Mins"
-		
+			
 	def __unicode__(self):
-		return "mins"
+	
+		ret = []
 		
-	def instructor_certs(self):
-		instructor = []		
-				
-		for field in (	("Airplane", self.air_cfi_cert_level),
-				("Helicopter", self.heli_cfi_cert_level),
-				("Glider", self.glider_cfi_cert_level),
-			):
+		for item in self.times:
+			ret.append( item[1] + " - " + item[0] )
 		
-			if field[1] > 0:
-				instructor.append((field[0], INSTRUCTOR_CERT_LEVEL[field[1]][1]))
-				
-		return instructor
-				
-				
-	def bools(self):
+		return ", ".join(ret)
+		
+	def _general(self):
 		spec = []
 		
 		if self.atp_mins:
@@ -104,77 +129,50 @@ class Mins(models.Model):
 			
 		return spec
 		
-	def times(self):
-		time = []
+	def _times(self):
+		time = {}
 	
-		for field in (	("Total", self.total),
-				("Night", self.night),
-				("Istrument", self.instrument),
-				("PIC", self.pic),
-				("Dual Given", self.dual_given),
-				("Cross Country", self.xc),
+		for cat_class in (
+				(self.airplane_mins,"Any Fixed Wing"), 
+				(self.any_mins, "Any Aircraft"),
+				(self.se_mins, "Single-Engine Airplane"),
+				(self.me_mins, "Multi-Engine Airplane"),
+				(self.sea_mins, "Single-Engine Seaplane"),
+				(self.mes_mins, "Multi-Engine Seaplane"),
+				(self.glider_mins, "Glider"),
+				(self.heli_mins, "Helicopter"),
+				(self.sim_mins, "Simulator"),):
 				
-				("Jet", self.jet),
-				("Helicopter", self.heli),
-				("Seaplane", self.ses),
-				("Multi-seaplane", self.mes),
-				("Turbine", self.turbine),
-				("Multi-engine", self.multi),
-				("On Type", self.on_type),
-				
-				("Multi-PIC", self.m_pic),
-				("Helicopter-PIC", self.h_pic),
-				("Multi-Seaplane PIC", self.s_pic),
-				("Seaplane PIC", self.mes_pic),
-				("Turbine-PIC", self.t_pic),
-				("Jet-PIC", self.jet_pic),
-				("Multi-Turbine-PIC", self.mt_pic),
-				
-				("Years with company", self.years_company),
-				("Years of experience", self.years_exp),
-			     ):
-			
-			if field[1] > 0:
-				time.append((str(field[1]), field[0]))
+			if cat_class[0]:
+				time[cat_class[1]] = cat_class[0].time_array
 				
 		return time
 		
-	def certs(self):
-		certs = []
+	def as_ul(self):
+		times = self.times
+		general = self.general
 		
-		for field in (	("SEL", self.SEL_cert_level),
-				("MEL", self.MEL_cert_level),
-				("SES", self.SES_cert_level),
-				("MES", self.MES_cert_level),
-				("Helicopter", self.heli_cert_level),
-				("Glider", self.glider_cert_level),
-			):
+		table = ""
 		
-			if field[1] > 0:
-				certs.append((field[0], CERT_LEVEL[field[1]][1]))
-				
-		if self.degree:
-			certs.append((DEGREE[self.degree][1],))
+		for cat_class in times:
+			title = cat_class
+			req_array = times[cat_class]
+			req_string = ""					
 			
-		if self.cert_agency > 0:
-			certs.append((CERT_AGENCY[self.cert_agency][1],))	
+			req_string = req_string + "<ul>"
+			for item in req_array:
+				req_string = req_string + "<li>" + str(item[0]) + ": <strong>" + str(item[1]) + "</strong></li> "	
+			req_string = req_string + "</ul>"
+	
+			table = table + title + ":" + req_string
+
+		return table
+	
+		
+	times = property(_times)
+	general = property(_general)
 			
-				
-		return certs
-		
-	def display_hard(self):
-		return merge(self.certs(), self.times(), self.instructor_certs(), self.bools())
-			
-	def display_pref(self):
-		return merge(self.certs(), self.times(), self.instructor_certs(), self.bools())
-		
-		
-		
-		
-		
-		
-		
-		
-		
+#################################################################################################################
+
 		
 		

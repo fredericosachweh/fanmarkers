@@ -5,11 +5,6 @@ class PositionInline(admin.StackedInline):
 	model = Position
 	extra = 1
 	
-class StatusBaseInline(admin.StackedInline):
-	model = StatusBase
-	extra = 1
-	raw_id_fields = ('base',)
-	
 class FleetInline(admin.TabularInline):
 	model = Fleet
 	extra = 3
@@ -41,13 +36,14 @@ class RouteAdmin(admin.ModelAdmin):
 
 class OperationAdmin(admin.ModelAdmin):
 	inlines = (OpBaseInline, )
-	#list_display = ('company', 'display_fleet')
+	list_display = ('company', 'all_fleet', 'all_bases')
 	
 class OpBaseAdmin(admin.ModelAdmin):
 	raw_id_fields = ('base', )
 	
 class HSAdmin(admin.ModelAdmin):	
-	inlines = (StatusBaseInline, )
+	pass
+	#inlines = (StatusBaseInline, )
 
 class PositionAdmin(admin.ModelAdmin):	
 	inlines = (PayScaleInline, )

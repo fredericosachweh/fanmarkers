@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block css %}
+	<style type="text/css">
+		input[type="text"]	{width: 4em}
+		.collapse		{padding: 5px; margin: 10px}
+		.collapse table		{display: none}
+		legend			{font-size: x-large}
+	</style>
+{% endblock %}
+
+{% block javascript %}
+
+
+
+{% endblock %}
+
+{% block body %}
+<div id="main_container">
+
+	<h1>{{ position.company }} >> Editing <em>{{ position }}</em> {{ min_type }} Minimums</h1>
+	<a href="/edit/position/{{ position.pk }}">Edit {{ position }}</a><br />
+	<a href="/position/{{ position.pk }}">View {{ position }}</a>
+	<hr class="top_divider" />
+	
+	<form action="." method="post">
+	
+	<div class="collapse" id="any_mins">
+		<fieldset>
+		<legend>Any Airplane Minimums</legend>
+		<table summary="Any mins">
+			{{airplane_mins}}
+		</table>
+	</div>
+	
+	<div class="collapse" id="sel_mins">
+		<fieldset>
+		<legend>Single-Engine Minimums</legend>
+		<table summary="Single-Engine Minimums">
+			{{se_mins}}
+		</table>
+	</div>
+	
+	<div class="collapse" id="mel_mins">
+		<fieldset>
+		<legend>Multi-Engine Minimums</legend>
+		<table summary="Multi-Engine Minimums">
+			{{me_mins}}
+		</table>
+	</div>
+	
+	<div class="collapse" id="ses_mins">
+		<fieldset>
+		<legend>Seaplane Minimums</legend>
+		<table summary="Seaplane Minimums">
+			{{sea_mins}}
+		</table>
+		</fieldset>
+	</div>
+	
+	<div class="collapse" id="ses_mins">
+		<fieldset>
+		<legend>Multi-Engine Seaplane Minimums</legend>
+		<table summary="Multi-Engine Seaplane Minimums">
+			{{mes_mins}}
+		</table>
+		</fieldset>
+	</div>
+	
+	<div class="collapse" id="any_mins">
+		<fieldset>
+		<legend>Any Aircraft Minimums</legend>
+		<table summary="Any Aircraft Minimums">
+			{{any_mins}}
+		</table>
+	</div>
+
+</form>
+</div>
+{% endblock %}

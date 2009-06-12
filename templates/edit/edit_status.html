@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block css %}
+	<style type="text/css">
+		.opbase_formbox				{border: 0px solid green; margin: 1em; padding: .5em}
+		.opbase_new				{border: 2px solid red;margin-top: 3em; padding: .5em}
+		.opbase_new table td:first-child	{text-align: center; font-weight: bold}
+		input[type="text"]					{width: 4em}
+
+	</style>
+{% endblock %}
+
+{% block javascript %}
+
+
+
+{% endblock %}
+
+{% block body %}
+<div id="main_container">
+
+	<h1>
+	Editing the status of: <em>{{ position.company }} - {{ position }}</em>
+	</h1>
+	<a href="/edit/position/{{position.pk}}">Edit {{position}}</a><br />
+	<a href="/position/{{position.pk}}">View {{position}}</a>
+	
+	<hr class="top_divider" />
+	
+	<form action="." method="post">
+	<div>
+		<table summary="hiring status form">
+			{{form}}
+		</table>
+		
+		<input type="submit" value="Submit Changes" />
+	
+	</div>
+	</form>
+	
+</div>
+
+{% endblock %}

@@ -132,6 +132,8 @@ class Position(models.Model):
 	hard_mins	=	models.ForeignKey(Mins, related_name="hard", blank=True, null=True)
 	pref_mins	=	models.ForeignKey(Mins, related_name="pref", blank=True, null=True)
 	
+	advertising	=	models.BooleanField(default=False)
+	
 	def __unicode__(self):
 		return u"%s" % (self.name,)
 
@@ -150,26 +152,31 @@ class Operation(models.Model):
 	bases		=	models.ManyToManyField("Base", through="OpBase", blank=True)
 	positions	=	models.ManyToManyField("Position", blank=True)
 	
-	def __unicode__(self):
-		airplane = []
-		for fleet in self.fleet.all():
-			airplane.append(fleet.aircraft.type)
 	
-		return u"%s - %s" % (self.company, ", ".join(airplane))
 		
-	def all_fleet(self):
+	def _all_fleet(self):
 		ret = []
 		for fleet in self.fleet.all():
 			ret.append(unicode(fleet.aircraft))
 			
 		return ", ".join(ret)
-		
-	def all_bases(self):
+			
+	def _all_bases(self):
 		ret = []
 		for base in self.bases.all():
 			ret.append(unicode(base.identifier))
 			
 		return ", ".join(ret)
+		
+	all_bases = property(_all_bases)
+	all_fleet = property(_all_fleet)
+	
+	def __unicode__(self):
+		#airplane = []
+		#for fleet in self.fleet.all():
+		#	airplane.append(fleet.aircraft.type)
+	
+		return u"%s - %s" % (self.company, self.all_fleet)
 
 
 class OpBase(models.Model):
@@ -192,20 +199,12 @@ class HiringStatus(models.Model):
 
 	position	=	models.ForeignKey("Position")
 	
-	status		=	models.IntegerField(choices=HIRING_STATUS, default=0)
 	reference	=	models.TextField(blank=True)
-	date		=	models.DateField()
+	date		=	models.DateField(blank=True)
 	
-	bases		=	models.ManyToManyField("Base", through="StatusBase", blank=True)
+	hiring_bases	=	models.ManyToManyField("Base", related_name="hiring", blank=True)
+	firing_bases	=	models.ManyToManyField("Base", related_name="firing", blank=True)
 	
-class StatusBase(models.Model):
-	
-	hiring_status	=	models.ForeignKey("HiringStatus")
-	base		=	models.ForeignKey("Base")
-	
-	base_entry	=	models.IntegerField(choices=BASE_ENTRY, default=0)
-	hiring_method	=	models.IntegerField(choices=HIRING_METHOD)
-		
 ######################################################################################################
 
 

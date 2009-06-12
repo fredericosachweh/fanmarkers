@@ -27,6 +27,8 @@
 	.info_table		{border: 1px solid black; padding: 1em}
 	.info_table td:first-child	{width: 8em}
 	
+	ul			{margin-top: 0}
+	
 	</style>
 {% endblock %}
 
@@ -49,15 +51,12 @@
 </script>
 
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/small_map.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/company_doc_ready.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/position_doc_ready.js"></script>
 
 <script type="text/javascript">
 	var bases = [];	//lat longs of all bases, indexed by the pk of that opbase
 	var maps = [];	//array of the Gmap2 objects
 	var data = [];	//array of all the points, indexed by the opbase pk
-	
-	var plus_path = '{{ MEDIA_URL }}/icons/plus.png';
-	var minus_path = '{{ MEDIA_URL }}/icons/minus.png';
 	
 {% for ob in p.opbases %}
 	bases[{{ob.pk}}] = [{{ob.base.location.y}},{{ob.base.location.x}}]; 
@@ -74,7 +73,10 @@
 	<h2>
 		<a href="/company/{{p.company.pk}}">{{p.company.name}}</a> > <a href="/edit/position/{{p.pk}}" class="edit_link"><img src="{{ MEDIA_URL }}/icons/edit.png" alt="Click to edit" /></a> {{p.name}}
 	</h2>
-	<table class="info_table">
+	
+	<hr class="top_divider" />
+	
+	<table class="info_table" summary="payscale and hiring minimums information">
 	
 	{% if p.payscaleyear_set.all %}
 		<tr>
@@ -101,19 +103,17 @@
 		</tr>
 		
 		{% if p.hard_mins %}
+		<tr>
 			<td>Hard Minimums:</td>
-			<td>
-			<strong>
-				{% for r in p.hard_mins.display_hard %}
-				{{r|join:" "}}<br />
-				{% endfor %}
-			</strong>
-			</td>
+			<td>{{p.hard_mins.as_ul|safe}}</td>
 		</tr>
 		{% endif %}
 
 		{% if p.pref_mins %}
-			<tr><td>&nbsp;</td></tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		
 		<tr>
 			<td>Preferred:</td>
 			<td>
@@ -125,7 +125,9 @@
 		{% endif %}
 	
 		{% if not p.pref_mins and not p.hard_mins %}
-			<td colspan="2"><em>No known hiring minimums</em></td></tr>
+			<tr>
+				<td colspan="2"><em>No known hiring minimums</em></td>
+			</tr>
 		{% endif %}
 	</table>
 
