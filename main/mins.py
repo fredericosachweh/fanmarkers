@@ -5,22 +5,20 @@ def merge(*input):
 	return reduce(list.__add__, input, list())
     
 class CatClassMins(models.Model):
-	total		=	models.IntegerField(default=0)
-	night		=	models.IntegerField(default=0)
-	instrument	=	models.IntegerField(default=0)
-	dual_given	=	models.IntegerField("Instruction Given", default=0)
-	xc		=	models.IntegerField("Cross Country", default=0)
+	total		=	models.IntegerField(MINIMUMS_VERBOSE["total"], default=0)
+	night		=	models.IntegerField(MINIMUMS_VERBOSE["night"], default=0)
+	instrument	=	models.IntegerField(MINIMUMS_VERBOSE["instrument"], default=0)
+	dual_given	=	models.IntegerField(MINIMUMS_VERBOSE["dual_given"], default=0)
+	xc		=	models.IntegerField(MINIMUMS_VERBOSE["xc"], default=0)
+	pic		=	models.IntegerField(MINIMUMS_VERBOSE["pic"], default=0)
+	t_pic		=	models.IntegerField(MINIMUMS_VERBOSE["t_pic"], default=0)
+	jet_pic		=	models.IntegerField(MINIMUMS_VERBOSE["jet_pic"], default=0)
+	jet		=	models.IntegerField(MINIMUMS_VERBOSE["jet"], default=0)
+	turbine		=	models.IntegerField(MINIMUMS_VERBOSE["turbine"], default=0)
 	
-	pic		=	models.IntegerField("PIC", default=0)
-	t_pic		=	models.IntegerField("Turbine-PIC", default=0)
-	jet_pic		=	models.IntegerField("Jet-PIC", default=0)
-	
-	jet		=	models.IntegerField(default=0)
-	turbine		=	models.IntegerField(default=0)
-	
-	cert_level	=	models.IntegerField("Certificate Level", choices=CERT_LEVEL, default=0)
-	instructor	=	models.BooleanField(default=False)
-	instrument_instructor=	models.BooleanField(default=False)
+	cert_level	=	models.IntegerField(MINIMUMS_VERBOSE["cert_level"], choices=CERT_LEVEL, default=0)
+	instructor	=	models.BooleanField(MINIMUMS_VERBOSE["instructor"], default=False)
+	instrument_instructor=	models.BooleanField(MINIMUMS_VERBOSE["instrument_instructor"], default=False)
 	
 	def __unicode__(self):
 		
@@ -34,22 +32,26 @@ class CatClassMins(models.Model):
 	def _time_array(self):
 		time = []
 		
-		for field in (	("Total",		self.total),
-				("Night",		self.night),
-				("Istrument",		self.instrument),
-				("Instruction Given",	self.dual_given),
-				("Cross Country",	self.xc),
-				("PIC",			self.pic),
-				("Turbine-PIC",		self.t_pic),
-				("Jet-PIC",		self.jet_pic),
-				("Certification Level",	self.get_cert_level_display()),
-				("Jet",			self.jet),
-				("Turbine",		self.turbine),
-				("Instructor",		self.instructor),
-				("Instrument Instructor",self.instrument_instructor),):
+		for field in (	(MINIMUMS_VERBOSE["total"],		self.total),
+				(MINIMUMS_VERBOSE["night"],		self.night),
+				(MINIMUMS_VERBOSE["instrument"],	self.instrument),
+				(MINIMUMS_VERBOSE["dual_given"],	self.dual_given),
+				(MINIMUMS_VERBOSE["xc"],		self.xc),
+				(MINIMUMS_VERBOSE["pic"],		self.pic),
+				(MINIMUMS_VERBOSE["t_pic"],		self.t_pic),
+				(MINIMUMS_VERBOSE["jet_pic"],		self.jet_pic),
+				(MINIMUMS_VERBOSE["cert_level"],	self.get_cert_level_display()),
+				(MINIMUMS_VERBOSE["jet"],		self.jet),
+				(MINIMUMS_VERBOSE["turbine"],		self.turbine),):
 
 			if field[1] > 0 and not field[1] == "None":
-				time.append(    (   str(field[0])    ,    str(field[1])   )          )
+				time.append(    (   field[0]  ,    str(field[1])   )          )
+				
+		for field in (	(MINIMUMS_VERBOSE["instructor"],		self.instructor),
+				(MINIMUMS_VERBOSE["instrument_instructor"],	self.instrument_instructor), ):
+				
+			if field[1]:
+				time.append(    (   field[0], )      )
 				
 		return time
 		
@@ -72,25 +74,24 @@ class Mins(models.Model):
 	
 	#############################################################
 	
-	on_type		=	models.IntegerField("On Type", default=0)
-
-	years_exp	=	models.DecimalField("Years of Experience", max_digits=4, decimal_places=2, default=0)
-	years_company	=	models.DecimalField("Years with this Company", max_digits=4, decimal_places=2, default=0)
+	degree		=	models.IntegerField(MINIMUMS_VERBOSE["degree"], choices=DEGREE, default=0)
 	
-	seniority	=	models.BooleanField(default=False)
-	rec		=	models.BooleanField("Internal Recommendation", default=False)
+	years_exp	=	models.DecimalField(MINIMUMS_VERBOSE["years_exp"], max_digits=4, decimal_places=2, default=0)
+	years_company	=	models.DecimalField(MINIMUMS_VERBOSE["years_company"], max_digits=4, decimal_places=2, default=0)
 	
-	mech_cert_level	=	models.IntegerField("Mechanic", choices=MECH_CERT_LEVEL, default=0)
+	seniority	=	models.BooleanField(MINIMUMS_VERBOSE["seniority"], default=False)
+	rec		=	models.BooleanField(MINIMUMS_VERBOSE["rec"], default=False)
 	
-	cert_agency	=	models.IntegerField(choices=CERT_AGENCY, default=0)
-	atp_mins	=	models.BooleanField("ATP Minimums", default=False)
-	i135_mins	=	models.BooleanField("Part 135 IFR Minimums", default=False)
-	v135_mins	=	models.BooleanField("Part 135 VFR Minimums", default=False)
-	tailwheel	=	models.BooleanField("Tailwheel Endorsement", default=False)
+	mech_cert_level	=	models.IntegerField(MINIMUMS_VERBOSE["mech"], choices=MECH_CERT_LEVEL, default=0)
 	
-	degree		=	models.IntegerField("Education", choices=DEGREE, default=0)
+	cert_agency	=	models.IntegerField(MINIMUMS_VERBOSE["cert_agency"], choices=CERT_AGENCY, default=0)
+	atp_mins	=	models.BooleanField(MINIMUMS_VERBOSE["atp"], default=False)
+	i135_mins	=	models.BooleanField(MINIMUMS_VERBOSE["i135"], default=False)
+	v135_mins	=	models.BooleanField(MINIMUMS_VERBOSE["v135"], default=False)
+	tailwheel	=	models.BooleanField(MINIMUMS_VERBOSE["tailwheel"], default=False)
 	
-	type_rating	=	models.ForeignKey("Aircraft", null=True, blank=True)
+	type_rating	=	models.ForeignKey("Aircraft", verbose_name=MINIMUMS_VERBOSE["type_rating"], null=True, blank=True)
+	on_type		=	models.IntegerField(MINIMUMS_VERBOSE["on_type"], default=0)
 	
 	#############################################################
 	
@@ -104,30 +105,60 @@ class Mins(models.Model):
 		for item in self.times:
 			ret.append( item[1] + " - " + item[0] )
 		
-		return ", ".join(ret)
+		return "mins: " + ", ".join(ret)
 		
 	def _general(self):
-		spec = []
 		
+		gen = []
+		
+		if self.type_rating:
+			gen.append((MINIMUMS_VERBOSE["type_rating"], self.type_rating.type, ))
+		
+		if self.on_type > 0:
+			gen.append((MINIMUMS_VERBOSE["on_type"], self.on_type, ))
+		
+		if self.years_exp > 0:
+			gen.append((MINIMUMS_VERBOSE["years_exp"], self.years_exp, ))	
+		
+		if self.years_company > 0:
+			gen.append((MINIMUMS_VERBOSE["years_company"], self.years_company, ))	
+		
+		if self.cert_agency > 0:
+			gen.append((MINIMUMS_VERBOSE["cert_agency"], self.get_cert_agency_display(), ))
+		
+		if self.mech_cert_level > 0:
+			gen.append((MINIMUMS_VERBOSE["mech"], self.get_mech_cert_level_display(), ))
+			
+		if self.degree > 0:
+			gen.append((MINIMUMS_VERBOSE["degree"], self.get_degree_display(), ))
+			
 		if self.atp_mins:
-			spec.append(("ATP Mins",))
+			gen.append((MINIMUMS_VERBOSE["atp"],))
 			
 		if self.i135_mins:
-			spec.append(("Part 135 IFR Minimums",))
+			gen.append((MINIMUMS_VERBOSE["i135"],))
 			
 		if self.v135_mins and not self.i135_mins:			#vfr mins are subset of ifr mins, so ignore vfr when ifr is selected
-			spec.append(("Part 135 VFR Minimums",))
+			gen.append((MINIMUMS_VERBOSE["v135"],))
 			
 		if self.tailwheel:
-			spec.append(("Tailwheel Endorsement",))
+			gen.append((MINIMUMS_VERBOSE["tailwheel"],))
 			
 		if self.seniority:
-			spec.append(("Enough Seniority",))
+			gen.append((MINIMUMS_VERBOSE["seniority"],))
 			
 		if self.rec:
-			spec.append(("Internal Recommendation",))
-			
-		return spec
+			gen.append((MINIMUMS_VERBOSE["rec"],))
+
+		ret = {}
+		
+		try:					#don't create a key if the list is empty
+			gen[0]
+			ret["General"] = gen
+			return ret
+		except:
+			return {}
+		
 		
 	def _times(self):
 		time = {}
@@ -152,25 +183,39 @@ class Mins(models.Model):
 		times = self.times
 		general = self.general
 		
+		general.update(times)
+		
+		all_reqs = general
+		
 		table = ""
 		
-		for cat_class in times:
+		for cat_class in all_reqs:
 			title = cat_class
-			req_array = times[cat_class]
+			req_array = all_reqs[cat_class]
 			req_string = ""					
 			
-			req_string = req_string + "<ul>"
 			for item in req_array:
-				req_string = req_string + "<li>" + str(item[0]) + ": <strong>" + str(item[1]) + "</strong></li> "	
-			req_string = req_string + "</ul>"
+				try:
+					req = str(item[0]) + ": "
+					value = "<strong>" + str(item[1]) + "</strong>"
+				except:
+					req = "<strong>" + str(item[0]) + "</strong>"
+					value = ""
+					
+				req_string = req_string + "<li>" + req + value + "</li> "	
+				
+			req_string = "<ul>" + req_string + "</ul>"
 	
 			table = table + title + ":" + req_string
 
-		return table
+		return  table  #str(times) + "<br/> " + str(general)
 	
 		
 	times = property(_times)
 	general = property(_general)
+	
+	def has(self):
+		return self.times.__len__() > 0 or self.general.__len__() > 0
 			
 #################################################################################################################
 

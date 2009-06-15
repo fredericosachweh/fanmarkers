@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from constants import *
 from mins import Mins, CatClassMins
 
+###############################################################################################################################
+
 class Aircraft(models.Model):
 	model		=	models.CharField(max_length=64, blank=True)
 	type		=	models.CharField(max_length=32)
@@ -13,6 +15,10 @@ class Aircraft(models.Model):
 	
 	class Meta:	
 		ordering = ["manufacturer", "type"]
+		
+	def get_absolute_url(self):
+		return "/aircraft/%i/" % self.pk
+
 		
 	def __unicode__(self):
 		extra = ""
@@ -27,6 +33,8 @@ class Aircraft(models.Model):
 			name = self.model
 			
 		return u'%s %s%s' % (self.manufacturer, name, extra)
+
+###############################################################################################################################
 		
 class PayscaleYear(models.Model):
 	position	=	models.ForeignKey("Position", )
@@ -36,6 +44,8 @@ class PayscaleYear(models.Model):
 	
 	def __unicode__(self):
 		return u"%s (%s)" % (self.position.name, self.year)
+		
+###############################################################################################################################
 	
 class Base(models.Model):
 	identifier	=	models.CharField(max_length=8, primary_key=True)
@@ -56,6 +66,10 @@ class Base(models.Model):
 	class Meta:
 		ordering = ["identifier", "sector"]
 		
+	def get_absolute_url(self):
+		return "/airport/%i/" % self.identifier
+
+		
 	def display_name(self):
 		ret = self.identifier
 		if len(self.name) > 0:
@@ -69,6 +83,8 @@ class Base(models.Model):
 		
 	def __unicode__(self):
 		return u"%s" % (self.identifier,)
+		
+###############################################################################################################################
 		
 class Route(models.Model):
 	bases		=	models.ManyToManyField("Base", through="RouteBase", blank=True)
@@ -87,6 +103,8 @@ class Route(models.Model):
 			ret.append('[' + str(base.location.y) + ', ' + str(base.location.x) + ']')
 		
 		return '[' + ",".join(ret) + ']'
+		
+###############################################################################################################################
 
 class RouteBase(models.Model):
 	base		=	models.ForeignKey("Base")
@@ -96,6 +114,7 @@ class RouteBase(models.Model):
 	def __unicode__(self):
 		return u"%s" % (self.base,)
 		
+###############################################################################################################################		
 	
 class Fleet(models.Model):
 	company		=	models.ForeignKey("Company", )
@@ -105,6 +124,8 @@ class Fleet(models.Model):
 
 	def __unicode__(self):
 		return u"%s" % (self.aircraft, )
+
+###############################################################################################################################
 
 class Company(models.Model):
 	name		=	models.CharField(max_length=64)
@@ -118,7 +139,12 @@ class Company(models.Model):
 		return u"%s" % (self.name)
 	
 	class Meta:
-        	verbose_name_plural = "Companies"
+		verbose_name_plural = "Companies"
+		
+	def get_absolute_url(self):
+		return "/company/%i/" % self.pk 
+
+###############################################################################################################################
         	
 class Position(models.Model):
 	company		=	models.ForeignKey("Company", )
@@ -146,13 +172,19 @@ class Position(models.Model):
 	class Meta:	
 		ordering = ["job_domain"]		#so captain shows up first when displayed on the page
 		
+	def get_absolute_url(self):
+		return "/position/%i/" % self.pk
+		
+###############################################################################################################################
+		
 class Operation(models.Model):
 	company		=	models.ForeignKey("Company",)
 	fleet		=	models.ManyToManyField("Fleet", blank=True, null=True)
 	bases		=	models.ManyToManyField("Base", through="OpBase", blank=True)
 	positions	=	models.ManyToManyField("Position", blank=True)
 	
-	
+	def __unicode__(self):
+		return u"%s - %s" % (self.company, self.all_fleet)
 		
 	def _all_fleet(self):
 		ret = []
@@ -171,13 +203,9 @@ class Operation(models.Model):
 	all_bases = property(_all_bases)
 	all_fleet = property(_all_fleet)
 	
-	def __unicode__(self):
-		#airplane = []
-		#for fleet in self.fleet.all():
-		#	airplane.append(fleet.aircraft.type)
 	
-		return u"%s - %s" % (self.company, self.all_fleet)
 
+###############################################################################################################################
 
 class OpBase(models.Model):
 	operation	=	models.ForeignKey("Operation", )
@@ -194,6 +222,8 @@ class OpBase(models.Model):
 	
 	def __unicode__(self):	
 		return u"%s - %s" % (self.base.identifier, self.operation.company.name)
+
+###############################################################################################################################
 		
 class HiringStatus(models.Model):
 

@@ -71,7 +71,13 @@
 
 
 	<h2>
-		<a href="/company/{{p.company.pk}}">{{p.company.name}}</a> > <a href="/edit/position/{{p.pk}}" class="edit_link"><img src="{{ MEDIA_URL }}/icons/edit.png" alt="Click to edit" /></a> {{p.name}}
+		<a href="{{p.company.get_absolute_url}}">{{p.company.name}}</a>
+		>
+		<a href="/edit{{p.company.get_absolute_url}}" class="edit_link">
+			<img src="{{ MEDIA_URL }}/icons/edit.png" alt="Click to edit" />
+		</a>
+		
+		{{p.name}}
 	</h2>
 	
 	<hr class="top_divider" />
@@ -102,14 +108,14 @@
 			<td colspan="2"><hr /></td>
 		</tr>
 		
-		{% if p.hard_mins %}
+		{% if p.hard_mins.has %}
 		<tr>
 			<td>Hard Minimums:</td>
 			<td>{{p.hard_mins.as_ul|safe}}</td>
 		</tr>
 		{% endif %}
 
-		{% if p.pref_mins %}
+		{% if p.pref_mins.has %}
 		<tr>
 			<td>&nbsp;</td>
 		</tr>
@@ -124,7 +130,7 @@
 		</tr>
 		{% endif %}
 	
-		{% if not p.pref_mins and not p.hard_mins %}
+		{% if not p.pref_mins.has and not p.hard_mins.has %}
 			<tr>
 				<td colspan="2"><em>No known hiring minimums</em></td>
 			</tr>

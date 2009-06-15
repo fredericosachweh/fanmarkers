@@ -102,3 +102,8 @@ class CatClassMinsForm(ModelForm):
 	class Meta:
 		model = CatClassMins
 		#exclude = ('company',)
+		
+class MinsForm(ModelForm):
+	class Meta:
+		model = Mins
+		exclude = ('any_mins','airplane_mins', 'se_mins', 'me_mins', 'sea_mins', 'mes_mins', 'sim_mins', 'heli_mins', 'glider_mins')

@@ -43,12 +43,6 @@ CERT_LEVEL	=	(	(0, "None"),
 				(4, "Frozen ATPL"),
 				(5, "ATP") )
 				
-INSTRUCTOR_CERT_LEVEL=	(	(0, "None"),
-				(1, "CFI"),
-				(2, "CFI + CFII"),
-				(3, "CFI + CFII + MEI"),
-				(4, "CFI + MEI") )
-	
 MECH_CERT_LEVEL	=	(	(0, "None"),
 				(1, "A&P"),
 				(2, "AI"),
@@ -60,10 +54,11 @@ CERT_AGENCY	=	(	(0, "None"),
 				(3, "Any ICAO"),
 				(4, "Other") )
 				
-DEGREE		=	(	(0, "No degree required"),
-				(1, "High School Degree"),
-				(2, "4-year University Degree"),
-				(3, "Graduate Degree"),
+DEGREE		=	(	(0, "Unknown"),
+				(1, "No degree required"),
+				(2, "High School Degree"),
+				(3, "4-year University Degree"),
+				(4, "Graduate Degree"),
 			)
 				
 JOB_DOMAIN	=	(	(1, "Crew Captain"),
@@ -118,3 +113,34 @@ CAT_CLASSES	=	(	(1, "Airplane SEL"),
 				(7, "Airplane Simulator"),
 				(8, "Helicopter Simulator"),
 				(9, "Other"), )
+				
+MINIMUMS_VERBOSE=	{	"total":		"Total",
+				"night":		"Night",
+				"instrument":		"Instrument",
+				"dual_given":		"Instruction Given",
+				"xc":			"Cross Country",
+				"pic":			"PIC",
+				"t_pic":		"Turbine PIC",
+				"jet_pic":		"Jet PIC",
+				"jet":			"Jet",
+				"turbine":		"Turbine",
+				"cert_level":		"Certification Level",
+				"instructor":		"Instructor Privileges",
+				"instrument_instructor":"Instrument Instructor Privileges",
+				
+				"degree":		"Education",
+				"years_exp":		"Years of Experience",
+				"years_company":	"Years With This Company",
+				"seniority":		"Enough Seniority",
+				"rec":			"Internal Recommendation",
+				"mech":			"Mechanic Certification",
+				"cert_agency":		"Certification Agency",
+				"atp":			"ATP Minimums",
+				"i135":			"Part 135 IFR Minimums",
+				"v135":			"Part 135 VFR Minimums",
+				"tailwheel":		"Tailwheel Endorsement",
+				"type_rating":		"Type Rating",
+				"on_type":		"Time on Type",
+			}
+				
+				

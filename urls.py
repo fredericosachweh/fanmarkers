@@ -1,7 +1,8 @@
 from django.conf.urls.defaults import *
-from django.views.generic import list_detail
+from django.views.generic import list_detail, create_update
 from django.contrib import admin
 from main.models import *
+from main.forms import *
 admin.autodiscover()
 
 company_info = {
@@ -29,8 +30,8 @@ urlpatterns = patterns('',
 	(r'^airport/(?P<pk>\S{1,7})/$',					"jobmap.main.views.airport"),
 	(r'^aircraft/(?P<pk>\d{1,5})/$',				"jobmap.main.views.aircraft"),
 	
-	(r'^edit/company/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_company"),
-	(r'^edit/operation/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_operation"),
+	(r'^edit/company/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": CompanyForm, "template_name": "edit/edit_company.html"}),
+	(r'^edit/operation/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": OperationForm, "template_name": "edit/edit_operation.html"}),
 	(r'^edit/position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_position"),
 	(r'^edit/route/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_route"),
 	(r'^edit/fleet/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_fleet"),
@@ -38,7 +39,7 @@ urlpatterns = patterns('',
 	(r'^edit/mins/hard/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Hard"}),
 	(r'^edit/mins/pref/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Preferred"}),
 	
-	(r'^new/company/$',						"jobmap.main.views.new_company"),
+	(r'^new/company/$',						create_update.create_object, {"form_class": CompanyForm, "template_name": "new/new_company.html"}),
 	(r'^new/operation/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_operation"),
 	(r'^new/position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_position"),
 	(r'^new/route/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_route"),

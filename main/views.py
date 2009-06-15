@@ -210,7 +210,7 @@ def edit_status(request, pk):
 	
 @render_to('edit/edit_mins.html')	
 def edit_mins(request, pk, min_type):
-	from forms import CatClassMinsForm
+	from forms import CatClassMinsForm, MinsForm
 	
 	position = Position.objects.get(pk=pk)
 	
@@ -218,14 +218,25 @@ def edit_mins(request, pk, min_type):
 	
 	if min_type == "Hard":
 		mins_object = position.hard_mins
+		if not mins_object:
+			mins_object = Mins()
+			mins_object.save()
+			
+			position.hard_mins = mins_object
+			position.save()
 	else:
 		mins_object = position.pref_mins
+		if not mins_object:				#if mins object hasnt been created yet, then create it!
+			mins_object = Mins()
+			mins_object.save()
+			
+			position.pref_mins = mins_object
+			position.save()
 	
 	#############################
 	
-	if not mins_object:
-		mins_object = Mins()
-		
+	
+			
 	anyy =		mins_object.any_mins
 	airplane =	mins_object.airplane_mins
 	se =		mins_object.se_mins
@@ -237,11 +248,29 @@ def edit_mins(request, pk, min_type):
 	sim =		mins_object.sim_mins
 	
 	if request.method == "POST":
-		form = FleetForm(request.POST, instance=fleet)
+		general_mins = MinsForm(request.POST, instance=mins_object, prefix="gen")
 		
-		if not form.errors:
-			form.save()
-			return HttpResponseRedirect('/edit/company/' + str(fleet.company.pk)) # Redirect after POST
+		any_mins = CatClassMinsForm(request.POST, instance=anyy, prefix="any")
+		airplane_mins = CatClassMinsForm(request.POST, instance=airplane, prefix="airplane")
+		se_mins = CatClassMinsForm(request.POST, instance=se, prefix="se")
+		me_mins = CatClassMinsForm(request.POST, instance=me, prefix="me")
+		sea_mins = CatClassMinsForm(request.POST, instance=sea, prefix="sea")
+		mes_mins = CatClassMinsForm(request.POST, instance=mes, prefix="mes")
+		heli_mins = CatClassMinsForm(request.POST, instance=heli, prefix="heli")
+		glider_mins = CatClassMinsForm(request.POST, instance=glider, prefix="glider")
+		sim_mins = CatClassMinsForm(request.POST, instance=sim, prefix="sim")
+		
+		if not general_mins.errors and not any_mins.errors:
+			general_mins.save()
+			any_mins.save()
+			se_mins.save()
+			me_mins.save()
+			sea_mins.save()
+			mes_mins.save()
+			heli_mins.save()
+			glider_mins.save()
+			sim_mins.save()
+			return HttpResponseRedirect('/edit/position/' + str(position.pk)) # Redirect after POST
 	else:
 		any_mins = CatClassMinsForm(instance=anyy, prefix="any")
 		airplane_mins = CatClassMinsForm(instance=airplane, prefix="airplane")
@@ -252,6 +281,8 @@ def edit_mins(request, pk, min_type):
 		heli_mins = CatClassMinsForm(instance=heli, prefix="heli")
 		glider_mins = CatClassMinsForm(instance=glider, prefix="glider")
 		sim_mins = CatClassMinsForm(instance=sim, prefix="sim")
+		
+		general_mins = MinsForm(instance=mins_object, prefix="gen")
 	
 	return locals()
 	
@@ -307,6 +338,9 @@ def new_position(request, pk):
 		form = PositionForm(request.POST, instance=pos)
 	
 		if form.is_valid():
+			form.save(commit=False)
+			form.hard_mins = Mins()
+			form.pref_mins = Mins()
 			form.save()
 			return HttpResponseRedirect('/edit/company/' + str(pk)) # Redirect after POST
 			
