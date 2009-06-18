@@ -5,7 +5,7 @@
 {% block css %}
 	<style type="text/css">
 
-
+		input[type="text"]		{width:4em}
 
 	</style>
 {% endblock %}
@@ -18,6 +18,30 @@
 
 {% block body %}
 <div id="main_container">
+
+	<h1>New Route for {{opbase.base}}</h1>
+	
+	<a href="/edit/operation/{{opbase.operation.pk}}" class="edit_link">Edit {{ opbase.operation }}</a>
+	
+	
+	<hr class="top_divider" />
+	
+	<form action="." method="post">
+		<div>
+			{{opbase.base}} - {% for form in formset.forms %}{{form.base}} - {{form.errors}}{% endfor %}{{opbase.base}}
+			{{ formset.management_form }}
+		</div>
+		
+		<hr />
+		
+		<table>
+			{{routeform}}
+		</table>
+				
+		<div>
+			<input type="submit" value="Create New Route" />
+		</div>
+	</form>
 
 </div>
 {% endblock %}

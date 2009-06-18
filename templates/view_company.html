@@ -22,7 +22,7 @@
 	
 		<h1>
 			<h1>
-				{{company.name}}{% if user.is_authenticated %} <a class="edit_link" href="/edit{{ company.get_absolute_url }}">(edit)</a>{% endif %}
+				{{company.name}}{% if user.is_authenticated %} <a class="edit_link_ui" href="/edit{{ company.get_absolute_url }}">(edit)</a>{% endif %}
 			</h1>
 		</h1>
 		{{ company.call_sign }}<br />

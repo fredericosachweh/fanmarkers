@@ -89,6 +89,7 @@ class Base(models.Model):
 class Route(models.Model):
 	bases		=	models.ManyToManyField("Base", through="RouteBase", blank=True)
 	description	=	models.TextField(blank=True)
+	opbase		=	models.ForeignKey("OpBase", blank=True)
 	
 	def __unicode__(self):
 		ret = []
@@ -119,7 +120,7 @@ class RouteBase(models.Model):
 class Fleet(models.Model):
 	company		=	models.ForeignKey("Company", )
 	aircraft	=	models.ForeignKey("Aircraft")
-	size		=	models.IntegerField(default=1)
+	size		=	models.IntegerField("Fleet Size", default=1)
 	description	=	models.TextField(blank=True)
 
 	def __unicode__(self):
@@ -213,13 +214,11 @@ class Operation(models.Model):
 class OpBase(models.Model):
 	operation	=	models.ForeignKey("Operation", )
 	base		=	models.ForeignKey("Base")
-	
-	workforce_size	=	models.IntegerField(default=0)	
-	routes		=	models.ManyToManyField("Route", related_name="route_opbase", blank=True)
+	workforce_size	=	models.IntegerField("Workforce Size", default=0)	
 	
 	def routes_json(self):
 		output = []
-		for route in self.routes.all():
+		for route in self.route_set.all():
 			output.append(route.json())
 		return "[" + ",".join(output) + "]"
 	

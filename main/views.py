@@ -16,7 +16,7 @@ from django.shortcuts import get_object_or_404
 @render_to('view_jobmap.html')
 def jobmap(request):
 	
-	usa = OpBase.objects.filter(advertising=True)
+	usa = OpBase.objects.filter(id=1)
 
 	return {"usa": usa}
 
@@ -53,31 +53,27 @@ def aircraft(request, pk):
 @render_to('edit_operation.html')		
 def edit_operation(request, pk):
 	from forms import OpBaseForm, OperationForm
-	from django.forms.models import modelformset_factory
+	from django.forms.models import inlineformset_factory
 
 	op = Operation.objects.get(pk=pk)
-	
-	OpBaseFormSet = modelformset_factory(OpBase, form=OpBaseForm, exclude=['routes', 'operation', ], extra=3, can_delete=True, )
-	
-	if request.method == "POST":
-		opform  = OperationForm(request.POST, instance=op)
-		formset = OpBaseFormSet(request.POST, queryset=op.opbase_set.all())
-		
-		if formset.is_valid() and opform.is_valid():
-			opform.save()
-			
-			instances = formset.save(commit=False)
-			
-			for instance in instances:
-				instance.operation = op
-				instance.save()
-			
-			return HttpResponseRedirect('/edit/company/' + str(op.company.pk)) # Redirect after POST
-	else:
-		formset = OpBaseFormSet(queryset=op.opbase_set.all())
-		opform  = OperationForm(instance=op)
 
-	return {'operation': op, 'opform': opform, 'formset': formset}
+	OpBaseFormSet = inlineformset_factory(Operation, OpBase, form=OpBaseForm, extra=5, )
+
+	if request.method == "POST":
+		form    = OperationForm(request.POST, instance=op)
+		formset = OpBaseFormSet(request.POST, instance=op)
+
+		if formset.is_valid() and form.is_valid():
+			form.save()
+			formset.save()
+	
+			return HttpResponseRedirect( op.get_absolute_url() )
+	else:
+		form    = OperationForm(instance=op)
+		formset = OpBaseFormSet(instance=op)
+
+
+	return {'operation': op, 'opform': form, 'formset': formset}
 
 ###############################################################################
 
@@ -110,18 +106,11 @@ def edit_mins(request, pk, min_type):
 		mins_object = position.hard_mins
 		if not mins_object:
 			mins_object = Mins()
-			mins_object.save()
-			
-			position.hard_mins = mins_object
-			position.save()
+
 	else:
 		mins_object = position.pref_mins
 		if not mins_object:				#if mins object hasnt been created yet, then create it!
 			mins_object = Mins()
-			mins_object.save()
-			
-			position.pref_mins = mins_object
-			position.save()
 	
 	#############################
 	
@@ -160,7 +149,8 @@ def edit_mins(request, pk, min_type):
 			heli_mins.save()
 			glider_mins.save()
 			sim_mins.save()
-			return HttpResponseRedirect('/edit/position/' + str(position.pk)) # Redirect after POST
+			
+			return HttpResponseRedirect( position.get_absolute_url() )
 	else:
 		any_mins = CatClassMinsForm(instance=anyy, prefix="any")
 		airplane_mins = CatClassMinsForm(instance=airplane, prefix="airplane")
@@ -182,26 +172,6 @@ def edit_mins(request, pk, min_type):
 
 ###############################################################################	
 
-@render_to('new_operation.html')	
-def new_operation(request, pk):
-	from forms import OperationForm
-	
-	company = Company.objects.get(pk=pk)
-	
-	if request.method == "POST":
-		op = Operation(company=company)
-		form = OperationForm(request.POST, instance=op)
-		
-		if not form.errors:
-			form.save()
-			return HttpResponseRedirect('/edit/company/' + str(pk)) # Redirect after POST
-	
-	form = OperationForm(instance=Operation(company=company))
-		
-	return {'company': company, 'form': form}
-	
-###############################################################################	
-
 @render_to('new_position.html')	
 def new_position(request, pk):
 	from forms import PositionForm
@@ -217,9 +187,9 @@ def new_position(request, pk):
 			form.hard_mins = Mins()
 			form.pref_mins = Mins()
 			form.save()
-			return HttpResponseRedirect('/edit/company/' + str(pk)) # Redirect after POST
-			
-	form = PositionForm()
+			return HttpResponseRedirect( "/edit" + company.get_absolute_url() )
+	else:
+		form = PositionForm()
 	
 	return {'company': company, 'form': form}
 	
@@ -237,31 +207,67 @@ def new_fleet(request, pk):
 	
 		if form.is_valid():
 			form.save()
-			return HttpResponseRedirect('/edit/company/' + str(pk)) # Redirect after POST
-	
-	form = FleetForm()
+			return HttpResponseRedirect( "/edit" + company.get_absolute_url() )
+	else:
+		form = FleetForm()
 		
 	return {'company': company, 'form': form}
 	
 ###############################################################################	
 
-@render_to('new/new_route.html')
+@render_to('new_route.html')
 def new_route(request, pk):
-	from forms import RouteForm
-
-	ob = OpBase.objects.get(pk=pk)
+	from forms import RouteBaseForm, RouteForm
+	from django.forms.models import inlineformset_factory
+	
+	opbase = get_object_or_404(OpBase, pk=pk)
+	route = Route(opbase=opbase)
+	
+	RouteBaseFormset = inlineformset_factory(Route, RouteBase, form=RouteBaseForm, extra=5, )
 	
 	if request.method == "POST":
-		route = Route(opbase=ob)
-		form = RouteForm(request.POST, instance=route)
+		formset = RouteBaseFormset(request.POST)
+		routeform = RouteForm(request.POST, instance=route)
+
+		if routeform.is_valid() and formset.is_valid():
+			routeform.save()
+			return HttpResponseRedirect( "/edit/operation/" + opbase.operation.pk )
 	
-		if form.is_valid():
-			form.save()
-			return HttpResponseRedirect('/edit/operation/' + str(pk)) # Redirect after POST
+	else:
+		formset = RouteBaseFormset()
+		routeform = RouteForm(instance=route)
+		
 	
-	form = RouteForm()
+	return {"opbase": opbase, "routeform": routeform, "formset": formset}
 	
-	return {'opbase': ob, 'form': form}
+###############################################################################	
+
+@render_to('new_operation.html')	
+def new_operation(request, pk):
+	from forms import OperationForm, OpBaseForm
+	from django.forms.models import inlineformset_factory
+	
+	company = Company.objects.get(pk=pk)
+	
+	OpBaseFormset = inlineformset_factory(Operation, OpBase, form=OpBaseForm, extra=5, )
+	
+	if request.method == "POST":
+		blank_op = Operation(company=company)
+		form = OperationForm(request.POST, instance=blank_op)
+		
+		formset = OpBaseFormset(request.POST, instance=blank_op)	#dummy operation instance to make sure the formset validates
+		
+		if form.is_valid() and formset.is_valid():
+			op = form.save()
+			formset = OpBaseFormset(request.POST, instance=op)
+			formset.save()
+			
+			return HttpResponseRedirect( "/edit" + company.get_absolute_url() )
+	else:
+		form = OperationForm(instance=Operation(company=company))
+		formset = OpBaseFormset()
+		
+	return {'company': company, 'form': form, "formset": formset}
 
 
 #############################################################################################################################

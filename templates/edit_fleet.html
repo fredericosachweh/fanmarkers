@@ -19,11 +19,11 @@
 {% endblock %}
 
 {% block body %}
+{% with form.instance as fleet%}
 <div id="main_container">
 
 	<h1>Editing: <em>{{fleet.company.name}} > {{fleet}}</em></h1>
-	<a href="/company/{{ fleet.company.pk }}">View {{ fleet.company.name }}</a> <br />
-	<a href="/edit/company/{{ fleet.company.pk }}">Edit {{ fleet.company.name }}</a>
+	<a href="/edit{{ fleet.company.get_absolute_url }}" class="edit_link">Edit {{ fleet.company.name }}</a>
 	
 	<hr class="top_divider" />
 	
@@ -36,4 +36,5 @@
 	</form>
 
 </div>
+{% endwith %}
 {% endblock %}

@@ -18,23 +18,22 @@
 <div id="main_container">
 	
 	<h1>Create new position for {{ company.name }}</h1>
-	<a href="/company/{{ company.pk }}">View {{ company.name }}</a><br />
-	<a href="/edit/company/{{ company.pk }}">Edit {{ company.name }}</a>
+	<a href="/edit{{ company.get_absolute_url }}" class="edit_link">Edit {{ company.name }}</a>
 	
-	<hr />
+	<hr class="top_divider" />
 	
 	<form action="." method="POST">
 	<div>
-		<table class="formtable">
+		<table summary="New Position fields">
 			{{form}}
 		</table>
 	</div>
 	
 	
 	<hr />
-	
-	<input type="submit" value="Submit">
-	
+	<div>
+		<input type="submit" value="Submit" />
+	</div>
 	</form>
 	
 </div>

@@ -15,40 +15,15 @@
 {% endblock %}
 
 {% block javascript %}
-	<script type="text/javascript">
-	$(document).ready(function() {
-	
-		$("#base_toggle").click(function(){
-			$("#base_mins").toggle();
-			
-			if( $("#base_toggle img").attr('src') == plus_path )
-				$("#base_toggle img").attr('src', minus_path);
-			else
-				$("#base_toggle img").attr('src', plus_path);
-		});
-		
-		$("#pref_toggle").click(function(){
-			$("#pref_mins").toggle();
-			
-			if( $("#pref_toggle img").attr('src') == plus_path )
-				$("#pref_toggle img").attr('src', minus_path);
-			else
-				$("#pref_toggle img").attr('src', plus_path);
-		});
-		
-	});	
-	</script>
-
-
 {% endblock %}
 
 {% block body %}
 {% with form.instance as position %}
 <div id="main_container">
 
-	<h1>Editing: <em>{{position.company.name}} > {{position.name}}</em></h1>
-	<a href="/position/{{ position.pk }}">View {{ position.name }}</a> <br />
-	<a href="/position/{{ position.pk }}">Edit {{ position.company.name }}</a>
+	<h1>Editing: {{position.company.name}} - {{position.name}}</h1>
+	<a href="{{ position.get_absolute_url }}">View {{ position.name }}</a> <br />
+	<a href="/edit{{ position.get_absolute_url }}" class="edit_link">Edit {{ position.company.name }}</a>
 	
 	<hr class="top_divider" />
 	
@@ -64,21 +39,21 @@
 		
 			<h2>Hiring Minimums</h2>
 		
-			<a href="/edit/mins/hard/{{position.pk}}">Click here to edit <strong>hard minimums</strong> info</a>
+			<a href="/edit/mins/hard/{{position.pk}}" class="edit_link">Click here to edit <strong>hard minimums</strong> info</a>
 			<br />
-			<a href="/edit/mins/pref/{{position.pk}}">Click here to edit <strong>preferred minimums</strong> info</a>
+			<a href="/edit/mins/pref/{{position.pk}}" class="edit_link">Click here to edit <strong>preferred minimums</strong> info</a>
 		
 			<hr />
 		
 			<h2>Salary</h2>
 		
-			<a href="/edit/salary/{{position.pk}}">Click here to edit salary info</a>
+			<a href="/edit/salary/{{position.pk}}" class="edit_link">Click here to edit salary info</a>
 		
 			<hr />
 			
 			<h2>Hiring Status</h2>
 		
-			<a href="/edit/status/{{position.pk}}">click here to edit Hiring Status info</a>
+			<a href="/edit/status/{{position.pk}}" class="edit_link">click here to edit Hiring Status info</a>
 		</div>
 	</form>
 

@@ -30,13 +30,21 @@ class OpBaseForm(ModelForm):
 	
 	class Meta:
 		model = OpBase
+		extra = 0
+		
+class RouteBaseForm(ModelForm):
+
+	base = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.TextInput)
+	
+	class Meta:
+		model = RouteBase
 		exclude = ['routes', ]
 		extra = 0
 		
 class PositionForm(ModelForm):
 	class Meta:
 		model = Position
-		exclude = ('watchers','hard_mins', 'pref_mins', 'company')
+		exclude = ('watchers','hard_mins', 'pref_mins', 'company', 'advertising')
 		
 class FleetForm(ModelForm):
 	class Meta:
@@ -46,7 +54,7 @@ class FleetForm(ModelForm):
 class RouteForm(ModelForm):
 	class Meta:
 		model = Route
-		exclude = ('opbase', )
+		exclude = ('opbase', 'bases')
 		
 class OperationForm(ModelForm):
 	positions = forms.ModelMultipleChoiceField(
@@ -61,7 +69,7 @@ class OperationForm(ModelForm):
 
 	class Meta:
 		model = Operation
-		exclude = ('bases','company')
+		exclude = ('bases',)
 		
 	def __init__(self, *args, **kwargs):
 		super(OperationForm, self).__init__(*args, **kwargs)

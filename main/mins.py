@@ -20,14 +20,11 @@ class CatClassMins(models.Model):
 	instructor	=	models.BooleanField(MINIMUMS_VERBOSE["instructor"], default=False)
 	instrument_instructor=	models.BooleanField(MINIMUMS_VERBOSE["instrument_instructor"], default=False)
 	
-	def __unicode__(self):
-		
-		ret = []
-		
-		for item in self.time_array:
-			ret.append(item[0] + ": " + item[1])
-		
-		return ", ".join(ret)
+	#def __unicode__(self):
+		#ret = []
+		#for item in self.time_array:
+		#	ret.append(item[0] + ": " + item[1])
+		#return "min" + ", ".join(ret)
 	
 	def _time_array(self):
 		time = []
@@ -82,7 +79,7 @@ class Mins(models.Model):
 	seniority	=	models.BooleanField(MINIMUMS_VERBOSE["seniority"], default=False)
 	rec		=	models.BooleanField(MINIMUMS_VERBOSE["rec"], default=False)
 	
-	mech_cert_level	=	models.IntegerField(MINIMUMS_VERBOSE["mech"], choices=MECH_CERT_LEVEL, default=0)
+	mech_cert_level	=	models.IntegerField(MINIMUMS_VERBOSE["mech_cert"], choices=MECH_CERT_LEVEL, default=0)
 	
 	cert_agency	=	models.IntegerField(MINIMUMS_VERBOSE["cert_agency"], choices=CERT_AGENCY, default=0)
 	atp_mins	=	models.BooleanField(MINIMUMS_VERBOSE["atp"], default=False)
@@ -98,14 +95,12 @@ class Mins(models.Model):
 	class Meta:
         	verbose_name_plural = "Mins"
 			
-	def __unicode__(self):
-	
-		ret = []
-		
-		for item in self.times:
-			ret.append( item[1] + " - " + item[0] )
-		
-		return "mins: " + ", ".join(ret)
+	#def __unicode__(self):
+	#	pass
+		#ret = []
+		#for item in self.times:
+		#	ret.append( item[1] + " - " + item[0] )
+		#return "mins: " + ", ".join(ret)
 		
 	def _general(self):
 		
@@ -127,7 +122,7 @@ class Mins(models.Model):
 			gen.append((MINIMUMS_VERBOSE["cert_agency"], self.get_cert_agency_display(), ))
 		
 		if self.mech_cert_level > 0:
-			gen.append((MINIMUMS_VERBOSE["mech"], self.get_mech_cert_level_display(), ))
+			gen.append((MINIMUMS_VERBOSE["mech_cert"], self.get_mech_cert_level_display(), ))
 			
 		if self.degree > 0:
 			gen.append((MINIMUMS_VERBOSE["degree"], self.get_degree_display(), ))

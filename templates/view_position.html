@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load humanize %}
 
-{% block title %}{% endblock %}
+{% block title %}{{position}} - Profile{% endblock %}
 
 {% block css %}
 	<style type="text/css">
@@ -60,7 +60,7 @@
 	
 {% for ob in position.opbases %}
 	bases[{{ob.pk}}] = [{{ob.base.location.y}},{{ob.base.location.x}}]; 
-	data[{{ob.pk}}] = {% if ob.routes.all %}{{ob.routes_json}}{%else%}"None";{% endif %}
+	data[{{ob.pk}}] = {% if ob.route_set.all %}{{ob.routes_json}}{%else%}"None";{% endif %}
 {% endfor %}
 </script>
 
@@ -71,7 +71,7 @@
 
 
 	<h1>
-		{{position.company.name}} - {{position.name}}{% if user.is_authenticated %} <a class="edit_link" href="/edit{{ position.get_absolute_url }}">(edit)</a>{% endif %}
+		{{position.company.name}} - {{position.name}}{% if user.is_authenticated %} <a class="edit_link_ui" href="/edit{{ position.get_absolute_url }}">(edit)</a>{% endif %}
 	</h1>
 	
 	<a href="{{position.company.get_absolute_url}}">View {{position.company.name}}</a>
@@ -86,7 +86,7 @@
 			<td>
 			<strong>
 				{% for ps in position.payscaleyear_set.all %}
-				{% if forlooposition.last and forlooposition.first %}
+				{% if forloop.last and forloop.first %}
 					${{ ps.amount|floatformat:2|intcomma }} <small>{{ ps.get_salary_unit_display }}</small>		
 				{% else %}
 					{{ ps.year|ordinal }} year: ${{ ps.amount|floatformat:2|intcomma }} <small>{{ ps.get_salary_unit_display }}</small><br />
