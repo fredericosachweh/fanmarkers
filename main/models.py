@@ -183,6 +183,9 @@ class Operation(models.Model):
 	bases		=	models.ManyToManyField("Base", through="OpBase", blank=True)
 	positions	=	models.ManyToManyField("Position", blank=True)
 	
+	def get_absolute_url(self):
+		return "/company/%s/#op%s" % (self.company.pk, self.pk)
+	
 	def __unicode__(self):
 		return u"%s - %s" % (self.company, self.all_fleet)
 		

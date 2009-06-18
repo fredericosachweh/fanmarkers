@@ -43,6 +43,7 @@
 {% endblock %}
 
 {% block body %}
+{% with form.instance as position %}
 <div id="main_container">
 
 	<h1>Editing: <em>{{position.company.name}} > {{position.name}}</em></h1>
@@ -54,7 +55,7 @@
 	<form action="." method="post">
 		<div>
 			<table summary="position details">
-			{{pos_form}}
+			{{form}}
 			</table>
 		
 			<input type="submit" value="Submit" />
@@ -82,4 +83,5 @@
 	</form>
 
 </div>
+{% endwith %}
 {% endblock %}

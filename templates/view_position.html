@@ -5,8 +5,8 @@
 
 {% block css %}
 	<style type="text/css">
-	.base			{border: 1px solid black; margin-top: 1em; padding: 0.5em; overflow: hidden}
-	.base_link		{font-weight: bold}
+	.base			{border: 0px solid black; margin-top: 1em; padding: 0.5em; overflow: hidden}
+	.base_link		{font-weight: bold; color: darkred}
 	.base_info		{display: none}
 	.base_floats		{float: left; padding-right: 1em}
 	
@@ -15,7 +15,7 @@
 	.routes_table		{border-collapse: collapse; margin-top: 1em}
 	.routes_table td	{padding-right: 2em}
 
-	.position_box		{border: 1px solid black; margin-bottom: .5em; padding: .5em; font-size: medium}
+	.position_box		{border: 0px solid black; margin-bottom: .5em; padding: .5em; font-size: medium}
 	.position_status	{font-size: medium}
 	.position_name		{font-size: x-large; font-weight: bold}
 	.payscale		{border-collapse: collapse; font-size: medium; margin-top: 1em}
@@ -58,7 +58,7 @@
 	var maps = [];	//array of the Gmap2 objects
 	var data = [];	//array of all the points, indexed by the opbase pk
 	
-{% for ob in p.opbases %}
+{% for ob in position.opbases %}
 	bases[{{ob.pk}}] = [{{ob.base.location.y}},{{ob.base.location.x}}]; 
 	data[{{ob.pk}}] = {% if ob.routes.all %}{{ob.routes_json}}{%else%}"None";{% endif %}
 {% endfor %}
@@ -70,27 +70,23 @@
 <div id="main_container">
 
 
-	<h2>
-		<a href="{{p.company.get_absolute_url}}">{{p.company.name}}</a>
-		>
-		<a href="/edit{{p.company.get_absolute_url}}" class="edit_link">
-			<img src="{{ MEDIA_URL }}/icons/edit.png" alt="Click to edit" />
-		</a>
-		
-		{{p.name}}
-	</h2>
+	<h1>
+		{{position.company.name}} - {{position.name}}{% if user.is_authenticated %} <a class="edit_link" href="/edit{{ position.get_absolute_url }}">(edit)</a>{% endif %}
+	</h1>
+	
+	<a href="{{position.company.get_absolute_url}}">View {{position.company.name}}</a>
 	
 	<hr class="top_divider" />
 	
 	<table class="info_table" summary="payscale and hiring minimums information">
 	
-	{% if p.payscaleyear_set.all %}
+	{% if position.payscaleyear_set.all %}
 		<tr>
 			<td>Salary:</td>
 			<td>
 			<strong>
-				{% for ps in p.payscaleyear_set.all %}
-				{% if forloop.last and forloop.first %}
+				{% for ps in position.payscaleyear_set.all %}
+				{% if forlooposition.last and forlooposition.first %}
 					${{ ps.amount|floatformat:2|intcomma }} <small>{{ ps.get_salary_unit_display }}</small>		
 				{% else %}
 					{{ ps.year|ordinal }} year: ${{ ps.amount|floatformat:2|intcomma }} <small>{{ ps.get_salary_unit_display }}</small><br />
@@ -108,14 +104,14 @@
 			<td colspan="2"><hr /></td>
 		</tr>
 		
-		{% if p.hard_mins.has %}
+		{% if position.hard_mins.has %}
 		<tr>
 			<td>Hard Minimums:</td>
-			<td>{{p.hard_mins.as_ul|safe}}</td>
+			<td>{{position.hard_mins.as_ul|safe}}</td>
 		</tr>
 		{% endif %}
 
-		{% if p.pref_mins.has %}
+		{% if position.pref_mins.has %}
 		<tr>
 			<td>&nbsp;</td>
 		</tr>
@@ -123,22 +119,23 @@
 		<tr>
 			<td>Preferred:</td>
 			<td>
-				{% for r in p.pref_mins.display_pref %}
+				{% for r in position.pref_mins.display_pref %}
 				{{r|join:" "}}<br />
 				{% endfor %}
 			</td>
 		</tr>
 		{% endif %}
 	
-		{% if not p.pref_mins.has and not p.hard_mins.has %}
+		{% if not position.pref_mins.has and not position.hard_mins.has %}
 			<tr>
 				<td colspan="2"><em>No known hiring minimums</em></td>
 			</tr>
 		{% endif %}
 	</table>
 
-
-{% for ob in p.opbases %}
+	<h2>Bases:</h2>
+	
+{% for ob in position.opbases %}
 	<div class="base b{{ ob.hiring_status }}">
 		<div class="base_floats">
 			<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="{{ MEDIA_URL }}/icons/plus.png" alt="+"/>
@@ -156,7 +153,7 @@
 					<table class="routes_table">
 					{% for r in ob.routes.all %}		{# new row, new route #}
 						<tr>
-						{% if forloop.first %}
+						{% if forlooposition.first %}
 							<td>Routes:</td>
 						{% else %}
 							<td></td>
@@ -167,7 +164,7 @@
 						<a href="/airport/{{ ob.base.identifier }}" title="{{ ob.base.city }}, {{ ob.base.sector }}">{{ ob.base.identifier }}</a> &#8594; 
 						{% for b in r.routebase_set.all %}
 						<a href="/airport/{{ b.base.identifier }}" title="{{ b.base.city }}, {{ b.base.sector }}">{{ b.base.identifier }}</a> &#8594; 
-						{% if forloop.last%}
+						{% if forlooposition.last%}
 						<a href="/airport/{{ ob.base.identifier }}" title="{{ ob.base.city }}, {{ ob.base.sector }}">{{ ob.base.identifier }}</a>
 						{% endif %}
 						{% endfor%}

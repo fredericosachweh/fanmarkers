@@ -157,7 +157,35 @@ class AllOverlay(Overlay):
 		
 	
 	
-	
+def overlay_view(request, z, x, y, o):
+	from main.overlays import *
+	from jobmap.settings import ICONS_DIR
+	       
+	if o[0] == "B":
+		ov = BaseOverlay(z, x, y, o)
+		ov.hard_limit = 10000
+	               
+		if z<4:		#zoomed out
+			ov.icon(ICONS_DIR + '/small/dblue.png')
+	       
+		elif z>=4:	#zoomd in close
+			ov.icon(ICONS_DIR + '/big/dblue.png')
+
+	#############################################################   
+
+	elif o[0]=="D":
+		ov = DestinationOverlay(z, x, y, o)
+		ov.hard_limit = 10000
+       
+		if z<4:		#zoomed out
+			ov.icon(ICONS_DIR + '/tiny/red.png')
+                        
+		elif z>=4:	#zoomd in close
+			ov.icon(ICONS_DIR + '/small/red.png')   
+	       
+		response = HttpResponse(mimetype="image/png")
+		ov.output().save(response, "PNG")
+		return response	
 	
 	
 	
