@@ -252,17 +252,17 @@ def new_operation(request, pk):
 	OpBaseFormset = inlineformset_factory(Operation, OpBase, form=OpBaseForm, extra=5, )
 	
 	if request.method == "POST":
-		blank_op = Operation(company=company)
-		form = OperationForm(request.POST, instance=blank_op)
+		op = Operation(company=company)
 		
-		formset = OpBaseFormset(request.POST, instance=blank_op)	#dummy operation instance to make sure the formset validates
-		
-		if form.is_valid() and formset.is_valid():
+		form = OperationForm(request.POST, instance=op)
+		if form.is_valid():
 			op = form.save()
-			formset = OpBaseFormset(request.POST, instance=op)
-			formset.save()
 			
-			return HttpResponseRedirect( "/edit" + company.get_absolute_url() )
+			formset = OpBaseFormset(request.POST, instance=op)
+			if formset.is_valid():
+				formset.save()
+			
+				return HttpResponseRedirect( "/edit" + company.get_absolute_url() )
 	else:
 		form = OperationForm(instance=Operation(company=company))
 		formset = OpBaseFormset()

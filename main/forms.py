@@ -38,7 +38,7 @@ class RouteBaseForm(ModelForm):
 	
 	class Meta:
 		model = RouteBase
-		exclude = ['routes', ]
+		exclude = ('routes', )
 		extra = 0
 		
 class PositionForm(ModelForm):

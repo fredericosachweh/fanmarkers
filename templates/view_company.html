@@ -12,6 +12,9 @@
 	.edit_op_icon		{float: right; margin-top: 10px; border: 0px solid black}
 	
 	.fleet_box		{border: 1px solid black; margin-top: 0.5em; margin-bottom: 0.5em; background: lightgray; padding: .5em}
+	
+	#info_table td		{border: 1px solid black; padding: 0.5em}
+	#info_table		{margin-top: 1em}
 </style>
 {% endblock %}
 
@@ -25,13 +28,16 @@
 				{{company.name}}{% if user.is_authenticated %} <a class="edit_link_ui" href="/edit{{ company.get_absolute_url }}">(edit)</a>{% endif %}
 			</h1>
 		</h1>
-		{{ company.call_sign }}<br />
-		{% if company.website %}
-			<a href="{{company.website}}">{{company.website}}</a>
-		{% endif %}
 		
-		
-		
+		<table id="info_table">
+			<tr>
+				<td>Call sign:</td>  <td>{% firstof company.call_sign "<em>None</em>"%}</td>
+			</tr>
+			<tr>
+				<td>Website:</td>  <td><a href="{{company.website}}">{{company.website}}</a></td>
+			</tr>
+		</table>
+			
 		{% for op in company.operation_set.all %}
 		<div class="operation_box">
 			{% if user.is_authenticated %}
@@ -66,8 +72,17 @@
 				</li>
 			</ul>
 			{% endfor %}
-		</div>		
+		</div>
+		
+		{#{% empty %}	#}
+		
+		<em>No operations</em>
+		
 		{% endfor %}
+		
+		
+		
+		
 
 	</div>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Add New Operation for {{ company.name }}{% endblock %}
+{% block title %}Add New Operation for {{ form.instance.company }}{% endblock %}
 
 {% block css %}
 	<style type="text/css">
@@ -47,7 +47,7 @@
 		
 			<table summary="Operation Base box">
 				<tr>
-					<th>{{form.base.label_tag}}:</th> <td>{{form.base}}</td> <td>{% for error in form.base.errors %}  <span class="errorlist">{{error}}</span>{% endfor %}</td>
+					<th>{{form.base.label_tag}}:{{form.id}}</th> <td>{{form.base}}</td> <td>{% for error in form.base.errors %}  <span class="errorlist">{{error}}</span>{% endfor %}</td>
 				</tr>
 			
 				<tr>
@@ -57,7 +57,7 @@
 		</div>
 		{% endfor %}
 	
-		<input type="submit" value="Submit">
+		<input type="submit" value="Submit" />
 	</form>
 </div>
 {% endwith %}
