@@ -41,7 +41,7 @@
 {% block body %}
 <div id="main_container">
 	<h1>{{ airport.identifier }} - {{ airport.name }}</h1>
-	<div>{%if airport.municipality%}{{airport.municipality}}, {%endif%}{{airport.region}}, {{airport.country}}</div>
+	<div>{{airport.location_summary}}</div>
 
 	<div id="small_map" class="small_map"></div>
 
@@ -50,7 +50,7 @@
 		<br /><br />
 
 		{% for op in ops_base %}
-			<a href="{{ op.get_absolute_url }}">{{ op.company }} - {{ op.all_fleet }}</a><br />
+			<a href="{{ op.get_absolute_url }}" class="view">{{ op.company }} - {{ op.all_fleet }}</a><br />
 		{% endfor %}
 	
 		{% if not ops_base %}
@@ -63,7 +63,7 @@
 		<br /><br />
 
 		{% for op in ops_fly %}
-			<a href="/company/{{ op.company.pk }}#op{{ op.pk }}">{{ op.company }} - {{ op.all_fleet }}</a><br />
+			<a href="/company/{{ op.company.pk }}#op{{ op.pk }}" class="view">{{ op.company }} - {{ op.all_fleet }}</a><br />
 		{% endfor %}
 	
 		{% if not ops_fly %}

@@ -1,10 +1,12 @@
-import Image, ImageFont, ImageDraw
+import Image, ImageFont, ImageDraw, random
+
 from main.models import *
 from jobmap.settings import PROJECT_PATH
+
 from django.contrib.gis.gdal.envelope import Envelope
-import random
-from globalmaptiles import GlobalMercator
 from django.http import HttpResponse
+
+from globalmaptiles import GlobalMercator
 
 class Overlay():
 
@@ -131,7 +133,7 @@ class Overlay():
 class BaseOverlay(Overlay):
 
 	def create_queryset(self, filters):
-		opbases = OpBase.objects.filter(base__in=self.geobases)		#get any opbases connected to geobases
+		opbases  = OpBase.objects.filter(base__in=self.geobases)	#get any opbases connected to geobases
 		queryset = Base.objects.filter(opbase__in=opbases)		#get all bases connected to those opbases
 		self.queryset = queryset
 	
@@ -141,7 +143,7 @@ class DestinationOverlay(Overlay):
 
 	def create_queryset(self, filters):
 		routebases = RouteBase.objects.filter(base__in=self.geobases)		#get any routebases connected to geobases
-		opbases    =    OpBase.objects.filter(base__in=self.geobases)		#get any opbases connected to geobases
+		opbases    = OpBase.objects.filter(base__in=self.geobases)		#get any opbases connected to geobases
 		
 		queryset = Base.objects.filter(routebase__in=routebases)		#get all bases connected to those routebases
 		
@@ -162,34 +164,42 @@ def overlay_view(request, z, x, y, o):
 	from jobmap.settings import ICONS_DIR
 	       
 	if o[0] == "B":
-		ov = BaseOverlay(z, x, y, o)
+		ov = BaseOverlay(z, x, y, o)				#non-status base
 		ov.hard_limit = 10000
 	               
 		if z<4:		#zoomed out
-			ov.icon(ICONS_DIR + '/small/dblue.png')
-	       
+			ov.icon(ICONS_DIR + '/small/blue.png')
 		elif z>=4:	#zoomd in close
-			ov.icon(ICONS_DIR + '/big/dblue.png')
+			ov.icon(ICONS_DIR + '/big/blue.png')
 
 	#############################################################   
 
-	elif o[0]=="D":
+	elif o[0]=="D":							#just a destination
 		ov = DestinationOverlay(z, x, y, o)
-		ov.hard_limit = 10000
-       
+		ov.hard_limit = 1000
+		
 		if z<4:		#zoomed out
-			ov.icon(ICONS_DIR + '/tiny/red.png')
-                        
+			ov.icon(ICONS_DIR + '/small/yellow.png')
+
 		elif z>=4:	#zoomd in close
-			ov.icon(ICONS_DIR + '/small/red.png')   
-	       
-		response = HttpResponse(mimetype="image/png")
-		ov.output().save(response, "PNG")
-		return response	
+			ov.icon(ICONS_DIR + '/big/yellow.png')
+			
+	#############################################################
 	
-	
-	
-	
-	
+	elif o[0]=="H":							#hiring base
+		ov = DestinationOverlay(z, x, y, o)
+		ov.hard_limit = 1000
+		
+		if z<4:		#zoomed out
+			ov.icon(ICONS_DIR + '/small/yellow.png')
+
+		elif z>=4:	#zoomd in close
+			ov.icon(ICONS_DIR + '/big/yellow.png')
+			
+	#############################################################
+
+	response = HttpResponse(mimetype="image/png")
+	ov.output().save(response, "PNG")
+	return response
 		
 

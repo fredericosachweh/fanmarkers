@@ -19,7 +19,7 @@
 <div id="main_container">
 
 	<h1>Editing: {{ company.name }}</h1>
-	<a href="/company/{{ form.instance.pk }}">View {{ company.name }}</a>
+	<a href="/company/{{ form.instance.pk }}" class="view">View {{ company.name }}</a>
 	
 	<hr class="top_divider" />
 
@@ -37,30 +37,30 @@
 	<hr />
 	
 	<h2>Fleets:</h2>
-	<a href="/new/fleet/{{company.pk}}" class="edit_link">Create New Fleet</a>
+	<a href="/new/fleet/{{company.pk}}" class="new">Create New Fleet</a>
 	<ul>
 	{% for fleet in form.instance.fleet_set.all %}
-		<li><a href="/edit/fleet/{{fleet.pk}}" class="edit_link">{{fleet.aircraft}} - {{fleet.size}}</a></li>
+		<li><a href="/edit/fleet/{{fleet.pk}}" class="edit">{{fleet.aircraft}} - {{fleet.size}}</a></li>
 	{% endfor %}
 	</ul>
 	
 	<hr />
 	
 	<h2>Positions:</h2>
-	<a href="/new/position/{{company.pk}}" class="edit_link">Create New Position</a>
+	<a href="/new/position/{{company.pk}}" class="new">Create New Position</a>
 	<ul>
 	{% for pos in form.instance.position_set.all %}
-		<li><a href="/edit/position/{{pos.pk}}" class="edit_link">{{pos.name}}</a></li>
+		<li><a href="/edit/position/{{pos.pk}}" class="edit">{{pos.name}}</a></li>
 	{% endfor %}
 	</ul>
 	
 	<hr />
 	
 	<h2>Operations:</h2>
-	<a href="/new/operation/{{company.pk}}" class="edit_link">Create New Operation</a>
+	<a href="/new/operation/{{company.pk}}" class="new">Create New Operation</a>
 	<ul>
 	{% for op in form.instance.operation_set.all %}
-		<li><a href="/edit/operation/{{op.pk}}" class="edit_link">{{op.all_fleet}} - {{op.all_bases}}</a></li>
+		<li><a href="/edit/operation/{{op.pk}}" class="edit">{{op.all_fleet}} - {{op.all_bases}}</a></li>
 	{% endfor %}
 	</ul>	
 

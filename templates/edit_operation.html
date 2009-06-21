@@ -25,7 +25,7 @@
 
 	<h1>Editing: {{operation.all_fleet}} Operation</h1>
 	
-	<a href="/edit{{ operation.company.get_absolute_url }}" class="edit_link">Edit {{ operation.company }}</a>
+	<a href="/edit{{ operation.company.get_absolute_url }}" class="edit">Edit {{ operation.company }}</a>
 	
 	
 	<hr class="top_divider" />
@@ -79,10 +79,10 @@
 		{% if form.instance.pk %}
 		<ul>
 			{% for route in form.instance.route_set.all %}
-			<li><a href="/edit/route/{{route.pk}}" class="edit_link">{{form.instance.base.identifier}}-{{ route }}-{{form.instance.base.identifier}}</a></li>
+			<li><a href="/edit/route/{{route.pk}}" class="edit">{{form.instance.base.identifier}}-{{ route }}-{{form.instance.base.identifier}}</a></li>
 			{% endfor %}
 
-			<li>**<a href="/new/route/{{form.instance.pk}}" class="edit_link">Add route</a>**</li>
+			<li>**<a href="/new/route/{{form.instance.pk}}" class="new">Add route</a>**</li>
 		</ul>
 		{% endif %}
 	

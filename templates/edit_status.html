@@ -4,10 +4,12 @@
 
 {% block css %}
 	<style type="text/css">
-		.opbase_formbox				{border: 0px solid green; margin: 1em; padding: .5em}
-		.opbase_new				{border: 2px solid red;margin-top: 3em; padding: .5em}
-		.opbase_new table td:first-child	{text-align: center; font-weight: bold}
-		input[type="text"]					{width: 4em}
+		input[type="text"]		{width: 4em}
+		
+		.status_table td:first-child	{width: 15em;}
+		.status_table td		{border: 1px solid black; width: 5em; text-align: center; padding: 2px}
+		
+		.status_table td:last-child	{background: lightgreen}
 
 	</style>
 {% endblock %}
@@ -22,17 +24,41 @@
 <div id="main_container">
 
 	<h1>
-	Editing the status of: <em>{{ position.company }} - {{ position }}</em>
+	Editing the status of: {{ position.company }} - {{ position }}
 	</h1>
-	<a href="/edit/position/{{position.pk}}">Edit {{position}}</a><br />
-	<a href="/position/{{position.pk}}">View {{position}}</a>
+	
+	<a href="{{ position.get_absolute_url }}" class="view">View {{position}}</a><br />
+	<a href="/edit{{ position.get_absolute_url }}" class="edit">Edit {{position}}</a>
+	
 	
 	<hr class="top_divider" />
 	
 	<form action="." method="post">
 	<div>
-		<table summary="hiring status form">
+		<table>
 			{{form}}
+		</table>
+	
+		<table summary="hiring status form" class="status_table">
+			<tr>
+				<td>Base</td>
+				<td>Status Unknown</td>
+				<td>Hiring (Assign)</td>
+				<td>Hiring (Choice)</td>
+				<td>Laying Off</td>
+				<td>Advertising</td>
+			</tr>
+
+			{% for base in bases %}
+			<tr>
+				<td><strong><a href="{{ base.get_absolute_url }}" class="immutable">{{base}}</a></strong><br />{{ base.location_summary}}</td>
+				<td><input type="radio" name="{{base.identifier}}" value="unknown" checked="checked" /></td>
+				<td><input type="radio" name="{{base.identifier}}" value="assign" /></td>
+				<td><input type="radio" name="{{base.identifier}}" value="choice" /></td>
+				<td><input type="radio" name="{{base.identifier}}" value="layoff" /></td>
+				<td><input type="radio" name="{{base.identifier}}" value="advertising" /></td>
+			</tr>
+			{% endfor %}
 		</table>
 		
 		<input type="submit" value="Submit Changes" />

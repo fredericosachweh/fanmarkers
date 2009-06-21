@@ -5,6 +5,18 @@ VOTE_WEIGHT	=	(	(1, "I have no idea what I'm talking about"),
 				(5, "I have first hand experience")
 			)
 			
+JUMPSEAT_TYPE	=	(	(0, "Unknown"),
+				(1, "None"),
+				(2, "Custom Agreement"),
+				(3, "CASS") )
+				
+PAY_TYPE	=	(	(0, "Unknown"),
+				(1, "Full Pay"),
+				(2, "Partial Pay"),
+				(3, "No Pay"),
+				(4, "You Pay Them Partially"),
+				(5, "You Pay Them in Full") )
+			
 AIRPORT_TYPE	=	(	(0, "Unknown"),
 				(1, "Small Airport"),
 				(2, "Medium Airport"),

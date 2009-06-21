@@ -20,15 +20,13 @@
 <div id="main_container">
 
 	<h1>New Route for {{opbase.base}}</h1>
-	
-	<a href="/edit/operation/{{opbase.operation.pk}}" class="edit_link">Edit {{ opbase.operation }}</a>
-	
+	<a href="/edit/operation/{{opbase.operation.pk}}" class="edit">Edit {{ opbase.operation }}</a>
 	
 	<hr class="top_divider" />
 	
 	<form action="." method="post">
 		<div>
-			{{opbase.base}} - {% for form in formset.forms %}{{form.base}} - {{form.errors}}{% endfor %}{{opbase.base}}
+			{{opbase.base}} - {% for form in formset.forms %}{{form.base}}{{form.id}} - {{form.errors}}{% endfor %}{{opbase.base}}
 			{{ formset.management_form }}
 		</div>
 		

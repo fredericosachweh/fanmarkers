@@ -41,8 +41,8 @@ class OperationAdmin(admin.ModelAdmin):
 class OpBaseAdmin(admin.ModelAdmin):
 	raw_id_fields = ('base', )
 	
-class HSAdmin(admin.ModelAdmin):	
-	pass
+class StatusAdmin(admin.ModelAdmin):	
+	raw_id_fields = ('assign_bases','choice_bases','layoff_bases','advertising', )
 	#inlines = (StatusBaseInline, )
 
 class PositionAdmin(admin.ModelAdmin):	
@@ -68,4 +68,4 @@ admin.site.register(Aircraft, 		AircraftAdmin)
 admin.site.register(Mins,		)
 admin.site.register(CatClassMins,	)
 admin.site.register(Company, 		CompanyAdmin)
-admin.site.register(HiringStatus, 	HSAdmin)
+admin.site.register(Status, 		StatusAdmin)

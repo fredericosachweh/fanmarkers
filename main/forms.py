@@ -1,8 +1,12 @@
-from django.forms import ModelForm
 from django import forms
-from models import *
-from django.template import Context, loader
+from django.forms import ModelForm
 from django.forms.forms import BoundField
+from django.forms.models import inlineformset_factory
+
+from models import *
+from main.custom_widgets import TableRowCheckboxSelectMultiple, TableRowRadioSelect
+from django.template import Context, loader
+
 
 class TemplatedForm(forms.Form):
 	def output_via_template(self):
@@ -18,29 +22,10 @@ class TemplatedForm(forms.Form):
 
 ############################################################################
 
-
 class CompanyForm(ModelForm):
 	class Meta:
 		model = Company
 		exclude = ('watchers',)
-		
-class OpBaseForm(ModelForm):
-
-	base = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.TextInput)
-	
-	class Meta:
-		model = OpBase
-		extra = 0
-		
-class RouteBaseForm(ModelForm):
-
-	base = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.TextInput)
-	
-	class Meta:
-		model = RouteBase
-		exclude = ('routes', )
-		extra = 0
-		
 class PositionForm(ModelForm):
 	class Meta:
 		model = Position
@@ -51,25 +36,38 @@ class FleetForm(ModelForm):
 		model = Fleet
 		exclude = ('watchers', 'company')
 		
+#####################################################################################################
+		
+class RouteBaseForm(ModelForm):
+	base = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.TextInput)
+
+	class Meta:
+		model = RouteBase
+		#exclude = ('sequence', )
+		
 class RouteForm(ModelForm):
 	class Meta:
 		model = Route
 		exclude = ('opbase', 'bases')
 		
+RouteBaseFormset = inlineformset_factory(Route, RouteBase, form=RouteBaseForm, extra=5, )
+	
+#####################################################################################################
+		
 class OperationForm(ModelForm):
 	positions = forms.ModelMultipleChoiceField(
 			queryset=Position.objects.all(),
-			widget=forms.SelectMultiple,
+			widget=forms.CheckboxSelectMultiple,
 		)
 	
 	fleet = forms.ModelMultipleChoiceField(
 			queryset=Fleet.objects.all(),
-			widget=forms.SelectMultiple,
+			widget=forms.CheckboxSelectMultiple,
 		)
 
 	class Meta:
 		model = Operation
-		exclude = ('bases',)
+		exclude = ('bases','company')
 		
 	def __init__(self, *args, **kwargs):
 		super(OperationForm, self).__init__(*args, **kwargs)
@@ -80,31 +78,32 @@ class OperationForm(ModelForm):
 			self.fields['fleet'].queryset = fleet
 			self.fields['positions'].queryset = pos
 			
-class HiringStatusForm(ModelForm):
+class OpBaseForm(ModelForm):
 
-	hiring_bases = forms.ModelMultipleChoiceField(
-			queryset=Base.objects.all(),
-			widget=forms.SelectMultiple,
-		)
-		
-	firing_bases = forms.ModelMultipleChoiceField(
-			queryset=Base.objects.all(),
-			widget=forms.SelectMultiple,
-		)
+	base = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.TextInput)
 	
 	class Meta:
-		model = HiringStatus
-		exclude = ('position', 'date', 'advertising')
-	
-	def __init__(self, *args, **kwargs):
-		if kwargs.has_key('bases_queryset'):
-			hqs = kwargs['bases_queryset']
-			del kwargs['bases_queryset']
-
-		super(HiringStatusForm, self).__init__(*args, **kwargs)
+		model = OpBase
+		extra = 0
 		
-		self.fields['hiring_bases'].queryset = hqs
-		self.fields['firing_bases'].queryset = hqs
+OpBaseFormset = inlineformset_factory(Operation, OpBase, form=OpBaseForm, extra=5, )		
+
+#####################################################################################################
+
+			
+class StatusForm(ModelForm):
+
+	hiring_bases = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
+	choice_bases = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
+	assign_bases = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
+	layoff_bases = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
+	advertising = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
+
+	class Meta:
+		model = Status
+		exclude = ('position', 'date')
+		
+#####################################################################################################
 	
 class CatClassMinsForm(ModelForm):
 	class Meta:
@@ -115,3 +114,8 @@ class MinsForm(ModelForm):
 	class Meta:
 		model = Mins
 		exclude = ('any_mins','airplane_mins', 'se_mins', 'me_mins', 'sea_mins', 'mes_mins', 'sim_mins', 'heli_mins', 'glider_mins')
+		
+######################################
+
+
+

@@ -27,33 +27,6 @@
 	<script type="text/javascript">
 		var map;		//map is in global scope
 		
-		var CustomGetTileUrl = function(point,zoom){
-		
-			if ( zoom == 9 )	// Only retrieve a tile from the script on zoom level 9
-				return "overlay_" + zoom + "_" + point.x + "_" + point.y + "_" + sessionKey;
-			else
-				return "overlay_0_0_0" ;	// Otherwise, use a blank image
-		}
-
-		
-		var DestOverlay = new GTileLayerOverlay(
-			new GTileLayer(null, null, null, {
-				tileUrlTemplate: '/overlay_{Z}_{X}_{Y}_DMB/', 
-				isPng:true,
-				opacity:1.0
-				}
-			)
-		);
-		
-		var BaseOverlay = new GTileLayerOverlay(
-			new GTileLayer(null, null, null, {
-				tileUrlTemplate: '/overlay_{Z}_{X}_{Y}_BMB/', 
-				isPng:true,
-				opacity:1.0
-					}
-			)
-		);
-		
 		africa = new GGeoXml('http://other.flightlogg.in/kml/africa.kmz');
 		americas = new GGeoXml('http://other.flightlogg.in/kml/americas.kmz');
 		carribean = new GGeoXml('http://other.flightlogg.in/kml/carribean.kmz');

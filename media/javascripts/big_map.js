@@ -1,3 +1,31 @@
+var CustomGetTileUrl = function(point,zoom){
+	if ( zoom == 9 )	// Only retrieve a tile from the script on zoom level 9
+		return "overlay_" + zoom + "_" + point.x + "_" + point.y + "_" + sessionKey;
+	else
+		return "overlay_0_0_0" ;	// Otherwise, use a blank image
+}
+
+
+var DestOverlay = new GTileLayerOverlay(
+	new GTileLayer(null, null, null, {
+		tileUrlTemplate: '/overlay_{Z}_{X}_{Y}_DMB/', 
+		isPng:true,
+		opacity:1.0
+		}
+	)
+);
+
+var BaseOverlay = new GTileLayerOverlay(
+	new GTileLayer(null, null, null, {
+		tileUrlTemplate: '/overlay_{Z}_{X}_{Y}_BMB/', 
+		isPng:true,
+		opacity:1.0
+			}
+	)
+);
+
+
+
 function initialize()
 {
 	if (GBrowserIsCompatible())
@@ -47,7 +75,7 @@ function figure_zoom()
 		map.addOverlay(usa);
 	}
 
-	else if(map.getZoom() < 6){
+	else if(map.getZoom() < 10){
 		map.addOverlay(BaseOverlay);
 		map.addOverlay(DestOverlay);
 	}

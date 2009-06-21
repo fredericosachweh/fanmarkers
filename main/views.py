@@ -4,12 +4,22 @@ from jobmap.settings import PROJECT_PATH
 from django.http import *
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-
+from django.contrib.auth.decorators import login_required
 from main.models import *
 
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 from django.shortcuts import get_object_or_404
+
+def sortdict(d):
+    """ returns a dictionary sorted by keys """
+    our_list = d.items()
+    our_list.sort()
+    k = {}
+    for item in our_list:
+        k[item[0]] = item[1]
+    return k
+
 
 ###############################################################################
 
@@ -28,11 +38,11 @@ def airport(request, pk):
 	airport = get_object_or_404(Base, pk=pk)
 	
 	ops_base = 	Operation.objects.filter(opbase__in=OpBase.objects.filter(base=airport))					#ops where this airport is a base
-	ops_fly =	Operation.objects.filter(opbase__in=OpBase.objects.filter(routes__in=Route.objects.filter(bases=airport)))	#ops where this airport is part of a route
+	ops_fly =	Operation.objects.filter(opbase__in=OpBase.objects.filter(route__in=Route.objects.filter(bases=airport)))	#ops where this airport is part of a route
 	
 	return {'airport': airport, "ops_base": ops_base, "ops_fly": ops_fly}
 	
-###############################################################################	
+###############################################################################
 	
 @render_to('view_aircraft.html')
 def aircraft(request, pk):
@@ -50,18 +60,16 @@ def aircraft(request, pk):
 
 ###############################################################################		
 
+@login_required()
 @render_to('edit_operation.html')		
 def edit_operation(request, pk):
-	from forms import OpBaseForm, OperationForm
-	from django.forms.models import inlineformset_factory
+	from forms import OpBaseFormset, OperationForm
 
-	op = Operation.objects.get(pk=pk)
-
-	OpBaseFormSet = inlineformset_factory(Operation, OpBase, form=OpBaseForm, extra=5, )
+	op = get_object_or_404(Operation, pk=pk)
 
 	if request.method == "POST":
 		form    = OperationForm(request.POST, instance=op)
-		formset = OpBaseFormSet(request.POST, instance=op)
+		formset = OpBaseFormset(request.POST, instance=op)
 
 		if formset.is_valid() and form.is_valid():
 			form.save()
@@ -70,35 +78,63 @@ def edit_operation(request, pk):
 			return HttpResponseRedirect( op.get_absolute_url() )
 	else:
 		form    = OperationForm(instance=op)
-		formset = OpBaseFormSet(instance=op)
+		formset = OpBaseFormset(instance=op)
 
 
 	return {'operation': op, 'opform': form, 'formset': formset}
 
 ###############################################################################
 
-###############################################################################	
-
+@login_required()
 @render_to('edit_status.html')		
 def edit_status(request, pk):
-	from forms import HiringStatusForm
+	from forms import StatusForm
+	import datetime
 
-	pos = Position.objects.get(pk=pk)
-	op = Operation.objects.get(positions=pos)
-	opbases = op.opbase_set.all()
+	position = get_object_or_404(Position, pk=pk)
+	operation = Operation.objects.get(positions=position)
+	opbases = operation.opbase_set.all()
 	bases = Base.objects.filter(opbase__in=opbases)
 	
-	form = HiringStatusForm(bases_queryset=bases)
+	now = datetime.datetime.now()
 	
-	return {"form": form, "position": pos}
+	status = get_object_or_None(Status, position=position)
+	
+	if not status:
+		status = Status(position=position, date=now)
+	
+	#assert False
+	
+	array = {}
+	array["unknown"] = array["assign"] = array["choice"] = array["advertising"] = array["layoff"] = []
+	
+	if request.method == "POST":
+		
+		form = StatusForm(request.POST, instance=status)
+		
+	
+		for base in bases:
+			for item in ("unknown", "assign", "choice", "advertising", "layoff", ):
+				if request.POST[str(base)] == item:
+					array[item] = array[item] + [base]
+		if form.is_valid():
+			form = form.save(commit=False)
+			form.advertising = array["advertising"]
+			form.save()
+	
+	else:
+		form = StatusForm()
+	
+	return {"form": form, "position": position, "bases": bases}
 	
 ###############################################################################	
-	
+
+@login_required()	
 @render_to('edit_mins.html')	
 def edit_mins(request, pk, min_type):
 	from forms import CatClassMinsForm, MinsForm
 	
-	position = Position.objects.get(pk=pk)
+	position = get_object_or_404(Position, pk=pk)
 	
 	#############################
 	
@@ -170,13 +206,12 @@ def edit_mins(request, pk, min_type):
 #############################################################################################################################
 #############################################################################################################################
 
-###############################################################################	
-
+@login_required()
 @render_to('new_position.html')	
 def new_position(request, pk):
 	from forms import PositionForm
 
-	company = Company.objects.get(pk=pk)
+	company = get_object_or_404(Company, pk=pk)
 
 	if request.method == "POST":
 		pos = Position(company=company)
@@ -195,11 +230,12 @@ def new_position(request, pk):
 	
 ###############################################################################	
 
+@login_required()
 @render_to('new_fleet.html')	
 def new_fleet(request, pk):
 	from forms import FleetForm
 
-	company = Company.objects.get(pk=pk)
+	company = get_object_or_404(Company, pk=pk)
 
 	if request.method == "POST":
 		fleet = Fleet(company=company)
@@ -215,39 +251,53 @@ def new_fleet(request, pk):
 	
 ###############################################################################	
 
+@login_required()
 @render_to('new_route.html')
 def new_route(request, pk):
-	from forms import RouteBaseForm, RouteForm
-	from django.forms.models import inlineformset_factory
-	
+	from forms import RouteBaseFormset, RouteForm
+
 	opbase = get_object_or_404(OpBase, pk=pk)
 	route = Route(opbase=opbase)
 	
-	RouteBaseFormset = inlineformset_factory(Route, RouteBase, form=RouteBaseForm, extra=5, )
-	
-	if request.method == "POST":
-		formset = RouteBaseFormset(request.POST)
+	if request.method == "POST":	
+		
+		
+		newPOST = request.POST.copy()
+		
+		i=1
+		for index in range(0, int(request.POST["routebase_set-TOTAL_FORMS"])):
+			if request.POST["routebase_set-" + str(index) + "-base"]:
+				newPOST["routebase_set-" + str(index) + "-sequence"]=i
+				i += 1
+			else:
+				newPOST["routebase_set-" + str(index) + "-sequence"] = ""
+		
+		########################################################
+		formset = RouteBaseFormset(newPOST)
 		routeform = RouteForm(request.POST, instance=route)
-
+		
 		if routeform.is_valid() and formset.is_valid():
-			routeform.save()
-			return HttpResponseRedirect( "/edit/operation/" + opbase.operation.pk )
+			route = routeform.save()
+			formset = RouteBaseFormset(newPOST, instance=route)
+			formset.save()
+						
+			return HttpResponseRedirect( "/edit/operation/" + str(opbase.operation.pk) )
 	
 	else:
 		formset = RouteBaseFormset()
 		routeform = RouteForm(instance=route)
 		
-	
 	return {"opbase": opbase, "routeform": routeform, "formset": formset}
 	
 ###############################################################################	
 
+@login_required()
 @render_to('new_operation.html')	
 def new_operation(request, pk):
 	from forms import OperationForm, OpBaseForm
 	from django.forms.models import inlineformset_factory
 	
-	company = Company.objects.get(pk=pk)
+	company = get_object_or_404(Company, pk=pk)
 	
 	OpBaseFormset = inlineformset_factory(Operation, OpBase, form=OpBaseForm, extra=5, )
 	

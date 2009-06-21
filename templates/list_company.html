@@ -4,7 +4,7 @@
 
 {% block css %}
 	<style type="text/css">
-		#company_filter_box		{border: 1px solid black; background: lightgreen;}
+		#company_filter_box		{margin: 1em; border: 1px solid black; background: lightgreen;}
 	</style>
 {% endblock %}
 
@@ -17,7 +17,7 @@
 {% block body %}
 <div id="main_container">
 
-	<div id="top_title">All Companies</div>
+	<h1>All Companies</h1>
 	
 	<div id="company_filter_box">
 		<table>
@@ -27,13 +27,15 @@
 			</tr>
 		</table>
 	</div>
+	<ol>
 	{% for c in company_list %}
 	
-		<a href="/company/{{c.pk}}">{{ c.name }}</a><br/>
+		<li><a href="/company/{{c.pk}}" class="view">{{ c.name }}</a></li>
 	
 	{% endfor %}
+	</ol>
 		<br />
-		**<a href="/new/company">Create New Company</a>**
+		**<a href="/new/company" class="new">Create New Company</a>**
 
 
 </div>

@@ -149,29 +149,25 @@
 				<div id="map_{{ob.pk}}" class="small_map"></div>
 			
 			
-				{% if ob.routes.all %}
-					<table class="routes_table">
-					{% for r in ob.routes.all %}		{# new row, new route #}
-						<tr>
-						{% if forlooposition.first %}
-							<td>Routes:</td>
-						{% else %}
-							<td></td>
-						{% endif %}
-					
+				{% if ob.route_set.all %}
+				<table class="routes_table">
+					<tr>
+						<td>Routes:</td><td></td>
+					</tr>
+					{% for r in ob.route_set.all %}		{# new row, new route #}
+					<tr>
 						<td>
-						{{r.get_often_display}}
-						<a href="/airport/{{ ob.base.identifier }}" title="{{ ob.base.city }}, {{ ob.base.sector }}">{{ ob.base.identifier }}</a> &#8594; 
-						{% for b in r.routebase_set.all %}
-						<a href="/airport/{{ b.base.identifier }}" title="{{ b.base.city }}, {{ b.base.sector }}">{{ b.base.identifier }}</a> &#8594; 
-						{% if forlooposition.last%}
-						<a href="/airport/{{ ob.base.identifier }}" title="{{ ob.base.city }}, {{ ob.base.sector }}">{{ ob.base.identifier }}</a>
-						{% endif %}
-						{% endfor%}
+						<a href="{{ ob.base.get_absolute_url }}" title="{{ ob.base.location_summary }}" class="immutable">{{ ob.base.identifier }}</a> &#8594; 
+							{% for b in r.routebase_set.all %}
+							<a href="{{ b.base.get_absolute_url }}" title="{{ b.base.location_summary }}" class="immutable">{{ b.base.identifier }}</a> &#8594; 
+							{% endfor%}
+						<a href="{{ ob.base.get_absolute_url }}" title="{{ ob.base.location_summary }}" class="immutable">{{ ob.base.identifier }}</a>
 						</td>
-						</tr>
+						
+						<td>{{r.description}}</td>
+					</tr>
 					{% endfor %}
-					</table>
+				</table>
 				{% endif %}
 			</div>
 		</div>

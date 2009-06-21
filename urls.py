@@ -59,3 +59,9 @@ urlpatterns = patterns('',
 	(r'^new/route/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_route"),
 	(r'^new/fleet/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_fleet"),
 )
+
+urlpatterns += patterns('django.contrib.auth',
+	(r'^accounts/login/$','views.login', {'template_name': 'admin/login.html'}),
+	(r'^accounts/logout/$','views.logout'),
+)
+

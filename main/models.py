@@ -37,13 +37,29 @@ class Aircraft(models.Model):
 ###############################################################################################################################
 		
 class PayscaleYear(models.Model):
-	position	=	models.ForeignKey("Position", )
+	compensation	=	models.ForeignKey("Compensation", )
 	year		=	models.IntegerField()
 	amount		=	models.FloatField()
 	salary_unit	=	models.IntegerField(choices=SALARY_TYPE)
 	
 	def __unicode__(self):
-		return u"%s (%s)" % (self.position.name, self.year)
+		return u"%s (%s)" % (self.compensation.position, self.year)
+		
+###############################################################################################################################
+		
+class Compensation(models.Model):
+	position	=	models.ForeignKey("Position", )
+	
+	benefits	=	models.TextField(blank=True)
+	perdiem		=	models.TextField(blank=True)
+	
+	training_pay	=	models.IntegerField(choices=PAY_TYPE, default=0)
+	flight_hours	=	models.FloatField("Typical Flight Hours (per month)")
+	training_contract=	models.BooleanField(default=False)
+	extra_info	=	models.TextField(blank=True)
+	
+	def __unicode__(self):
+		return "comp: %s" % self.position
 		
 ###############################################################################################################################
 	
@@ -64,10 +80,16 @@ class Base(models.Model):
 	objects		=	models.GeoManager()
 	
 	class Meta:
-		ordering = ["identifier", "sector"]
+		ordering = ["identifier", "country"]
+		verbose_name_plural = "Bases"
 		
 	def get_absolute_url(self):
-		return "/airport/%i/" % self.identifier
+		return "/airport/%s/" % (self.identifier, )
+		
+	def __unicode__(self):
+		return u"%s" % (self.identifier,)
+			
+	
 
 		
 	def display_name(self):
@@ -76,13 +98,15 @@ class Base(models.Model):
 			ret = ret + " - " + self.name
 			
 		return ret
-		
-	class Meta:
-        	verbose_name_plural = "Bases"
 
+	def location_summary(self):
+		ret = []
 		
-	def __unicode__(self):
-		return u"%s" % (self.identifier,)
+		for item in (self.municipality, self.region, self.country, ):
+			if item and item != "United States":
+				ret.append(item)
+				
+		return ", ".join(ret)
 		
 ###############################################################################################################################
 		
@@ -110,8 +134,8 @@ class Route(models.Model):
 class RouteBase(models.Model):
 	base		=	models.ForeignKey("Base")
 	route		=	models.ForeignKey("Route")
-	sequence	=	models.IntegerField()
-	
+	sequence	=	models.IntegerField(blank=True)
+
 	def __unicode__(self):
 		return u"%s" % (self.base,)
 		
@@ -134,17 +158,20 @@ class Company(models.Model):
 	website		=	models.URLField(blank=True)
 	description	=	models.TextField(blank=True)
 	type		=	models.IntegerField(choices=BUSINESS_TYPE, default=0)
+	jumpseat	=	models.IntegerField(choices=JUMPSEAT_TYPE, default=0)
+	union		=	models.CharField(max_length=32, blank=True)
+	contact_info	=	models.TextField(blank=True)
 	watchers	=	models.ManyToManyField(User, blank=True, )
-	
-	def __unicode__(self):
-		return u"%s" % (self.name)
 	
 	class Meta:
 		verbose_name_plural = "Companies"
 		
 	def get_absolute_url(self):
 		return "/company/%i/" % self.pk 
-
+		
+	def __unicode__(self):
+		return u"%s" % (self.name)
+	
 ###############################################################################################################################
         	
 class Position(models.Model):
@@ -153,14 +180,17 @@ class Position(models.Model):
 	description	=	models.TextField(blank=True)
 	
 	job_domain	=	models.IntegerField(choices=JOB_DOMAIN)
-	training_provided=	models.BooleanField(default=True)
 	schedule_type	=	models.IntegerField(choices=SCHEDULE_TYPE)
 	
 	hard_mins	=	models.ForeignKey(Mins, related_name="hard", blank=True, null=True)
 	pref_mins	=	models.ForeignKey(Mins, related_name="pref", blank=True, null=True)
 	
-	advertising	=	models.BooleanField(default=False)
-	
+	class Meta:	
+		ordering = ["job_domain"]		#so captain shows up first when displayed on the page
+		
+	def get_absolute_url(self):
+		return "/position/%i/" % self.pk
+		
 	def __unicode__(self):
 		return u"%s" % (self.name,)
 
@@ -170,11 +200,7 @@ class Position(models.Model):
 		except:
 			return None
 
-	class Meta:	
-		ordering = ["job_domain"]		#so captain shows up first when displayed on the page
-		
-	def get_absolute_url(self):
-		return "/position/%i/" % self.pk
+	
 		
 ###############################################################################################################################
 		
@@ -195,7 +221,7 @@ class Operation(models.Model):
 		for fleet in self.fleet.all():
 			ret.append(unicode(fleet.aircraft))
 			
-		return ", ".join(ret)
+		return " + ".join(ret)
 			
 	def _all_bases(self):
 		ret = []
@@ -216,27 +242,34 @@ class OpBase(models.Model):
 	base		=	models.ForeignKey("Base")
 	workforce_size	=	models.IntegerField("Workforce Size", default=0)	
 	
+	def __unicode__(self):	
+		return u"%s - %s" % (self.base.identifier, self.operation.company.name)
+		
 	def routes_json(self):
 		output = []
 		for route in self.route_set.all():
 			output.append(route.json())
 		return "[" + ",".join(output) + "]"
 	
-	def __unicode__(self):	
-		return u"%s - %s" % (self.base.identifier, self.operation.company.name)
+	
 
 ###############################################################################################################################
 		
-class HiringStatus(models.Model):
+class Status(models.Model):
 
 	position	=	models.ForeignKey("Position")
 	
-	reference	=	models.TextField(blank=True)
-	date		=	models.DateField(blank=True)
+	reference	=	models.TextField(blank=True, null=True)
+	date		=	models.DateField(blank=True, null=True)
 	
-	hiring_bases	=	models.ManyToManyField("Base", related_name="hiring", blank=True)
-	firing_bases	=	models.ManyToManyField("Base", related_name="firing", blank=True)
+	assign_bases	=	models.ManyToManyField("Base", related_name="assign", blank=True)
+	choice_bases	=	models.ManyToManyField("Base", related_name="direct", blank=True)
+	layoff_bases	=	models.ManyToManyField("Base", related_name="firing", blank=True)
+	advertising	=	models.ManyToManyField("Base", related_name="advertising", blank=True)
 	
-######################################################################################################
+	def __unicode__(self):
+		return str(self.position) + " " + str(self.date)
+	
+###############################################################################################################################
 
 

@@ -22,8 +22,8 @@
 <div id="main_container">
 
 	<h1>Editing: {{position.company.name}} - {{position.name}}</h1>
-	<a href="{{ position.get_absolute_url }}">View {{ position.name }}</a> <br />
-	<a href="/edit{{ position.get_absolute_url }}" class="edit_link">Edit {{ position.company.name }}</a>
+	<a href="{{ position.get_absolute_url }}" class="view">View {{ position.name }}</a> <br />
+	<a href="/edit{{ position.company.get_absolute_url }}" class="edit">Edit {{ position.company.name }}</a>
 	
 	<hr class="top_divider" />
 	
@@ -39,21 +39,21 @@
 		
 			<h2>Hiring Minimums</h2>
 		
-			<a href="/edit/mins/hard/{{position.pk}}" class="edit_link">Click here to edit <strong>hard minimums</strong> info</a>
+			<a href="/edit/mins/hard/{{position.pk}}" class="edit">Click here to edit <strong>hard minimums</strong> info</a>
 			<br />
-			<a href="/edit/mins/pref/{{position.pk}}" class="edit_link">Click here to edit <strong>preferred minimums</strong> info</a>
+			<a href="/edit/mins/pref/{{position.pk}}" class="edit">Click here to edit <strong>preferred minimums</strong> info</a>
 		
 			<hr />
 		
 			<h2>Salary</h2>
 		
-			<a href="/edit/salary/{{position.pk}}" class="edit_link">Click here to edit salary info</a>
+			<a href="/edit/salary/{{position.pk}}" class="edit">Click here to edit salary info</a>
 		
 			<hr />
 			
 			<h2>Hiring Status</h2>
 		
-			<a href="/edit/status/{{position.pk}}" class="edit_link">click here to edit Hiring Status info</a>
+			<a href="/edit/status/{{position.pk}}" class="edit">click here to edit Hiring Status info</a>
 		</div>
 	</form>
 
