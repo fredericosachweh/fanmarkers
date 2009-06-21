@@ -84,48 +84,6 @@ def edit_operation(request, pk):
 	return {'operation': op, 'opform': form, 'formset': formset}
 
 ###############################################################################
-
-@login_required()
-@render_to('edit_status.html')		
-def edit_status(request, pk):
-	from forms import StatusForm
-	import datetime
-
-	position = get_object_or_404(Position, pk=pk)
-	operation = Operation.objects.get(positions=position)
-	opbases = operation.opbase_set.all()
-	bases = Base.objects.filter(opbase__in=opbases)
-	
-	now = datetime.datetime.now()
-	
-	status = get_object_or_None(Status, position=position)
-	
-	if not status:
-		status = Status(position=position, date=now)
-	
-	#assert False
-	
-	array = {}
-	array["unknown"] = array["assign"] = array["choice"] = array["advertising"] = array["layoff"] = []
-	
-	if request.method == "POST":
-		
-		form = StatusForm(request.POST, instance=status)
-		
-	
-		for base in bases:
-			for item in ("unknown", "assign", "choice", "advertising", "layoff", ):
-				if request.POST[str(base)] == item:
-					array[item] = array[item] + [base]
-		if form.is_valid():
-			form = form.save(commit=False)
-			form.advertising = array["advertising"]
-			form.save()
-	
-	else:
-		form = StatusForm()
-	
-	return {"form": form, "position": position, "bases": bases}
 	
 ###############################################################################	
 
@@ -295,14 +253,81 @@ def handle_route(request, ttype, pk):
 		
 	return {"type": ttype, "opbase": opbase, "routeform": routeform, "formset": formset}
 	
+@login_required()
+@render_to('new_operation.html')       
+def new_operation(request, pk):
+	from forms import OperationForm, OpBaseForm
+	from django.forms.models import inlineformset_factory
+
+	company = get_object_or_404(Company, pk=pk)
+
+	OpBaseFormset = inlineformset_factory(Operation, OpBase, form=OpBaseForm, extra=5, )
+
+	if request.method == "POST":
+		op = Operation(company=company)
+
+		form = OperationForm(request.POST, instance=op)
+		if form.is_valid():
+			op = form.save()
+
+			formset = OpBaseFormset(request.POST, instance=op)
+			if formset.is_valid():
+				formset.save()
+
+				return HttpResponseRedirect( "/edit" + company.get_absolute_url() )
+	else:
+		form = OperationForm(instance=Operation(company=company))
+		formset = OpBaseFormset()
+
+	return {'company': company, 'form': form, "formset": formset}
+
 #############################################################################################################################
 #############################################################################################################################
 #############################################################################################################################
 from main.overlays import overlay_view
+#############################################################################################################################
+#############################################################################################################################
+#############################################################################################################################	
+@login_required()
+@render_to('edit_status.html')		
+def edit_status(request, pk):
+	from forms import StatusForm
+	import datetime
+
+	position = get_object_or_404(Position, pk=pk)
+	operation = Operation.objects.get(positions=position)
+	opbases = operation.opbase_set.all()
+	bases = Base.objects.filter(opbase__in=opbases)
+	
+	now = datetime.datetime.now()
+	
+	status = get_object_or_None(Status, position=position)
+	
+	if not status:
+		status = Status(position=position, date=now)
+	
+	#assert False
+	
+	array = {}
+	array["unknown"] = array["assign"] = array["choice"] = array["advertising"] = array["layoff"] = []
+	
+	if request.method == "POST":
+		newPOST = request.POST.copy()
+		for base in bases:
+			for item in ("unknown", "assign", "choice", "advertising", "layoff", ):
+				if request.POST[str(base)] == item:
+					array[item] = array[item] + [base]
+					
+					
+		form = StatusForm(newPOST, instance=status)
+		if form.is_valid():
+			form = form.save(commit=False)
+			form.advertising = array["advertising"]
+			form.save()
+	
+	else:
+		form = StatusForm()
+	
+	return {"form": form, "position": position, "bases": bases}
 	
 
-	
-	
-	
-	
-	

@@ -92,11 +92,11 @@ OpBaseFormset = inlineformset_factory(Operation, OpBase, form=OpBaseForm, extra=
 			
 class StatusForm(ModelForm):
 
-	hiring_bases = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
+	not_bases = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
 	choice_bases = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
 	assign_bases = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
 	layoff_bases = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
-	advertising = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
+	unknown = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
 
 	class Meta:
 		model = Status

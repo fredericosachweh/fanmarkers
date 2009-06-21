@@ -262,10 +262,10 @@ class Status(models.Model):
 	reference	=	models.TextField(blank=True, null=True)
 	date		=	models.DateField(blank=True, null=True)
 	
+	not_bases	=	models.ManyToManyField("Base", related_name="not", blank=True)
 	assign_bases	=	models.ManyToManyField("Base", related_name="assign", blank=True)
 	choice_bases	=	models.ManyToManyField("Base", related_name="direct", blank=True)
 	layoff_bases	=	models.ManyToManyField("Base", related_name="firing", blank=True)
-	advertising	=	models.ManyToManyField("Base", related_name="advertising", blank=True)
 	
 	def __unicode__(self):
 		return str(self.position) + " " + str(self.date)

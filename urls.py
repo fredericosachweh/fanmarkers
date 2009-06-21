@@ -50,7 +50,7 @@ urlpatterns = patterns('',
 	(r'^new/company/$',						create_update.create_object, {"form_class": CompanyForm, "template_name": "new_company.html"}),
 	(r'^edit/company/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": CompanyForm, "template_name": "edit_company.html"}),
 	
-	(r'^edit/operation/(?P<pk>\d{1,4})/$',				"main.views.edit_operation"),
+	(r'^edit/operation/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_operation"),
 	(r'^new/operation/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_operation"),
 	
 	(r'^edit/route/(?P<pk>\d{1,4})/$',				"jobmap.main.views.handle_route", {"ttype": "edit"}),
