@@ -19,7 +19,12 @@
 {% block body %}
 <div id="main_container">
 
+	{% ifequal type "edit" %}
+	<h1>Edit Route for {{opbase.base}}</h1>
+	{% else %}
 	<h1>New Route for {{opbase.base}}</h1>
+	{% endifequal %}
+	
 	<a href="/edit/operation/{{opbase.operation.pk}}" class="edit">Edit {{ opbase.operation }}</a>
 	
 	<hr class="top_divider" />
@@ -37,7 +42,11 @@
 		</table>
 				
 		<div>
+			{% ifequal type "edit" %}
+			<input type="submit" value="Edit Route" />
+			{% else %}
 			<input type="submit" value="Create New Route" />
+			{% endifequal %}
 		</div>
 	</form>
 

@@ -54,6 +54,12 @@
 			<h2>Hiring Status</h2>
 		
 			<a href="/edit/status/{{position.pk}}" class="edit">click here to edit Hiring Status info</a>
+			
+			<hr />
+			
+			<h2>Operation</h2>
+		
+			<a href="/edit/operation/{% for op in position.operation_set.all %}{{op.pk}}{% endfor %}" class="edit">click here to edit this position's Operation (Bases and Routes)</a>
 		</div>
 	</form>
 

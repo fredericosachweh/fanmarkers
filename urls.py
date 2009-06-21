@@ -39,25 +39,29 @@ urlpatterns = patterns('',
 	(r'^jobmap/',							"jobmap.main.views.jobmap"),
 	('^$', 								"jobmap.main.views.jobmap"),
 	
-	(r'^position/(?P<object_id>\d{1,4})/$',				list_detail.object_detail, position_view),
-	(r'^company/(?P<object_id>\d{1,4})/$',				list_detail.object_detail, company_view),
 	(r'^airport/(?P<pk>\S{1,7})/$',					"jobmap.main.views.airport"),
 	(r'^aircraft/(?P<pk>\d{1,5})/$',				"jobmap.main.views.aircraft"),
 	
-	(r'^edit/company/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": CompanyForm, "template_name": "edit_company.html"}),
-	(r'^edit/operation/(?P<pk>\d{1,4})/$',				"main.views.edit_operation"),
+	(r'^position/(?P<object_id>\d{1,4})/$',				list_detail.object_detail, position_view),
+	(r'^new/position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_position"),
 	(r'^edit/position/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": PositionForm, "template_name": "edit_position.html"}),
-	(r'^edit/route/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": RouteForm, "template_name": "edit_route.html"}),
+	
+	(r'^company/(?P<object_id>\d{1,4})/$',				list_detail.object_detail, company_view),
+	(r'^new/company/$',						create_update.create_object, {"form_class": CompanyForm, "template_name": "new_company.html"}),
+	(r'^edit/company/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": CompanyForm, "template_name": "edit_company.html"}),
+	
+	(r'^edit/operation/(?P<pk>\d{1,4})/$',				"main.views.edit_operation"),
+	(r'^new/operation/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_operation"),
+	
+	(r'^edit/route/(?P<pk>\d{1,4})/$',				"jobmap.main.views.handle_route", {"ttype": "edit"}),
+	(r'^new/route/(?P<pk>\d{1,4})/$',				"jobmap.main.views.handle_route", {"ttype": "new"}),
+
 	(r'^edit/fleet/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": FleetForm, "template_name": "edit_fleet.html"}),
+	(r'^new/fleet/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_fleet"),
+	
 	(r'^edit/status/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_status"),
 	(r'^edit/mins/hard/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Hard"}),
 	(r'^edit/mins/pref/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Preferred"}),
-	
-	(r'^new/company/$',						create_update.create_object, {"form_class": CompanyForm, "template_name": "new_company.html"}),
-	(r'^new/operation/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_operation"),
-	(r'^new/position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_position"),
-	(r'^new/route/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_route"),
-	(r'^new/fleet/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_fleet"),
 )
 
 urlpatterns += patterns('django.contrib.auth',

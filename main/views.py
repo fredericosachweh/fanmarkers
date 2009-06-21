@@ -252,16 +252,18 @@ def new_fleet(request, pk):
 ###############################################################################	
 
 @login_required()
-@render_to('new_route.html')
-def new_route(request, pk):
+@render_to('new-edit_route.html')
+def handle_route(request, ttype, pk):
 	from forms import RouteBaseFormset, RouteForm
 
-	opbase = get_object_or_404(OpBase, pk=pk)
-	route = Route(opbase=opbase)
-	
+	if ttype=="new":
+		opbase = get_object_or_404(OpBase, pk=pk)
+		route = Route(opbase=opbase)
+	elif ttype=="edit":
+		route = get_object_or_404(Route, pk=pk)
+		opbase = route.opbase
+		
 	if request.method == "POST":	
-		
-		
 		newPOST = request.POST.copy()
 		
 		i=1
@@ -284,42 +286,15 @@ def new_route(request, pk):
 			return HttpResponseRedirect( "/edit/operation/" + str(opbase.operation.pk) )
 	
 	else:
-		formset = RouteBaseFormset()
-		routeform = RouteForm(instance=route)
+		if ttype=="new":
+			formset = RouteBaseFormset()
+			routeform = RouteForm(instance=route)
+		elif ttype=="edit":	
+			formset = RouteBaseFormset(instance=route)
+			routeform = RouteForm(instance=route)
 		
-	return {"opbase": opbase, "routeform": routeform, "formset": formset}
+	return {"type": ttype, "opbase": opbase, "routeform": routeform, "formset": formset}
 	
-###############################################################################	
-
-@login_required()
-@render_to('new_operation.html')	
-def new_operation(request, pk):
-	from forms import OperationForm, OpBaseForm
-	from django.forms.models import inlineformset_factory
-	
-	company = get_object_or_404(Company, pk=pk)
-	
-	OpBaseFormset = inlineformset_factory(Operation, OpBase, form=OpBaseForm, extra=5, )
-	
-	if request.method == "POST":
-		op = Operation(company=company)
-		
-		form = OperationForm(request.POST, instance=op)
-		if form.is_valid():
-			op = form.save()
-			
-			formset = OpBaseFormset(request.POST, instance=op)
-			if formset.is_valid():
-				formset.save()
-			
-				return HttpResponseRedirect( "/edit" + company.get_absolute_url() )
-	else:
-		form = OperationForm(instance=Operation(company=company))
-		formset = OpBaseFormset()
-		
-	return {'company': company, 'form': form, "formset": formset}
-
-
 #############################################################################################################################
 #############################################################################################################################
 #############################################################################################################################
