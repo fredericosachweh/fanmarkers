@@ -5,16 +5,13 @@
 
 {% block css %}
 	<style type="text/css">
-	.base			{border: 0px solid black; margin-top: 1em; padding: 0.5em; overflow: hidden}
+	.base			{border: 2px solid black; margin-top: 1em; padding: 0.5em; overflow: hidden}
 	.base_link		{font-weight: bold; color: darkred}
 	.base_info		{display: none}
 	.base_floats		{float: left; padding-right: 1em}
 	
 	.plus			{cursor: pointer}
 	
-	.routes_table		{border-collapse: collapse; margin-top: 1em}
-	.routes_table td	{padding-right: 2em}
-
 	.position_box		{border: 0px solid black; margin-bottom: .5em; padding: .5em; font-size: medium}
 	.position_status	{font-size: medium}
 	.position_name		{font-size: x-large; font-weight: bold}
@@ -141,35 +138,34 @@
 			<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="{{ MEDIA_URL }}/icons/plus.png" alt="+"/>
 		</div>
 		<div class="base_floats">
-			<a title="{{ ob.base.get_location }}" class="base_link" href="/airport/{{ ob.base.identifier }}">
+			<a title="{{ ob.base.get_location }}" class="base_link" href="{{ ob.base.get_absolute_url }}">
 				{{ ob.base.display_name }}</a> {{ ob.get_hiring_status_display }} ({{ob.workforce_size}})<br />
 				<small>{{ ob.base.municipality }}, {{ ob.base.region }}{% ifnotequal ob.base.country "United States"%}, {{ ob.base.country }}{% endifnotequal %}</small>
-			
+				
 			<div class="base_info" id="info_{{ob.pk}}" >
 				<div id="map_{{ob.pk}}" class="small_map"></div>
-			
-			
-				{% if ob.route_set.all %}
-				<table class="routes_table">
-					<tr>
-						<td>Routes:</td><td></td>
-					</tr>
-					{% for r in ob.route_set.all %}		{# new row, new route #}
-					<tr>
-						<td>
-						<a href="{{ ob.base.get_absolute_url }}" title="{{ ob.base.location_summary }}" class="immutable">{{ ob.base.identifier }}</a> &#8594; 
-							{% for b in r.routebase_set.all %}
-							<a href="{{ b.base.get_absolute_url }}" title="{{ b.base.location_summary }}" class="immutable">{{ b.base.identifier }}</a> &#8594; 
-							{% endfor%}
-						<a href="{{ ob.base.get_absolute_url }}" title="{{ ob.base.location_summary }}" class="immutable">{{ ob.base.identifier }}</a>
-						</td>
-						
-						<td>{{r.description}}</td>
-					</tr>
-					{% endfor %}
-				</table>
-				{% endif %}
 			</div>
+			
+			{% if ob.route_set.all %}
+			<br /><br />
+			<div>
+				<strong>Routes:</strong>
+				<ul>
+				{% for r in ob.route_set.all %}		{# new row, new route #}
+				<li>
+					<a href="{{ ob.base.get_absolute_url }}" title="{{ ob.base.location_summary }}" class="immutable">{{ ob.base.identifier }}</a> &#8594; 
+						{% for b in r.routebase_set.all %}
+						<a href="{{ b.base.get_absolute_url }}" title="{{ b.base.location_summary }}" class="immutable">{{ b.base.identifier }}</a> &#8594; 
+						{% endfor%}
+					<a href="{{ ob.base.get_absolute_url }}" title="{{ ob.base.location_summary }}" class="immutable">{{ ob.base.identifier }}</a>
+					{{r.description}}
+				</li>
+				{% endfor %}
+				</ul>
+			</div>
+			{% endif %}
+			
+			
 		</div>
 	</div>
 {% endfor %}

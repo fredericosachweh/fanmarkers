@@ -4,7 +4,6 @@ from django.forms.forms import BoundField
 from django.forms.models import inlineformset_factory
 
 from models import *
-from main.custom_widgets import TableRowCheckboxSelectMultiple, TableRowRadioSelect
 from django.template import Context, loader
 
 

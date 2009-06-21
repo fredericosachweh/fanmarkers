@@ -9,7 +9,7 @@
 		.status_table td:first-child	{width: 15em;}
 		.status_table td		{border: 1px solid black; width: 5em; text-align: center; padding: 2px}
 		
-		.status_table td:last-child	{background: lightgreen}
+		.status_table td:last-child	{background: lightred}
 
 	</style>
 {% endblock %}
@@ -43,20 +43,28 @@
 			<tr>
 				<td>Base</td>
 				<td>Status Unknown</td>
+				<td>Not Hiring</td>
+				{% if bases|length_is:"1" %}
+				<td>Hiring</td>
+				{% else %}
 				<td>Hiring (Assign)</td>
 				<td>Hiring (Choice)</td>
+				{% endif %}
 				<td>Laying Off</td>
-				<td>Advertising</td>
 			</tr>
 
 			{% for base in bases %}
 			<tr>
 				<td><strong><a href="{{ base.get_absolute_url }}" class="immutable">{{base}}</a></strong><br />{{ base.location_summary}}</td>
 				<td><input type="radio" name="{{base.identifier}}" value="unknown" checked="checked" /></td>
+				<td><input type="radio" name="{{base.identifier}}" value="not" /></td>
+				{% if bases|length_is:"1" %}
+				<td><input type="radio" name="{{base.identifier}}" value="choice" /></td>
+				{% else %}
 				<td><input type="radio" name="{{base.identifier}}" value="assign" /></td>
 				<td><input type="radio" name="{{base.identifier}}" value="choice" /></td>
+				{% endif %}
 				<td><input type="radio" name="{{base.identifier}}" value="layoff" /></td>
-				<td><input type="radio" name="{{base.identifier}}" value="advertising" /></td>
 			</tr>
 			{% endfor %}
 		</table>
