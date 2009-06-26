@@ -35,14 +35,15 @@ position_view = {
 		}
 
 urlpatterns = patterns('',
-	(r'^overlay_(?P<z>\d{1,2})_(?P<x>\d{1,5})_(?P<y>\d{1,5})_(?P<o>\S{1,5})/$',		"jobmap.main.views.overlay_view"),
 
-	(r'^site-media/(?P<path>.*)$',					'django.views.static.serve', {'document_root': '/home/chris/Websites/jobmap/media', 'show_indexes': True}),
+	(r'^overlay/(?P<z>\d{1,2})_(?P<x>\d{1,5})_(?P<y>\d{1,5})_(?P<o>\S{1,5})/$', 'main.views.overlay'),
 	(r'^admin/doc/',						include('django.contrib.admindocs.urls')),
-	(r'^admin/(.*)',						admin.site.root),
 	(r'^comments/',							include('django.contrib.comments.urls')),
+	(r'^account/',							include('django_authopenid.urls')),	
+	(r'^admin/(.*)',						admin.site.root),
 	
-	(r'^account/',							include('django_authopenid.urls')),
+	(r'^site-media/(?P<path>.*)$',					'django.views.static.serve', {'document_root': '/home/chris/Websites/jobmap/media', 'show_indexes': True}),
+	
 	(r'^profile/',							"jobmap.main.views.profile"),
 	
 	(r'^jobmap/',							"jobmap.main.views.jobmap"),

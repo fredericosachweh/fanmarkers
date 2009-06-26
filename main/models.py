@@ -265,8 +265,8 @@ class Status(models.Model):
 	
 	not_bases	=	models.ManyToManyField("Base", related_name="not", blank=True)
 	assign_bases	=	models.ManyToManyField("Base", related_name="assign", blank=True)
-	choice_bases	=	models.ManyToManyField("Base", related_name="direct", blank=True)
-	layoff_bases	=	models.ManyToManyField("Base", related_name="firing", blank=True)
+	choice_bases	=	models.ManyToManyField("Base", related_name="choice", blank=True)
+	layoff_bases	=	models.ManyToManyField("Base", related_name="layoff", blank=True)
 	
 	advertising	=	models.BooleanField(default=False)
 	ad_start	=	models.DateTimeField(blank=True, null=True)

@@ -29,6 +29,11 @@ def jobmap(request):
 	
 	usa_bases = Base.objects.filter(country__exact="United States")
 	
+	all_hiring = Position.objects.exclude(status__choice_bases__isnull=True, status__assign_bases__isnull=True).values('pk')
+	just_hiring = all_hiring.exclude(status__advertising=True)
+	advertising = all_hiring.filter(status__advertising=True)
+	layoff = Status.objects.filter(layoff_bases__isnull=False).values('pk')
+	
 	usa_h = Status.objects.filter(   Q(assign_bases__in=usa_bases) | Q(choice_bases__in=usa_bases)    ).count()
 
 	return {"usa_h": usa_h}
@@ -285,7 +290,7 @@ def new_operation(request, pk):
 
 #############################################################################################################################
 #############################################################################################################################
-from main.overlays import overlay_view
+#from main.overlays import overlay_view
 #############################################################################################################################
 #############################################################################################################################
 
@@ -393,21 +398,39 @@ def edit_salary(request, pk):
 @render_to('profile.html')
 def profile(request):
 	from main.forms import ProfileForm
-	
+
 	user = request.user
 	profile = get_object_or_None(Profile, user=user)
-	
+
 	if not profile:
 		profile = Profile(user=user)
+
+		form = ProfileForm(instance=profile)
+		return {"form": form}
+
+
+
+def overlay(request, z, x, y, o):
+	from overlay.overlay_class import OverlayClass
+	from jobmap.settings import ICONS_DIR
+	from django.db.models import Q
 	
-	form = ProfileForm(instance=profile)
-	return {"form": form}
+	#bases
+	layoff = Base.objects.filter(layoff__in=Status.objects.all())
+	all_hiring = Base.objects.filter(Q(choice__in=Status.objects.all()) | Q(assign__in=Status.objects.all()))
+	just_hiring = Base.objects.filter(Q(choice__in=Status.objects.exclude(advertising=True).values('pk')) | Q(assign__in=Status.objects.exclude(advertising=True).values('pk')))
+	advertising = Base.objects.filter(Q(choice__in=Status.objects.filter(advertising=True).values('pk')) | Q(assign__in=Status.objects.filter(advertising=True).values('pk')))
 	
+	ov = OverlayClass(x=x,y=y,z=z, queryset=all_hiring)
+	ov.icon(ICONS_DIR + '/small/yellow.png')
+		
+	#############################################################
+
+	response = HttpResponse(mimetype="image/png")
+	ov.output().save(response, "PNG")
+	return response	
+
 	
-	
-	
-	
-	
-	
+			
 	
 	

@@ -6,25 +6,14 @@ var CustomGetTileUrl = function(point,zoom){
 }
 
 
-var DestOverlay = new GTileLayerOverlay(
+var BaseOverlay = new GTileLayerOverlay(
 	new GTileLayer(null, null, null, {
-		tileUrlTemplate: '/overlay_{Z}_{X}_{Y}_DMB/', 
+		tileUrlTemplate: '/overlay/{Z}_{X}_{Y}_DMB/', 
 		isPng:true,
 		opacity:1.0
 		}
 	)
 );
-
-var BaseOverlay = new GTileLayerOverlay(
-	new GTileLayer(null, null, null, {
-		tileUrlTemplate: '/overlay_{Z}_{X}_{Y}_BMB/', 
-		isPng:true,
-		opacity:1.0
-			}
-	)
-);
-
-
 
 function initialize()
 {
@@ -77,12 +66,9 @@ function figure_zoom()
 
 	else if(map.getZoom() < 10){
 		map.addOverlay(BaseOverlay);
-		map.addOverlay(DestOverlay);
 	}
 	else{
-	
 		map.addOverlay(MarkerLayer);
-	
 	}
 	
 }
