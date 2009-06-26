@@ -25,10 +25,13 @@ def sortdict(d):
 
 @render_to('view_jobmap.html')
 def jobmap(request):
+	from django.db.models import Q
 	
-	usa = OpBase.objects.filter(id=1)
+	usa_bases = Base.objects.filter(country__exact="United States")
+	
+	usa_h = Status.objects.filter(   Q(assign_bases__in=usa_bases) | Q(choice_bases__in=usa_bases)    ).count()
 
-	return {"usa": usa}
+	return {"usa_h": usa_h}
 
 ###############################################################################	
 	
@@ -61,7 +64,7 @@ def aircraft(request, pk):
 ###############################################################################		
 
 @login_required()
-@render_to('edit_operation.html')		
+@render_to('new-edit_operation.html')		
 def edit_operation(request, pk):
 	from forms import OpBaseFormset, OperationForm
 
@@ -81,7 +84,7 @@ def edit_operation(request, pk):
 		formset = OpBaseFormset(instance=op)
 
 
-	return {'operation': op, 'opform': form, 'formset': formset}
+	return {'operation': op, 'form': form, 'formset': formset, "type": "edit"}
 
 ###############################################################################
 	
@@ -189,7 +192,7 @@ def new_position(request, pk):
 ###############################################################################	
 
 @login_required()
-@render_to('new_fleet.html')	
+@render_to('new-edit_fleet.html')	
 def new_fleet(request, pk):
 	from forms import FleetForm
 
@@ -205,19 +208,19 @@ def new_fleet(request, pk):
 	else:
 		form = FleetForm()
 		
-	return {'company': company, 'form': form}
+	return {'company': company, 'form': form, "type": "new"}
 	
 ###############################################################################	
 
 @login_required()
 @render_to('new-edit_route.html')
-def handle_route(request, ttype, pk):
+def handle_route(request, type, pk):
 	from forms import RouteBaseFormset, RouteForm
 
-	if ttype=="new":
+	if type=="new":
 		opbase = get_object_or_404(OpBase, pk=pk)
 		route = Route(opbase=opbase)
-	elif ttype=="edit":
+	elif type=="edit":
 		route = get_object_or_404(Route, pk=pk)
 		opbase = route.opbase
 		
@@ -244,24 +247,22 @@ def handle_route(request, ttype, pk):
 			return HttpResponseRedirect( "/edit/operation/" + str(opbase.operation.pk) )
 	
 	else:
-		if ttype=="new":
+		if type=="new":
 			formset = RouteBaseFormset()
 			routeform = RouteForm(instance=route)
-		elif ttype=="edit":	
+		elif type=="edit":	
 			formset = RouteBaseFormset(instance=route)
 			routeform = RouteForm(instance=route)
 		
-	return {"type": ttype, "opbase": opbase, "routeform": routeform, "formset": formset}
+	return {"type": type, "opbase": opbase, "routeform": routeform, "formset": formset}
 	
 @login_required()
-@render_to('new_operation.html')       
+@render_to('new-edit_operation.html')       
 def new_operation(request, pk):
-	from forms import OperationForm, OpBaseForm
+	from forms import OperationForm, OpBaseFormset
 	from django.forms.models import inlineformset_factory
 
 	company = get_object_or_404(Company, pk=pk)
-
-	OpBaseFormset = inlineformset_factory(Operation, OpBase, form=OpBaseForm, extra=5, )
 
 	if request.method == "POST":
 		op = Operation(company=company)
@@ -281,53 +282,132 @@ def new_operation(request, pk):
 
 	return {'company': company, 'form': form, "formset": formset}
 
-#############################################################################################################################
+
 #############################################################################################################################
 #############################################################################################################################
 from main.overlays import overlay_view
 #############################################################################################################################
 #############################################################################################################################
-#############################################################################################################################	
+
 @login_required()
 @render_to('edit_status.html')		
 def edit_status(request, pk):
-	from forms import StatusForm
+	from forms import StatusForm, newBase
 	import datetime
 
+	newbases = []
+	
 	position = get_object_or_404(Position, pk=pk)
 	operation = Operation.objects.get(positions=position)
 	opbases = operation.opbase_set.all()
 	bases = Base.objects.filter(opbase__in=opbases)
 	
-	now = datetime.datetime.now()
-	
 	status = get_object_or_None(Status, position=position)
 	
+	#status = Status.objects.select_related().get(position=position)
+	
 	if not status:
-		status = Status(position=position, date=now)
-	
-	#assert False
-	
-	array = {}
-	array["unknown"] = array["assign"] = array["choice"] = array["advertising"] = array["layoff"] = []
+		status = Status(position=position)
 	
 	if request.method == "POST":
+		
 		newPOST = request.POST.copy()
+		newPOST.update({"position": position.pk})
+		
+		field_bases = {}
+		field_bases["not"] = field_bases["assign"] = field_bases["choice"] = field_bases["layoff"] = []
+		
 		for base in bases:
-			for item in ("unknown", "assign", "choice", "advertising", "layoff", ):
-				if request.POST[str(base)] == item:
-					array[item] = array[item] + [base]
-					
+			for item in ("not", "assign", "choice", "layoff", ):
+				if newPOST[str(base)] == item:
+					field_bases[item] = field_bases[item] + [base]
+		#assert False			
 					
 		form = StatusForm(newPOST, instance=status)
 		if form.is_valid():
-			form = form.save(commit=False)
-			form.advertising = array["advertising"]
-			form.save()
-	
+			instance = form.save()
+			instance.not_bases = field_bases["not"]
+			instance.assign_bases = field_bases["assign"]
+			instance.choice_bases = field_bases["choice"]
+			instance.layoff_bases = field_bases["layoff"]
+			instance.save()
+			
+		return HttpResponseRedirect( "/edit" + position.get_absolute_url() )
 	else:
+		for base in bases:
+			newbase = newBase()
+			newbase.identifier = base.identifier
+			newbase.location_summary = base.location_summary
+			
+			if not status.pk:
+				newbase.unknown_checked = 'checked="checked"'
+				
+			elif base in status.not_bases.all():
+				newbase.not_checked = 'checked="checked"'
+				
+			elif base in status.choice_bases.all():
+				newbase.choice_checked = 'checked="checked"'
+				
+			elif base in status.assign_bases.all():
+				newbase.assign_checked = 'checked="checked"'
+				
+			elif base in status.layoff_bases.all():
+				newbase.layoff_checked = 'checked="checked"'
+				
+			else:
+				newbase.unknown_checked = 'checked="checked"'
+			
+			newbases.append(newbase)
+			
 		form = StatusForm()
 	
-	return {"form": form, "position": position, "bases": bases}
+	return {"bases": newbases, "form": form, "position": position, "last_modified": status.last_modified}
 	
+#############################################################################################################################
+		
+@login_required()
+@render_to('edit_salary.html')	
+def edit_salary(request, pk):
+	from main.forms import CompensationForm, PayscaleFormset
+	
+	position = get_object_or_404(Position, pk=pk)
+	comp = get_object_or_None(Compensation, position=position)
+	
+	if not comp:
+		comp = Compensation(position=position)
+	
+	
+	
+	if request.method == "POST":
+		form = CompensationForm(request.POST, instance=comp)
+		#form.save()
+	else:
+		form = CompensationForm(instance=comp)
+		formset = PayscaleFormset(instance=comp)
+	
+	return {"form": form, "formset": formset, "position": position}
 
+#############################################################################################################################
+
+@login_required()
+@render_to('profile.html')
+def profile(request):
+	from main.forms import ProfileForm
+	
+	user = request.user
+	profile = get_object_or_None(Profile, user=user)
+	
+	if not profile:
+		profile = Profile(user=user)
+	
+	form = ProfileForm(instance=profile)
+	return {"form": form}
+	
+	
+	
+	
+	
+	
+	
+	
+	

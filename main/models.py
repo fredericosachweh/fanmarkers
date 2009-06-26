@@ -54,9 +54,12 @@ class Compensation(models.Model):
 	perdiem		=	models.TextField(blank=True)
 	
 	training_pay	=	models.IntegerField(choices=PAY_TYPE, default=0)
-	flight_hours	=	models.FloatField("Typical Flight Hours (per month)")
 	training_contract=	models.BooleanField(default=False)
+	
+	flight_hours	=	models.FloatField("Typical Flight Hours", help_text="(per month)", blank=True, null=True)
+
 	extra_info	=	models.TextField(blank=True)
+	last_modified	=	models.DateTimeField(auto_now=True)
 	
 	def __unicode__(self):
 		return "comp: %s" % self.position
@@ -153,13 +156,13 @@ class Fleet(models.Model):
 ###############################################################################################################################
 
 class Company(models.Model):
-	name		=	models.CharField(max_length=64)
+	name		=	models.CharField(max_length=64, unique=True)
 	call_sign	=	models.CharField(max_length=32, blank=True)
 	website		=	models.URLField(blank=True)
 	description	=	models.TextField(blank=True)
 	type		=	models.IntegerField(choices=BUSINESS_TYPE, default=0)
 	jumpseat	=	models.IntegerField(choices=JUMPSEAT_TYPE, default=0)
-	union		=	models.CharField(max_length=32, blank=True)
+	union		=	models.CharField(max_length=32, blank=True, default="Unknown")
 	contact_info	=	models.TextField(blank=True)
 	watchers	=	models.ManyToManyField(User, blank=True, )
 	
@@ -200,10 +203,8 @@ class Position(models.Model):
 		except:
 			return None
 
-	
-		
 ###############################################################################################################################
-		
+
 class Operation(models.Model):
 	company		=	models.ForeignKey("Company",)
 	fleet		=	models.ManyToManyField("Fleet", blank=True, null=True)
@@ -260,16 +261,24 @@ class Status(models.Model):
 	position	=	models.ForeignKey("Position")
 	
 	reference	=	models.TextField(blank=True, null=True)
-	date		=	models.DateField(blank=True, null=True)
+	last_modified	=	models.DateTimeField(auto_now=True)
 	
 	not_bases	=	models.ManyToManyField("Base", related_name="not", blank=True)
 	assign_bases	=	models.ManyToManyField("Base", related_name="assign", blank=True)
 	choice_bases	=	models.ManyToManyField("Base", related_name="direct", blank=True)
 	layoff_bases	=	models.ManyToManyField("Base", related_name="firing", blank=True)
 	
+	advertising	=	models.BooleanField(default=False)
+	ad_start	=	models.DateTimeField(blank=True, null=True)
+	ad_stop		=	models.DateTimeField(blank=True, null=True)
+	
 	def __unicode__(self):
-		return str(self.position) + " " + str(self.date)
+		return str(self.position) + " - " + str(self.last_modified)
 	
 ###############################################################################################################################
 
-
+class Profile(models.Model):
+	user		=	models.ForeignKey(User, primary_key=True)
+					
+	dob		=	models.DateField("Date of Birth", blank=True, default="1900-01-01")
+	resume		=	models.TextField(blank=True, null=True)

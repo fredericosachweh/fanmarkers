@@ -4,13 +4,22 @@ from django.contrib import admin
 
 from main.models import *
 from main.forms import *
+from main.constants import *
 
 admin.autodiscover()
 
-company_info = {
+company_list_all = {
 		"queryset": Company.objects.all(),
 		"template_name": "list_company.html",
 		"template_object_name": "company",
+		"extra_context": {"types": BUSINESS_TYPE, "title": "All Companies"}
+		}
+		
+company_list_type = {
+		"queryset": Company.objects.all(),
+		"template_name": "list_company.html",
+		"template_object_name": "company",
+		"extra_context": {"types": BUSINESS_TYPE, "title": "All Companies"}
 		}
 
 company_view = {
@@ -26,15 +35,15 @@ position_view = {
 		}
 
 urlpatterns = patterns('',
-
 	(r'^overlay_(?P<z>\d{1,2})_(?P<x>\d{1,5})_(?P<y>\d{1,5})_(?P<o>\S{1,5})/$',		"jobmap.main.views.overlay_view"),
 
 	(r'^site-media/(?P<path>.*)$',					'django.views.static.serve', {'document_root': '/home/chris/Websites/jobmap/media', 'show_indexes': True}),
 	(r'^admin/doc/',						include('django.contrib.admindocs.urls')),
 	(r'^admin/(.*)',						admin.site.root),
 	(r'^comments/',							include('django.contrib.comments.urls')),
-	(r'^accounts/',							include('registration.urls')),
-	(r'^company/$',							list_detail.object_list, company_info),
+	
+	(r'^account/',							include('django_authopenid.urls')),
+	(r'^profile/',							"jobmap.main.views.profile"),
 	
 	(r'^jobmap/',							"jobmap.main.views.jobmap"),
 	('^$', 								"jobmap.main.views.jobmap"),
@@ -46,6 +55,8 @@ urlpatterns = patterns('',
 	(r'^new/position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_position"),
 	(r'^edit/position/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": PositionForm, "template_name": "edit_position.html"}),
 	
+	(r'^company/list/all/',						list_detail.object_list, company_list_all),
+	(r'^company/list/type/(?P<object_id>\d{1,4})/$',		list_detail.object_list, company_list_type),
 	(r'^company/(?P<object_id>\d{1,4})/$',				list_detail.object_detail, company_view),
 	(r'^new/company/$',						create_update.create_object, {"form_class": CompanyForm, "template_name": "new_company.html"}),
 	(r'^edit/company/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": CompanyForm, "template_name": "edit_company.html"}),
@@ -56,16 +67,17 @@ urlpatterns = patterns('',
 	(r'^edit/route/(?P<pk>\d{1,4})/$',				"jobmap.main.views.handle_route", {"ttype": "edit"}),
 	(r'^new/route/(?P<pk>\d{1,4})/$',				"jobmap.main.views.handle_route", {"ttype": "new"}),
 
-	(r'^edit/fleet/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": FleetForm, "template_name": "edit_fleet.html"}),
+	(r'^edit/fleet/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": FleetForm, "template_name": "new-edit_fleet.html", "extra_context": {"type": "edit"}}),
 	(r'^new/fleet/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_fleet"),
 	
 	(r'^edit/status/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_status"),
+	(r'^edit/salary/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_salary"),
 	(r'^edit/mins/hard/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Hard"}),
 	(r'^edit/mins/pref/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Preferred"}),
 )
 
-urlpatterns += patterns('django.contrib.auth',
-	(r'^accounts/login/$','views.login', {'template_name': 'admin/login.html'}),
-	(r'^accounts/logout/$','views.logout'),
-)
+#urlpatterns += patterns('django.contrib.auth',
+#	(r'^accounts/login/$','views.login', {'template_name': 'admin/login.html'}),
+#	(r'^accounts/logout/$','views.logout'),
+#)
 

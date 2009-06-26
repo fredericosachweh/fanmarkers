@@ -5,10 +5,8 @@ def google_maps(request):
 	return {'GOOGLE_MAPS_KEY': GOOGLE_MAPS_KEY}
 	
 def top_numbers(request):
-	#hiring =	OpBase.objects.filter(hiring_status=2).count()
-	#advertising =	OpBase.objects.filter(hiring_status=3).count()
+	hiring =	Status.objects.exclude(  choice_bases__isnull=True, assign_bases__isnull=True  )
 	
-	hiring = "??"
-	advertising = "??"
+	advertising =	hiring.filter(advertising=True)
 	
-	return {'advertising': str(advertising), 'hiring': str(hiring)}
+	return {'advertising': str(advertising.count()), 'hiring': str(hiring.count())}

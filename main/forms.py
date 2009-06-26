@@ -92,15 +92,15 @@ OpBaseFormset = inlineformset_factory(Operation, OpBase, form=OpBaseForm, extra=
 			
 class StatusForm(ModelForm):
 
-	not_bases = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
-	choice_bases = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
-	assign_bases = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
-	layoff_bases = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
-	unknown = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput)
+	#not_bases = forms.ModelMultipleChoiceField(queryset=Base.objects.all()[:50])
+	not_bases = forms.ModelMultipleChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput, required=False)
+	choice_bases = forms.ModelMultipleChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput, required=False)
+	assign_bases = forms.ModelMultipleChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput, required=False)
+	layoff_bases = forms.ModelMultipleChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput, required=False)
 
 	class Meta:
 		model = Status
-		exclude = ('position', 'date')
+		#exclude = ("layoff_bases", "assign_bases", "choice_bases", )
 		
 #####################################################################################################
 	
@@ -116,5 +116,34 @@ class MinsForm(ModelForm):
 		
 ######################################
 
+class PayscaleYearForm(ModelForm):
+	class Meta:
+		model = PayscaleYear
 
+class CompensationForm(ModelForm):
+	class Meta:
+		model = Compensation
+		#exclude = ('company',)
+		
+PayscaleFormset = inlineformset_factory(Compensation, PayscaleYear, form=PayscaleYearForm, extra=5, )
+		
+######################################
+
+class ProfileForm(ModelForm):
+	class Meta:
+		model = Profile
+		exclude = ('user', )
+		
+class newBase(object):
+	not_checked = ""
+	assign_checked = ""
+	choice_checked = ""
+	layoff_checked = ""
+	unknown_checked = ""
+	
+	identifier = ""
+	location_summary = ""
+	
+	def __unicode__(self):
+		return self.identifier
 
