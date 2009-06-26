@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block javascript %}{% endblock %}
+
+{% block body %}
+<div id="main_container">
+	<h1>
+	{% block heading %}Heading{% endblock %}
+	</h1>
+	
+	{% block top_links%}links{% endblock %}
+	
+	<div class="last_modified" >&nbsp;</div>
+	<hr/>
+	
+	{% block main_content %}
+	{% endblock %}
+</div>
+{% endblock %}

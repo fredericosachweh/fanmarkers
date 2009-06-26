@@ -1,0 +1,17 @@
+{% extends "base_form.html" %}
+
+{% block title %}Add New Position for {{ company.name }}{% endblock %}
+
+{########################################################################}
+
+{% block top_links %}
+<a href="/edit{{ company.get_absolute_url }}" class="edit_link">Edit {{ company.name }}</a>
+{% endblock %}
+
+{########################################################################}
+
+{% block form%}
+<table summary="New Position fields">
+	{{form}}
+</table>
+{% endblock %}

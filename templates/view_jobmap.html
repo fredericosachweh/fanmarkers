@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Jobmap{% endblock %}
+
+{% block css %}
+		<style type="text/css">
+			#container				{height: 100%; overflow: hidden}
+			#map_canvas				{height: 100%; width: 100%; float: left; background: green;    border: 0px solid black}
+			#sidebar				{height: 100%; width: 100%; float: left; background: #FFDDFF;  border: 0px solid black; padding-top: 20px}
+		
+			#container table			{height: 100%; width: 100%; border-collapse: collapse}
+			#container table tr			{height: 100%}
+			td					{height: 100%}
+			#container table td:last-child		{width: 20em; height: 100%}
+		
+			#submit_sidebar				{margin-left: auto; margin-right: auto}
+		</style>
+{% endblock %}
+
+{% block javascript %}
+
+	
+
+	<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}" type="text/javascript">
+	</script>
+	
+	<script type="text/javascript">
+		var map;		//map is in global scope
+		
+		africa = new GGeoXml('http://other.flightlogg.in/kml/africa.kmz');
+		americas = new GGeoXml('http://other.flightlogg.in/kml/americas.kmz');
+		carribean = new GGeoXml('http://other.flightlogg.in/kml/carribean.kmz');
+		alaska = new GGeoXml('http://other.flightlogg.in/kml/alaska.kmz');
+		austrailia = new GGeoXml('http://other.flightlogg.in/kml/austrailia.kmz');
+		canada = new GGeoXml('http://other.flightlogg.in/kml/canada.kmz');
+		china = new GGeoXml('http://other.flightlogg.in/kml/china.kmz');
+		eastern_europe = new GGeoXml('http://other.flightlogg.in/kml/eastern_europe.kmz');
+		europe = new GGeoXml('http://other.flightlogg.in/kml/europe.kmz');
+		india = new GGeoXml('http://other.flightlogg.in/kml/india.kmz');
+		indonesia = new GGeoXml('http://other.flightlogg.in/kml/indonesia.kmz');
+		middle_east = new GGeoXml('http://other.flightlogg.in/kml/middle_east.kmz');
+		russia = new GGeoXml('http://other.flightlogg.in/kml/russia.kmz');
+		scandanavia = new GGeoXml('http://other.flightlogg.in/kml/scandanavia.kmz');
+		usa = new GGeoXml('http://other.flightlogg.in/kml/usa.kmz');
+		
+	</script>
+	
+	<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/big_map.js">
+	</script>
+	
+{% endblock %}
+
+{% block body %}	
+	<div id="container">
+		<table>
+			<tr>
+				<td><div id="map_canvas"></div></td>
+				<td>
+					<form action="." method="get">
+					<div id="sidebar">
+					Show:<br />	<input type="checkbox" id="c_bases" />Job bases<br />
+							<input type="checkbox" id="c_destinations" />Destination airports<br />
+							
+					<hr />
+							
+					Filter:		<select id="d_filter">
+								<option>Show All</option>
+								<option>Only Advertising</option>
+								<option>Only Hiring</option>
+								<option>Only Lay-off</option>
+								<option>Only no-status</option>
+							</select>
+														
+							<br />
+							
+					<hr />
+							
+					By Aircraft:	<select id="d_aircraft">
+								<option>All</option>
+							</select>
+							
+							<br />
+							
+					By Schedule:	<select id="d_schedule">
+								<option>All</option>
+								<option>On Call</option>
+								<option>Scheduled</option>
+							</select>
+							
+							<br />
+							
+					<hr />
+							
+					Only show jobs I'm qualified for: <input type="checkbox" /><br />
+							
+							<br />
+					
+					Search: <input type="text" /><br />
+					
+					<br />
+					
+					<input id="submit_sidebar" type="submit" value="Go" />
+				
+					</div>
+					</form>
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+{% endblock %}

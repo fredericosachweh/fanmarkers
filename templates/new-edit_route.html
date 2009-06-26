@@ -1,0 +1,34 @@
+{% extends "base_form.html" %}
+
+{% block title %}New Route for {{opbase.base}}{% endblock %}
+
+{% block css %}
+	<style type="text/css">
+		input[type="text"]		{width:4em}
+	</style>
+{% endblock %}
+
+{% block heading %}
+	{% ifequal type "edit" %}
+	<h1>Edit Route for {{opbase.base}}</h1>
+	{% else %}
+	<h1>New Route for {{opbase.base}}</h1>
+	{% endifequal %}
+{% endblock %}
+
+{% block top_links %}	
+	<a href="/edit/operation/{{opbase.operation.pk}}" class="edit">Edit {{ opbase.operation }}</a>
+{% endblock %}	
+	
+{% block form%}
+	<div>
+		{{opbase.base}} - {% for form in formset.forms %}{{form.base}}{{form.id}} - {{form.errors}}{% endfor %}{{opbase.base}}
+		{{ formset.management_form }}
+	</div>
+	
+	<hr />
+	
+	<table>
+		{{routeform}}
+	</table>
+{% endblock %}

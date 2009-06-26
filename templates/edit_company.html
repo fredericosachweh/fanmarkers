@@ -1,0 +1,55 @@
+{% extends "base_form.html" %}
+{################################################################################}
+
+{% block title %}Editing: {{ form.instance }}{% endblock %}
+
+{################################################################################}
+
+{% block top_links %}	
+	<a href="{{ form.instance.get_absolute_url }}" class="view">View {{ form.instance }}</a>
+{% endblock %}
+
+{################################################################################}
+
+{% block form %}
+	<table>
+	{{form}}
+	</table>
+{% endblock %}
+
+{################################################################################}
+
+{% block afterform %}
+	<hr />
+	<h2>Fleets:</h2>
+	<a href="/new/fleet/{{form.instance.pk}}" class="new">Create New Fleet</a>
+	<ul>
+	{% for fleet in form.instance.fleet_set.all %}
+		<li><a href="/edit/fleet/{{fleet.pk}}" class="edit">{{fleet.aircraft}} - {{fleet.size}}</a></li>
+	{% endfor %}
+	</ul>
+
+	<hr />
+
+	<h2>Positions:</h2>
+	<a href="/new/position/{{form.instance.pk}}" class="new">Create New Position</a>
+	<ul>
+	{% for pos in form.instance.position_set.all %}
+		<li><a href="/edit/position/{{pos.pk}}" class="edit">{{pos.name}}</a></li>
+	{% endfor %}
+	</ul>
+
+	<hr />
+
+	<h2>Operations:</h2>
+	<a href="/new/operation/{{form.instance.pk}}" class="new">Create New Operation</a>
+	<ul>
+	{% for op in form.instance.operation_set.all %}
+		<li><a href="/edit/operation/{{op.pk}}" class="edit">{{op.all_fleet}} - {{op.all_bases}}</a></li>
+	{% endfor %}
+	</ul>	
+
+	</div>
+{% endblock %}
+
+{################################################################################}

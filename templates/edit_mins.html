@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Editing {{ position }} {{ min_type }} Minimums{% endblock %}
+
+{% block css %}
+	<style type="text/css">
+		input[type="text"]	{width: 3em}
+		.collapse		{padding: 5px; margin: 10px}
+		.collapse table		{display: none}
+		legend			{font-size: large; color: gray}
+		.highlighted		{font-weight: bold; color: black}
+		.plus 			{margin: 2px; margin-right: 5px; cursor: pointer}	
+	</style>
+{% endblock %}
+
+{% block javascript %}
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$(".plus").attr("src", plus_path);
+			
+			//       input                      td        tr     tbody    table     legend     img
+			$("input[type='text'][value!=0]").parent().parent().parent().parent().show();						//the table
+			$("input[type='text'][value!=0]").parent().parent().parent().parent().siblings().children().attr("src", minus_path);	//the image
+			$("input[type='text'][value!=0]").parent().parent().parent().parent().siblings().addClass("highlighted")		//the legend
+			
+			
+			//       option                 select     td        tr     tbody    table     legend     img
+			$("option:selected[value!=0]").parent().parent().parent().parent().parent().show();						//the table
+			$("option:selected[value!=0]").parent().parent().parent().parent().parent().siblings().children().attr("src", minus_path);	//the image
+			$("option:selected[value!=0]").parent().parent().parent().parent().parent().siblings().addClass("highlighted")
+			
+			
+		
+			$(".plus").click(function(){
+				$(this).parent().siblings().toggle("fast");	//toggle table visibility
+				
+				if($(this).attr('src') == plus_path){
+					$(this).attr('src', minus_path);
+					$(this).attr('alt', "-");
+				}
+				else{
+					$(this).attr('src', plus_path);
+					$(this).attr('alt', "+");
+				}
+			});
+		});
+	
+	</script>
+
+
+{% endblock %}
+
+{% block body %}
+<div id="main_container">
+
+	<h1>{{ position.company }} >> Editing <em>{{ position }}</em> {{ min_type }} Minimums</h1>
+	<a href="/edit/position/{{ position.pk }}">Edit {{ position }}</a><br />
+	<a href="/position/{{ position.pk }}">View {{ position }}</a>
+	<hr class="top_divider" />
+	
+	<h2>General Requirements:</h2>
+	
+	<form action="." method="post">
+	<table>
+	{{general_mins}}
+	</table>
+	
+	<hr />
+	
+	<h2>Flight Times:</h2>
+	
+	<div class="collapse" id="any_mins">
+		<fieldset>
+		<legend><img title="Click to expand" class="plus" id="expand_any" alt="+"/>Any Aircraft</legend>
+		<table summary="Any Aircraft Minimums">
+			{{any_mins}}
+		</table>
+		</fieldset>
+	</div>
+	
+	<div class="collapse" id="airplane_mins">
+		<fieldset>
+			<legend><img title="Click to expand" class="plus" id="expand_airplane" alt="+"/>Fixed Wing</legend>
+			<table summary="Fixed Wing Minimums">
+				{{airplane_mins}}
+			</table>
+		</fieldset>
+	</div>
+	
+	<div class="collapse" id="se_mins">
+		<fieldset>
+			<legend><img title="Click to expand" class="plus" id="expand_se" alt="+"/>Single-Engine</legend>
+			<table summary="Single-Engine Minimums">
+				{{se_mins}}
+			</table>
+		</fieldset>
+	</div>
+	
+	<div class="collapse" id="me_mins">
+		<fieldset>
+		<legend><img title="Click to expand" class="plus" id="expand_me" alt="+"/>Multi-Engine</legend>
+		<table summary="Multi-Engine Minimums">
+			{{me_mins}}
+		</table>
+		</fieldset>
+	</div>
+	
+	<div class="collapse" id="sea_mins">
+		<fieldset>
+		<legend><img title="Click to expand" class="plus" id="expand_sea" alt="+"/>Seaplane</legend>
+		<table summary="Seaplane Minimums">
+			{{sea_mins}}
+		</table>
+		</fieldset>
+	</div>
+	
+	<div class="collapse" id="mes_mins">
+		<fieldset>
+		<legend><img title="Click to expand" class="plus" id="expand_mes" alt="+"/>Multi-Engine Seaplane</legend>
+		<table summary="Multi-Engine Seaplane Minimums">
+			{{mes_mins}}
+		</table>
+		</fieldset>
+	</div>
+	
+	<div class="collapse" id="glider_mins">
+		<fieldset>
+		<legend><img title="Click to expand" class="plus" id="expand_glider" alt="+"/>Glider</legend>
+		<table summary="Glider Minimums">
+			{{glider_mins}}
+		</table>
+		</fieldset>
+	</div>
+	
+	<div class="collapse" id="heli_mins">
+		<fieldset>
+		<legend><img title="Click to expand" class="plus" id="expand_heli" alt="+"/>Helicopter</legend>
+		<table summary="Helicopter Minimums">
+			{{heli_mins}}
+		</table>
+		</fieldset>
+	</div>
+	
+	<div class="collapse" id="sim_mins">
+		<fieldset>
+		<legend><img title="Click to expand" class="plus" id="expand_sim" alt="+"/>Simulator</legend>
+		<table summary="Simulator Minimums">
+			{{sim_mins}}
+		</table>
+		</fieldset>
+	</div>
+	
+	<div>
+		<input type="submit" value="Submit" />
+	</div>
+</form>
+</div>
+{% endblock %}

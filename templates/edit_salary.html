@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock %}
+
+{% block css %}
+	<style type="text/css">
+		input[type="text"]		{width: 4em}
+		
+		.status_table td:first-child	{width: 15em;}
+		.status_table td		{border: 1px solid black; width: 5em; text-align: center; padding: 2px}
+		
+		.status_table td:last-child	{background: lightred}
+
+	</style>
+{% endblock %}
+
+{% block javascript %}
+
+
+
+{% endblock %}
+
+{% block body %}
+<div id="main_container">
+
+	<h1>
+	Editing salary information for: {{ position.company }} - {{ position }}
+	</h1>
+	
+	<a href="{{ position.get_absolute_url }}" class="view">View {{position}}</a><br />
+	<a href="/edit{{ position.get_absolute_url }}" class="edit">Edit {{position}}</a>
+	
+	
+	<hr class="top_divider" />
+	
+	<form action="." method="post">
+	<div>
+		<table>
+			<tr>
+				<th>{{form.flight_hours.label_tag}}</th> <td>{{form.flight_hours}} {{form.flight_hours.help_text}}</td>
+			</tr>
+			
+			<tr>
+				<th>{{form.benefits.label_tag}}</th> <td>{{form.benefits}} {{form.benefits.help_text}}</td>
+			</tr>
+			
+			<tr>
+				<th>{{form.perdiem.label_tag}}</th> <td>{{form.perdiem}} {{form.perdiem.help_text}}</td>
+			</tr>
+			
+			<tr>
+				<th>{{form.training_pay.label_tag}}</th> <td>{{form.training_pay}} {{form.training_pay.help_text}}</td>
+			</tr>
+			
+			<tr>
+				<th>{{form.training_contract.label_tag}}</th> <td>{{form.training_contract}} {{form.training_contract.help_text}}</td>
+			</tr>
+			
+			<tr>
+				<th>{{form..label_tag}}</th> <td>{{form.}} {{form..help_text}}</td>
+			</tr>
+			
+			<tr>
+				<th>{{form..label_tag}}</th> <td>{{form.}} {{form..help_text}}</td>
+			</tr>
+			
+			<tr>
+				<th>{{form..label_tag}}</th> <td>{{form.}} {{form..help_text}}</td>
+			</tr>
+		</table>
+		
+		<hr />
+		
+		<table>
+			{% for form in formset.forms%}
+				{%if form.field {{form}}
+			{% endfor %}
+		</table>
+	
+		<input type="submit" value="Submit Changes" />
+	
+	</div>
+	</form>
+	
+</div>
+
+{% endblock %}

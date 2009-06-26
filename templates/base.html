@@ -1,0 +1,132 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+{#<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">#}
+<html{# xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"#} lang="en">
+	<head profile="http://www.w3.org/2005/10/profile">
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+		{#<meta name="DESCRIPTION" content="An electronic logbook application for pilots." />#}
+		{#<meta name="KEYWORDS" content="Pilot Logbook, Online Logbook, Pilot Log, Flight Log, Flight Logbook, web application, Private Pilot">#}
+		{#<link rel="icon" type="image/png" href="/icons/favicon_{{ profile.style }}.png" />#}
+		
+		<style type="text/css">
+			body			{font-family: Bitstream Vera Sans; font-size: small}
+			input			{font-family: Bitstream Vera Sans; font-size: small}
+			
+			h1			{margin-bottom: 0px}
+			
+			th			{text-align: left}
+			
+			a			{text-decoration: none}
+			a:hover			{text-decoration: underline}
+			
+			/***********************************************************************/
+			
+			a.view			{color: purple}
+			a.view:visited		{color: darkpurple}
+			
+			a.edit			{color: green}
+			a.edit:visited		{color: darkgreen}
+			
+			a.new			{color: blue}
+			a.new:visited		{color: darkblue}
+			
+			a.immutable		{color: red}
+			a.immutable:visited		{color: darkred}
+			
+			/***********************************************************************/
+			
+			a.edit_link_ui		{font-size: x-small; color: green; font-weight: bold}
+			
+			.last_modified		{text-align: right}
+			
+			#fullscreen		{width: 100%; height: 100%; position: absolute; top: 0; left:0; padding:0; margin: 0; z-index: -1}
+			
+			#top_bar		{background: olive; position: absolute; top: 0; left:0; width: 100%; color: white; z-index: 2}
+			#top_bar a		{color: black; text-decoration: none}
+			
+			#top_bar table		{float: left; padding: 0; margin: 0; height: 100%; border-collapse: collapse}
+			#top_bar table td	{padding-left: 1em; padding-right: 1em; border-left: 1px solid black; border-right: 1px solid black}
+			#top_bar table td:hover	{background: #AAAAAA}
+			
+			#count_box		{float: right}
+			
+			#main_container		{padding: 10px; margin-top: 1em}
+			
+			.small_map		{height: 200px; width:400px; background: green; margin-bottom: 1em; margin-top: 1em}
+		</style>
+		{% block css %}
+		{% endblock %}
+		
+		<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/javascripts/jquery/css/black-tie/jquery-ui-1.7.1.custom.css">
+		
+		<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/jquery/jquery-1.3.2.min.js"></script>		
+		<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/jquery/jquery-ui-1.7.1.custom.min.js"></script>
+		
+		<script type="text/javascript">
+		
+			var plus_path = '{{ MEDIA_URL }}/icons/plus.png';
+			var minus_path = '{{ MEDIA_URL }}/icons/minus.png';
+			
+			{% if not user.is_authenticated %}
+			$(document).ready(function() {
+		
+				$("a.edit_link_ui").hide();
+				$("a.edit").hide();
+				$("a.new").hide();
+	
+			});
+			{% endif %}
+		
+		</script>
+		
+		{% block javascript %}
+		{% endblock %}
+				
+		<!--<script type="text/javascript">
+			var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+			document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+		</script>
+		
+		<script type="text/javascript">
+			var pageTracker = _gat._getTracker("UA-501381-2");
+			pageTracker._trackPageview();
+		</script>
+		-->
+		
+		
+		
+		<title>{% block title %}{% endblock %}</title>
+	</head>
+	
+	<body>
+		<div id="fullscreen">
+			<div id="top_bar">
+				<table summary="navigation bar">
+					<tr>
+						<td><a href="/jobmap">Map</a></td>
+						<td><a href="/company/list/all">Company Profiles</a></td>
+						{% if user.is_authenticated %}
+						<td><a href="/account/profile">Profile / Sign Out</a></td>
+						{% else %}
+						<td><a href="/account/signin">Sign in / Register</a></td>
+						{% endif %}
+						<td><a href="/forum">Forum</a></td>
+						<td><a href="/advertise">Advertise</a></td>
+						<td><a href="/latest">Latest Changes</a></td>
+						<td><a href="/search">Advanced Search</a></td>
+					</tr>
+				</table>
+				
+				<div id="count_box">
+					Advertising: <strong>{{ advertising }}</strong>&nbsp;&nbsp; Hiring: <strong>{{ hiring }}</strong>&nbsp;
+				</div>
+			</div>
+			
+			{% block body %}
+			{% endblock %}
+			
+		</div>
+		
+		
+	</body>
+	
+</html>

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block javascript %}{% endblock %}
+
+{% block body %}
+<div id="main_container">
+	<h1>
+	{% block heading %}{% endblock %}
+	</h1>
+	{% block top_links%}{% endblock %}
+	
+	<div class="last_modified" >{% if last_modified %}Last Modified: {{last_modified|date:"Y-M-d, T"}}{% endif %} &nbsp; </div>
+	<hr/>
+	
+	{% block form %}{% endblock %}
+</div>
+{% endblock %}

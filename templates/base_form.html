@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block javascript %}{% endblock %}
+
+{% block body %}
+<div id="main_container">
+	<h1>
+	{% block title %}{% endblock %}
+	</h1>
+	
+	{% block top_links%}{% endblock %}
+	
+	<div class="last_modified" >{% if last_modified %}Last Modified: <strong>{{last_modified|date:"F d, Y"}}</strong> {{last_modified|date:"(G:i.s T)"}}{% endif %} &nbsp; </div>
+	<hr/>
+	
+	{% block beforeform %}{% endblock %}
+	
+	<form action="." method="post">
+		<div>
+			{% block form %}{% endblock %}
+			<br />
+			<input type="submit" value="{% if last_modified %}Submit Changes{% else %}Submit{% endif %}" />
+		</div>
+	</form>
+	
+	{% block afterform %}{% endblock %}
+</div>
+{% endblock %}

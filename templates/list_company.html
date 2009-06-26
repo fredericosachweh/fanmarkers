@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Company List{% endblock %}
+
+{% block css %}
+	<style type="text/css">
+		#company_filter_box		{margin: 1em; border: 1px solid black; background: lightgreen;}
+	</style>
+{% endblock %}
+
+{% block javascript %}
+
+
+
+{% endblock %}
+
+{% block body %}
+<div id="main_container">
+
+	<h1>{{title}}</h1>
+	
+	<div id="company_filter_box">
+		<table>
+			<tr>
+				{% for type in types %}
+				<td><a href="/company/list/type/{{ type.0 }}">{{type.1}}</a></td>
+				{% endfor %}
+			</tr>
+		</table>
+	</div>
+	<ol>
+	{% for company in company_list %}
+		<li><a href="/company/{{company.pk}}" class="view">{{ company.name }}</a></li>
+	{% endfor %}
+	</ol>
+		<br />
+		<a href="/new/company" class="new">Create New Company</a>
+
+
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends "base_form.html" %}
+
+{% block title %}
+	{% ifequal type "edit" %}
+	Editing: {{form.instance}}
+	{% else %}
+	Adding New Fleet for: {{ company.name }}
+	{% endifequal %}
+{% endblock %}
+
+{##############################################################################}
+
+{% block heading %}
+	{% ifequal type "edit" %}
+	Editing: {{form.instance}}
+	{% else %}
+	Adding New Fleet for: {{ company.name }}
+	{% endifequal %}
+{% endblock %}
+
+{##############################################################################}	
+
+{% block top_links %}
+	{% ifequal type "edit" %}
+	<a href="/edit{{ form.instance.company.get_absolute_url }}" class="edit">Edit {{ form.instance.company }}</a>
+	{% else %}
+	<a href="/edit{{ company.get_absolute_url }}" class="edit">Edit {{ company }}</a>
+	{% endifequal %}
+{% endblock %}
+
+{##############################################################################}
+		
+{% block form %}
+<table>
+	{{form}}
+</table>
+{% endblock %}
