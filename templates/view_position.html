@@ -139,8 +139,8 @@
 		</div>
 		<div class="base_floats">
 			<a title="{{ ob.base.get_location }}" class="base_link" href="{{ ob.base.get_absolute_url }}">
-				{{ ob.base.display_name }}</a> {{ ob.get_hiring_status_display }} ({{ob.workforce_size}})<br />
-				<small>{{ ob.base.municipality }}, {{ ob.base.region }}{% ifnotequal ob.base.country "United States"%}, {{ ob.base.country }}{% endifnotequal %}</small>
+				{{ ob.base.display_name }}</a> ({{ob.workforce_size}})<br />
+				<small>{{ ob.base.location_summary}}</small>
 				
 			<div class="base_info" id="info_{{ob.pk}}" >
 				<div id="map_{{ob.pk}}" class="small_map"></div>
