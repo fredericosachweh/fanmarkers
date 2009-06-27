@@ -13,7 +13,7 @@ class OverlayClass():
 	gmt = GlobalMercator()
 	hard_limit = 100
 	
-	def __init__(self, z=1, x=1, y=1, o="", image="", queryset=""):
+	def __init__(self, z=1, x=1, y=1, o="", image="", queryset="", pointfield=True):
 		z = int(z)
 		x = int(x)
 		y = int(y)
@@ -21,6 +21,8 @@ class OverlayClass():
 		self.options = o
 		self.zoom = z
 		self.queryset = queryset
+		self.pointfield = pointfield
+		
 		if image == "":
 			#self.im = Image.new("RGBA", (256,256))
 			self.im = Image.open(PROJECT_PATH + "/media/test.png")
@@ -39,17 +41,25 @@ class OverlayClass():
 		return self.icon_width
 			
 	def create_envelope(self):
+		"""Creates an envelope with the bounds being the lattitude/longitude of the image.
+		It also extends the bounds by half the width of the icon used so any icons that are placed
+		near the edges of any image will not get cut off
+		"""
+		
 		res = self.gmt.Resolution(self.zoom)		#number of meters in one pixel
 		rev = res * self.icon_width			#number of meters for half an icon
-	
+
 		e_lat, e_long = self.gmt.MetersToLatLon(rev, rev)
-	
+
 		ex_W = self.W - e_lat
 		ex_E = self.E + e_lat
 		ex_S = self.S + e_long
 		ex_N = self.N - e_long
-	
-		return Envelope( (ex_W, ex_N, ex_E, ex_S) )
+		
+		if self.pointfield:
+			return Envelope( (ex_W, ex_N, ex_E, ex_S) )
+		else:
+			return (ex_W, ex_N, ex_E, ex_S)
 		
 	def shuffle(self):
 		bases = list(self.queryset)
@@ -81,28 +91,31 @@ class OverlayClass():
 	def output(self):
 	
 		bounds = self.create_envelope()
-		self.geobases = self.queryset.filter(location__intersects=bounds.wkt)[:self.hard_limit]		#get all bases in the square
-	
+		
+		if self.pointfield:
+			self.geobases = self.queryset.filter(location__intersects=bounds.wkt)[:self.hard_limit]
+		else:
+			self.geobases = self.queryset.filter(location__intersects=bounds.wkt)[:self.hard_limit]
+			
 		geobases = self.geobases
 	
-		#assert False
-		
-		#if(self.icon_width == 0 or self.geobases.count() < 1):		#if no icon is set, or there are no geobases, just return original image
-		#	return self.im
+		if self.icon_width == 0 or self.geobases.count() < 1:		#if no icon is set, or there are no geobases, just return the unmodified original image
+			return self.im
 				
 		self.put_points()
 		
 		self.debug_messages()
+		
 		return self.im
 		
 	def debug_messages(self):
-		pass
-		#font = ImageFont.load_default()
-		#draw = ImageDraw.Draw(self.im)
+		#pass
+		font = ImageFont.load_default()
+		draw = ImageDraw.Draw(self.im)
 
-		#draw.text((10, 150), "pix:  x=" + str(self.x) + " # y=" + str(self.y), font=font, fill='black')
-		#draw.text((10, 230), "Geo= " + str(self.geobases.count()), font=font, fill='black')
-		#draw.text((10, 210), "Org= " + str(self.queryset.count()), font=font, fill='black')
+		draw.text((10, 150), "pix:  z=" + str(self.zoom) + " x=" + str(self.x) + " # y=" + str(self.y), font=font, fill='black')
+		draw.text((10, 230), "Geo= " + str(self.geobases.count()), font=font, fill='black')
+		draw.text((10, 210), "Org= " + str(self.queryset.count()), font=font, fill='black')
 
 ###################################################################################
 ###################################################################################

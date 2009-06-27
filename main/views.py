@@ -422,7 +422,7 @@ def overlay(request, z, x, y, o):
 	advertising = Base.objects.filter(Q(choice__in=Status.objects.filter(advertising=True).values('pk')) | Q(assign__in=Status.objects.filter(advertising=True).values('pk')))
 	
 	ov = OverlayClass(x=x,y=y,z=z, queryset=all_hiring)
-	ov.icon(ICONS_DIR + '/small/yellow.png')
+	ov.icon(ICONS_DIR + '/small/red.png')
 		
 	#############################################################
 
