@@ -24,8 +24,8 @@ class OverlayClass():
 		self.pointfield = pointfield
 		
 		if image == "":
-			#self.im = Image.new("RGBA", (256,256))
-			self.im = Image.open(PROJECT_PATH + "/media/test.png")
+			self.im = Image.new("RGBA", (256,256))
+			#self.im = Image.open(PROJECT_PATH + "/media/test.png")
 		else:
 			self.im = image
 		
