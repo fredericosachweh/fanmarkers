@@ -20,6 +20,8 @@ class CatClassMins(models.Model):
 	instructor	=	models.BooleanField(MINIMUMS_VERBOSE["instructor"], default=False)
 	instrument_instructor=	models.BooleanField(MINIMUMS_VERBOSE["instrument_instructor"], default=False)
 	
+	atp_mins	=	models.BooleanField(MINIMUMS_VERBOSE["atp_mins"], default=False)
+	
 	#def __unicode__(self):
 		#ret = []
 		#for item in self.time_array:
@@ -45,7 +47,8 @@ class CatClassMins(models.Model):
 				time.append(    (   field[0]  ,    str(field[1])   )          )
 				
 		for field in (	(MINIMUMS_VERBOSE["instructor"],		self.instructor),
-				(MINIMUMS_VERBOSE["instrument_instructor"],	self.instrument_instructor), ):
+				(MINIMUMS_VERBOSE["instrument_instructor"],	self.instrument_instructor),
+				(MINIMUMS_VERBOSE["atp_mins"],			self.atp_mins), ):
 				
 			if field[1]:
 				time.append(    (   field[0], )      )
@@ -82,7 +85,6 @@ class Mins(models.Model):
 	mech_cert_level	=	models.IntegerField(MINIMUMS_VERBOSE["mech_cert"], choices=MECH_CERT_LEVEL, default=0)
 	
 	cert_agency	=	models.IntegerField(MINIMUMS_VERBOSE["cert_agency"], choices=CERT_AGENCY, default=0)
-	atp_mins	=	models.BooleanField(MINIMUMS_VERBOSE["atp"], default=False)
 	i135_mins	=	models.BooleanField(MINIMUMS_VERBOSE["i135"], default=False)
 	v135_mins	=	models.BooleanField(MINIMUMS_VERBOSE["v135"], default=False)
 	tailwheel	=	models.BooleanField(MINIMUMS_VERBOSE["tailwheel"], default=False)
