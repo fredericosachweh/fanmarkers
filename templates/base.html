@@ -105,7 +105,7 @@
 						<td><a href="/jobmap">Map</a></td>
 						<td><a href="/company/list/all">Company Profiles</a></td>
 						{% if user.is_authenticated %}
-						<td><a href="/profile">Profile / Sign Out</a></td>
+						<td><a href="/profile">{{user.username}}</a></td>
 						{% else %}
 						<td><a href="/openid/login">Sign in / Register</a></td>
 						{% endif %}

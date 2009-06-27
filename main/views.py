@@ -27,14 +27,14 @@ def sortdict(d):
 def jobmap(request):
 	from django.db.models import Q
 	
-	usa_bases = Base.objects.filter(country__exact="United States")
+	#usa_bases = Base.objects.filter(country__exact="United States")
 	
-	all_hiring = Position.objects.exclude(status__choice_bases__isnull=True, status__assign_bases__isnull=True).values('pk')
-	just_hiring = all_hiring.exclude(status__advertising=True)
-	advertising = all_hiring.filter(status__advertising=True)
-	layoff = Status.objects.filter(layoff_bases__isnull=False).values('pk')
+	#all_hiring = Position.objects.exclude(status__choice_bases__isnull=True, status__assign_bases__isnull=True).values('pk')
+	#just_hiring = all_hiring.exclude(status__advertising=True)
+	#advertising = all_hiring.filter(status__advertising=True)
+	#layoff = Status.objects.filter(layoff_bases__isnull=False).values('pk')
 	
-	usa_h = Status.objects.filter(   Q(assign_bases__in=usa_bases) | Q(choice_bases__in=usa_bases)    ).count()
+	usa_h = "ff" #Status.objects.filter(   Q(assign_bases__in=usa_bases) | Q(choice_bases__in=usa_bases)    ).count()
 
 	return {"usa_h": usa_h}
 
@@ -420,7 +420,15 @@ def profile(request):
 	
 	return locals()
 
-
+#############################################################################################################################
+#############################################################################################################################
+#############################################################################################################################
+#############################################################################################################################
+#############################################################################################################################
+#############################################################################################################################
+#############################################################################################################################
+#############################################################################################################################
+#############################################################################################################################
 
 def overlay(request, z, x, y, o):
 	from overlay.overlay_class import OverlayClass

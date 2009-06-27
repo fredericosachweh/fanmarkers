@@ -1,4 +1,4 @@
-{% extends "base_form.html" %}
+{% extends "base_account.html" %}
 
 {% block title %}Sign in using OpenID{% endblock %}
 
@@ -21,8 +21,8 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}/openid_ui/js/openid-jquery.js"></script>	
 
 <script type="text/javascript">
-$(document).ready(function() {
-	    openid.init('id_openid_identifier');
+	$(document).ready(function() {
+	   openid.init('openid_identifier');
 	});
 </script>
 
@@ -37,21 +37,20 @@ Sign in using OpenID
 
 {#######################################################################################}
 
-
-
-{% block beforeform %}
-<form action="{{ action }}" method="post" id="openid_form">
+{% block form %}
+<form action="." method="post" id="openid_form">
 	<fieldset>
+		<input type="hidden" name="action" value="verify" />
+		
 		<legend>Sign-in or Create New Account</legend>
 	
 		<div id="openid_choice">
 	    		<p>Please click your account provider:</p>
 	    		<div id="openid_btns"></div>
-
 		</div>
 		
 		<div id="openid_input_area">
-			<input id="id_openid_identifier" name="openid_identifier" type="text" value="http://" />
+			<input id="openid_identifier" type="text" class="required openid" name="openid_identifier" maxlength="255" />
 			<input type="submit" value="Sign-In"/>
 		</div>
 		
@@ -61,10 +60,4 @@ Sign in using OpenID
 		</noscript>
 	</fieldset>
 </form>
-{% endblock %}
-
-{% block form %}
-<table>
-	{{form}}
-</table>
 {% endblock %}

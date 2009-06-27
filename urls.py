@@ -77,3 +77,8 @@ urlpatterns = patterns('',
 	(r'^edit/mins/hard/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Hard"}),
 	(r'^edit/mins/pref/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Preferred"}),
 )
+
+urlpatterns += patterns('django.contrib.auth',
+	(r'^accounts/login/$','views.login', {'template_name': 'admin/login.html'}),
+	(r'^accounts/logout/$','views.logout', {"template_name": "view_jobmap.html"}),
+)
