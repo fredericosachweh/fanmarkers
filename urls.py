@@ -39,8 +39,9 @@ urlpatterns = patterns('',
 	(r'^overlay/(?P<z>\d{1,2})_(?P<x>\d{1,5})_(?P<y>\d{1,5})_(?P<o>\S{1,5})/$', 'main.views.overlay'),
 	(r'^admin/doc/',						include('django.contrib.admindocs.urls')),
 	(r'^comments/',							include('django.contrib.comments.urls')),
-	(r'^account/',							include('django_authopenid.urls')),	
 	(r'^admin/(.*)',						admin.site.root),
+	(r'^openid/',							include('django_openid_auth.urls')),
+	
 	
 	(r'^site-media/(?P<path>.*)$',					'django.views.static.serve', {'document_root': '/home/chris/Websites/jobmap/media', 'show_indexes': True}),
 	
@@ -76,9 +77,3 @@ urlpatterns = patterns('',
 	(r'^edit/mins/hard/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Hard"}),
 	(r'^edit/mins/pref/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Preferred"}),
 )
-
-#urlpatterns += patterns('django.contrib.auth',
-#	(r'^accounts/login/$','views.login', {'template_name': 'admin/login.html'}),
-#	(r'^accounts/logout/$','views.logout'),
-#)
-
