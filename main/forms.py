@@ -2,6 +2,7 @@ from django import forms
 from django.forms import ModelForm
 from django.forms.forms import BoundField
 from django.forms.models import inlineformset_factory
+from django.contrib.auth.models import User
 
 from models import *
 from django.template import Context, loader
@@ -91,16 +92,26 @@ OpBaseFormset = inlineformset_factory(Operation, OpBase, form=OpBaseForm, extra=
 
 			
 class StatusForm(ModelForm):
-
-	#not_bases = forms.ModelMultipleChoiceField(queryset=Base.objects.all()[:50])
-	not_bases = forms.ModelMultipleChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput, required=False)
+	not_bases =    forms.ModelMultipleChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput, required=False)
 	choice_bases = forms.ModelMultipleChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput, required=False)
 	assign_bases = forms.ModelMultipleChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput, required=False)
 	layoff_bases = forms.ModelMultipleChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput, required=False)
 
 	class Meta:
 		model = Status
-		#exclude = ("layoff_bases", "assign_bases", "choice_bases", )
+
+class newBase(object):
+	not_checked = ""
+	assign_checked = ""
+	choice_checked = ""
+	layoff_checked = ""
+	unknown_checked = ""
+	
+	identifier = ""
+	location_summary = ""
+	
+	def __unicode__(self):
+		return self.identifier
 		
 #####################################################################################################
 	
@@ -134,16 +145,10 @@ class ProfileForm(ModelForm):
 		model = Profile
 		exclude = ('user', )
 		
-class newBase(object):
-	not_checked = ""
-	assign_checked = ""
-	choice_checked = ""
-	layoff_checked = ""
-	unknown_checked = ""
-	
-	identifier = ""
-	location_summary = ""
-	
-	def __unicode__(self):
-		return self.identifier
+class UserForm(ModelForm):
+	class Meta:
+		model = User
+		fields = ('username', )
+		
+#####################################
 
