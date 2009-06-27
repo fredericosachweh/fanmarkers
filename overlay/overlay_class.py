@@ -104,7 +104,7 @@ class OverlayClass():
 				
 		self.put_points()
 		
-		self.debug_messages()
+		#self.debug_messages()
 		
 		return self.im
 		
