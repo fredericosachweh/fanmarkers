@@ -435,20 +435,36 @@ def overlay(request, z, x, y, o):
 	from jobmap.settings import ICONS_DIR
 	from django.db.models import Q
 	
-	#bases
-	layoff = Base.objects.filter(layoff__in=Status.objects.all())
-	all_hiring = Base.objects.filter(Q(choice__in=Status.objects.all()) | Q(assign__in=Status.objects.all()))
-	just_hiring = Base.objects.filter(Q(choice__in=Status.objects.exclude(advertising=True).values('pk')) | Q(assign__in=Status.objects.exclude(advertising=True).values('pk')))
-	advertising = Base.objects.filter(Q(choice__in=Status.objects.filter(advertising=True).values('pk')) | Q(assign__in=Status.objects.filter(advertising=True).values('pk')))
+	all_bases = Base.objects.filter(opbase__isnull=False)
 	
-	ov = OverlayClass(x=x,y=y,z=z, queryset=all_hiring)
-	ov.icon(ICONS_DIR + '/small/red.png')
-		
+	#bases
+	layoff = all_bases.filter(layoff__in=Status.objects.all())
+	
+	all_hiring = all_bases.filter(Q(choice__in=Status.objects.all()) | Q(assign__in=Status.objects.all()))
+	not_hiring = all_bases.exclude(Q(choice__in=Status.objects.all()) | Q(assign__in=Status.objects.all()))
+	
+	just_hiring = Base.objects.filter(Q(choice__in=Status.objects.exclude(advertising=True)) | Q(assign__in=Status.objects.exclude(advertising=True)))
+	advertising = Base.objects.filter(Q(choice__in=Status.objects.filter(advertising=True)) | Q(assign__in=Status.objects.filter(advertising=True)))
+	
+	ov = OverlayClass(x=x,y=y,z=z, queryset=all_bases)
+	ov.icon(ICONS_DIR + '/big/green.png')						# green icons for no status bases
+	
+	ov = OverlayClass(x=x,y=y,z=z, queryset=just_hiring, image=ov.output())		# yellow for hiring bases
+	ov.icon(ICONS_DIR + '/big/yellow.png')
+	
+	ov = OverlayClass(x=x,y=y,z=z, queryset=layoff, image=ov.output())		# green for hiring bases
+	ov.icon(ICONS_DIR + '/big/red.png')
+	
+	ov = OverlayClass(x=x,y=y,z=z, queryset=advertising, image=ov.output())		# red-gold for advertising bases
+	ov.icon(ICONS_DIR + '/big/red-gold.png')
+	
 	#############################################################
 
 	response = HttpResponse(mimetype="image/png")
 	ov.output().save(response, "PNG")
-	return response	
+	return response
+	
+	#return {"33": "33"}	
 
 	
 			

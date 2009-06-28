@@ -12,6 +12,7 @@ class OverlayClass():
 
 	gmt = GlobalMercator()
 	hard_limit = 100
+	debug = False
 	
 	def __init__(self, z=1, x=1, y=1, o="", image="", queryset="", pointfield=True):
 		z = int(z)
@@ -97,14 +98,13 @@ class OverlayClass():
 		else:
 			self.geobases = self.queryset.filter(location__intersects=bounds.wkt)[:self.hard_limit]
 			
-		geobases = self.geobases
-	
+		if self.debug:
+			self.debug_messages()
+		
 		if self.icon_width == 0 or self.geobases.count() < 1:		#if no icon is set, or there are no geobases, just return the unmodified original image
 			return self.im
 				
 		self.put_points()
-		
-		#self.debug_messages()
 		
 		return self.im
 		
