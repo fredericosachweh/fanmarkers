@@ -1,4 +1,6 @@
-{% extends "base.html" %}
+{% extends "base_view.html" %}
+{% load comments %}
+
 
 {% block title %}{{aircraft}}{% endblock %}
 
@@ -8,17 +10,8 @@
 	</style>
 {% endblock %}
 
-{% block javascript %}
+{% block main_content %}
 
-{% endblock %}
-
-{% block body %}
-<div id="main_container">
-
-	<h1>{{aircraft}}</h1>
-	
-	<hr class="top_divider" />
-	
 	<table summary="aircraft specs">
 		<tr>
 			<td>Type:</td>
@@ -66,4 +59,8 @@
 	</div>
 
 </div>
+
+{% render_comment_form for aircraft %}
+
+
 {% endblock %}

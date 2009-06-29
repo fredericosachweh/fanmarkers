@@ -431,7 +431,7 @@ def profile(request):
 #############################################################################################################################
 
 def overlay(request, z, x, y, o):
-	from overlay.overlay_class import OverlayClass
+	from overlay.overlays import GoogleOverlay
 	from jobmap.settings import ICONS_DIR
 	from django.db.models import Q
 	
@@ -446,26 +446,25 @@ def overlay(request, z, x, y, o):
 	just_hiring = Base.objects.filter(Q(choice__in=Status.objects.exclude(advertising=True)) | Q(assign__in=Status.objects.exclude(advertising=True)))
 	advertising = Base.objects.filter(Q(choice__in=Status.objects.filter(advertising=True)) | Q(assign__in=Status.objects.filter(advertising=True)))
 	
-	ov = OverlayClass(x=x,y=y,z=z, queryset=all_bases)
-	ov.icon(ICONS_DIR + '/big/green.png')						# green icons for no status bases
+	##########
 	
-	ov = OverlayClass(x=x,y=y,z=z, queryset=just_hiring, image=ov.output())		# yellow for hiring bases
-	ov.icon(ICONS_DIR + '/big/yellow.png')
+	ov = GoogleOverlay(z,x,y, queryset=all_bases, field="location")
+	ov.icon(ICONS_DIR + '/big/base.png')						# green icons for no status bases
 	
-	ov = OverlayClass(x=x,y=y,z=z, queryset=layoff, image=ov.output())		# green for hiring bases
-	ov.icon(ICONS_DIR + '/big/red.png')
+	ov = GoogleOverlay(z,x,y, queryset=all_hiring, image=ov.output(), field="location")		# yellow for hiring bases
+	ov.icon(ICONS_DIR + '/big/hiring.png')
 	
-	ov = OverlayClass(x=x,y=y,z=z, queryset=advertising, image=ov.output())		# red-gold for advertising bases
-	ov.icon(ICONS_DIR + '/big/red-gold.png')
+	#ov = GoogleOverlay(z,x,y, queryset=layoff, image=ov.output(), field="location")		# green for hiring bases
+	#ov.icon(ICONS_DIR + '/big/red.png')
+	
+	ov = GoogleOverlay(z,x,y, queryset=advertising, image=ov.output(), field="location")		# red-gold for advertising bases
+	ov.icon(ICONS_DIR + '/big/advertising.png')
 	
 	#############################################################
 
 	response = HttpResponse(mimetype="image/png")
 	ov.output().save(response, "PNG")
 	return response
-	
-	#return {"33": "33"}	
-
 	
 			
 	
