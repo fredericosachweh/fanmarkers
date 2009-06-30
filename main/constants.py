@@ -11,11 +11,11 @@ JUMPSEAT_TYPE	=	(	(0, "Unknown"),
 				(3, "CASS") )
 				
 PAY_TYPE	=	(	(0, "Unknown"),
-				(1, "Full Pay"),
-				(2, "Partial Pay"),
+				(1, "The pilot pays the full price of training"),
+				(2, "The pilot pays for part of the training"),
 				(3, "No Pay"),
-				(4, "You Pay Them Partially"),
-				(5, "You Pay Them in Full") )
+				(4, "Pilot gets reduced salary during training"),
+				(5, "Pilot gets full salary during training") )
 			
 AIRPORT_TYPE	=	(	(0, "Unknown"),
 				(1, "Small Airport"),

@@ -51,7 +51,7 @@ class Compensation(models.Model):
 	position	=	models.ForeignKey("Position", )
 	
 	benefits	=	models.TextField(blank=True)
-	perdiem		=	models.TextField(blank=True)
+	perdiem		=	models.TextField("Per Diem", blank=True)
 	
 	training_pay	=	models.IntegerField(choices=PAY_TYPE, default=0)
 	training_contract=	models.BooleanField(default=False)
@@ -165,6 +165,7 @@ class Company(models.Model):
 	union		=	models.CharField(max_length=32, blank=True, default="Unknown")
 	contact_info	=	models.TextField(blank=True)
 	watchers	=	models.ManyToManyField(User, blank=True, )
+	last_modified	=	models.DateTimeField(auto_now=True)
 	
 	class Meta:
 		verbose_name_plural = "Companies"
@@ -179,7 +180,7 @@ class Company(models.Model):
         	
 class Position(models.Model):
 	company		=	models.ForeignKey("Company", )
-	name		=	models.CharField(max_length=32, blank=True)
+	name		=	models.CharField("Position Name", max_length=32, blank=True)
 	description	=	models.TextField(blank=True)
 	
 	job_domain	=	models.IntegerField(choices=JOB_DOMAIN)
@@ -187,6 +188,7 @@ class Position(models.Model):
 	
 	hard_mins	=	models.ForeignKey(Mins, related_name="hard", blank=True, null=True)
 	pref_mins	=	models.ForeignKey(Mins, related_name="pref", blank=True, null=True)
+	last_modified	=	models.DateTimeField(auto_now=True)
 	
 	class Meta:	
 		ordering = ["job_domain"]		#so captain shows up first when displayed on the page
@@ -210,6 +212,7 @@ class Operation(models.Model):
 	fleet		=	models.ManyToManyField("Fleet", blank=True, null=True)
 	bases		=	models.ManyToManyField("Base", through="OpBase", blank=True)
 	positions	=	models.ManyToManyField("Position", blank=True)
+	last_modified	=	models.DateTimeField(auto_now=True)
 	
 	def get_absolute_url(self):
 		return "/company/%s/#op%s" % (self.company.pk, self.pk)

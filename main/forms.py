@@ -26,10 +26,6 @@ class CompanyForm(ModelForm):
 	class Meta:
 		model = Company
 		exclude = ('watchers',)
-class PositionForm(ModelForm):
-	class Meta:
-		model = Position
-		exclude = ('watchers','hard_mins', 'pref_mins', 'company', 'advertising')
 		
 class FleetForm(ModelForm):
 	class Meta:
@@ -113,6 +109,23 @@ class newBase(object):
 	def __unicode__(self):
 		return self.identifier
 		
+class PositionForm(ModelForm):
+	class Meta:
+		model = Position
+		exclude = ('watchers','hard_mins', 'pref_mins', 'company', 'advertising')
+		
+class PayscaleForm(ModelForm):
+	class Meta:
+		model = PayscaleYear
+		
+		
+class CompensationForm(ModelForm):
+	class Meta:
+		model = Compensation
+		exclude = ('position',)
+		
+PayscaleFormset = inlineformset_factory(Compensation, PayscaleYear, form=PayscaleForm, extra=5, )	
+		
 #####################################################################################################
 	
 class CatClassMinsForm(ModelForm):
@@ -124,19 +137,6 @@ class MinsForm(ModelForm):
 	class Meta:
 		model = Mins
 		exclude = ('any_mins','airplane_mins', 'se_mins', 'me_mins', 'sea_mins', 'mes_mins', 'sim_mins', 'heli_mins', 'glider_mins')
-		
-######################################
-
-class PayscaleYearForm(ModelForm):
-	class Meta:
-		model = PayscaleYear
-
-class CompensationForm(ModelForm):
-	class Meta:
-		model = Compensation
-		#exclude = ('company',)
-		
-PayscaleFormset = inlineformset_factory(Compensation, PayscaleYear, form=PayscaleYearForm, extra=5, )
 		
 ######################################
 

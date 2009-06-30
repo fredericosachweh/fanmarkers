@@ -1,15 +1,15 @@
 # coding: UTF-8
 
-from jobmap.settings import PROJECT_PATH
-from django.http import *
-from django.shortcuts import render_to_response
-from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from main.models import *
 
+from django.http import HttpResponse
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 from django.shortcuts import get_object_or_404
+
+from main.immutable_views import *
+from main.position_views import *
 
 def sortdict(d):
     """ returns a dictionary sorted by keys """
@@ -22,51 +22,6 @@ def sortdict(d):
 
 
 ###############################################################################
-
-@render_to('view_jobmap.html')
-def jobmap(request):
-	from django.db.models import Q
-	
-	#usa_bases = Base.objects.filter(country__exact="United States")
-	
-	#all_hiring = Position.objects.exclude(status__choice_bases__isnull=True, status__assign_bases__isnull=True).values('pk')
-	#just_hiring = all_hiring.exclude(status__advertising=True)
-	#advertising = all_hiring.filter(status__advertising=True)
-	#layoff = Status.objects.filter(layoff_bases__isnull=False).values('pk')
-	
-	usa_h = "ff" #Status.objects.filter(   Q(assign_bases__in=usa_bases) | Q(choice_bases__in=usa_bases)    ).count()
-
-	return {"usa_h": usa_h}
-
-###############################################################################	
-	
-@render_to('view_airport.html')
-def airport(request, pk):
-
-	airport = get_object_or_404(Base, pk=pk)
-	
-	ops_base = 	Operation.objects.filter(opbase__in=OpBase.objects.filter(base=airport))					#ops where this airport is a base
-	ops_fly =	Operation.objects.filter(opbase__in=OpBase.objects.filter(route__in=Route.objects.filter(bases=airport)))	#ops where this airport is part of a route
-	
-	return {'airport': airport, "ops_base": ops_base, "ops_fly": ops_fly}
-	
-###############################################################################
-	
-@render_to('view_aircraft.html')
-def aircraft(request, pk):
-
-	aircraft = get_object_or_404(Aircraft, pk=pk)
-	operations = Operation.objects.filter(fleet__in=Fleet.objects.filter(aircraft=aircraft))
-	
-	return {'aircraft': aircraft, "operations": operations}
-	
-
-#############################################################################################################################
-#############################################################################################################################
-#############################################################################################################################
-
-
-###############################################################################		
 
 @login_required()
 @render_to('new-edit_operation.html')		
@@ -172,27 +127,7 @@ def edit_mins(request, pk, min_type):
 #############################################################################################################################
 #############################################################################################################################
 
-@login_required()
-@render_to('new_position.html')	
-def new_position(request, pk):
-	from forms import PositionForm
 
-	company = get_object_or_404(Company, pk=pk)
-
-	if request.method == "POST":
-		pos = Position(company=company)
-		form = PositionForm(request.POST, instance=pos)
-	
-		if form.is_valid():
-			form.save(commit=False)
-			form.hard_mins = Mins()
-			form.pref_mins = Mins()
-			form.save()
-			return HttpResponseRedirect( "/edit" + company.get_absolute_url() )
-	else:
-		form = PositionForm()
-	
-	return {'company': company, 'form': form}
 	
 ###############################################################################	
 
@@ -287,110 +222,6 @@ def new_operation(request, pk):
 
 	return {'company': company, 'form': form, "formset": formset}
 
-
-#############################################################################################################################
-#############################################################################################################################
-#from main.overlays import overlay_view
-#############################################################################################################################
-#############################################################################################################################
-
-@login_required()
-@render_to('edit_status.html')		
-def edit_status(request, pk):
-	from forms import StatusForm, newBase
-	import datetime
-
-	newbases = []
-	
-	position = get_object_or_404(Position, pk=pk)
-	operation = Operation.objects.get(positions=position)
-	opbases = operation.opbase_set.all()
-	bases = Base.objects.filter(opbase__in=opbases)
-	
-	status = get_object_or_None(Status, position=position)
-	
-	#status = Status.objects.select_related().get(position=position)
-	
-	if not status:
-		status = Status(position=position)
-	
-	if request.method == "POST":
-		
-		newPOST = request.POST.copy()
-		newPOST.update({"position": position.pk})
-		
-		field_bases = {}
-		field_bases["not"] = field_bases["assign"] = field_bases["choice"] = field_bases["layoff"] = []
-		
-		for base in bases:
-			for item in ("not", "assign", "choice", "layoff", ):
-				if newPOST[str(base)] == item:
-					field_bases[item] = field_bases[item] + [base]
-		#assert False			
-					
-		form = StatusForm(newPOST, instance=status)
-		if form.is_valid():
-			instance = form.save()
-			instance.not_bases = field_bases["not"]
-			instance.assign_bases = field_bases["assign"]
-			instance.choice_bases = field_bases["choice"]
-			instance.layoff_bases = field_bases["layoff"]
-			instance.save()
-			
-		return HttpResponseRedirect( "/edit" + position.get_absolute_url() )
-	else:
-		for base in bases:
-			newbase = newBase()
-			newbase.identifier = base.identifier
-			newbase.location_summary = base.location_summary
-			
-			if not status.pk:
-				newbase.unknown_checked = 'checked="checked"'
-				
-			elif base in status.not_bases.all():
-				newbase.not_checked = 'checked="checked"'
-				
-			elif base in status.choice_bases.all():
-				newbase.choice_checked = 'checked="checked"'
-				
-			elif base in status.assign_bases.all():
-				newbase.assign_checked = 'checked="checked"'
-				
-			elif base in status.layoff_bases.all():
-				newbase.layoff_checked = 'checked="checked"'
-				
-			else:
-				newbase.unknown_checked = 'checked="checked"'
-			
-			newbases.append(newbase)
-			
-		form = StatusForm()
-	
-	return {"bases": newbases, "form": form, "position": position, "last_modified": status.last_modified}
-	
-#############################################################################################################################
-		
-@login_required()
-@render_to('edit_salary.html')	
-def edit_salary(request, pk):
-	from main.forms import CompensationForm, PayscaleFormset
-	
-	position = get_object_or_404(Position, pk=pk)
-	comp = get_object_or_None(Compensation, position=position)
-	
-	if not comp:
-		comp = Compensation(position=position)
-	
-	
-	
-	if request.method == "POST":
-		form = CompensationForm(request.POST, instance=comp)
-		#form.save()
-	else:
-		form = CompensationForm(instance=comp)
-		formset = PayscaleFormset(instance=comp)
-	
-	return {"form": form, "formset": formset, "position": position}
 
 #############################################################################################################################
 

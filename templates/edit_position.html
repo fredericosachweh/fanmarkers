@@ -1,6 +1,6 @@
 {% extends "base_form.html" %}
 
-{% block title %}Editing: {{form.instance.company}} - {{form.instance}}{% endblock %}
+{% block title %}Editing: {{pos_form.instance.company}} - {{pos_form.instance}}{% endblock %}
 
 {########################################################################}
 
@@ -12,51 +12,146 @@
 		
 		#base_mins				{display: none}
 		#pref_mins				{display: none}
-
+		
+		#status_table				{border-collapse: collapse;}
+		#status_table td:first-child		{width: 15em;}
+		#status_table td			{border: 1px solid black; width: 5em; text-align: center; padding: 2px; background: white}
+		#status_table td[colspan="6"]		{font-weight: bold; font-size: large}
+		
+		#status_table td:last-child		{background: lightred}
+		
+		.form_holder				{border: 0px solid red; margin-bottom: 30px}
+		
+		#payscale_table				{border-collapse: collapse; width: 25em}
+		#payscale_table input			{width: 5em}
+		#payscale_table td			{border: 1px solid black; padding: 2px; background: white; text-align: center}
+		#payscale_table tr:first-child		{text-align: center}
+		
 	</style>
 {% endblock %}
 
 {########################################################################}
 
 {% block top_links %}
-<a href="{{ form.instance.get_absolute_url }}" class="view">View {{ form.instance }}</a> <br />
-<a href="/edit{{ form.instance.company.get_absolute_url }}" class="edit">Edit {{ form.instance.company }}</a>
+<a href="{{ pos_form.instance.get_absolute_url }}" class="view">View {{ pos_form.instance }}</a> <br />
+<a href="/edit{{ pos_form.instance.company.get_absolute_url }}" class="edit">Edit {{ pos_form.instance.company }}</a>
 {% endblock %}
 
 {########################################################################}
 
 {% block form%}
-<table summary="Position details">
-	{{form}}
-</table>
-{% endblock %}
+	<h2>General:</h2>
+	
+	<div class="form_holder">
+		<table class="form_table" summary="Position details">
+			<tr>
+				<td colspan=2>Last modified:  <strong>{{pos_form.instance.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{pos_form.instance.last_modified|date:"(G:i.s T)"}}</td>
+			</tr>
+			{{pos_form}}
+		</table>
+	</div>
 
-{% block afterform %}
+{########################################################################}
 
-	<hr />
+	<h2>Compensation:</h2>
+	
+	<div class="form_holder">
+		<table class="form_table">
+			<tr>
+				<td colspan=2>Last modified:  <strong>{{comp_form.instance.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{comp_form.instance.last_modified|date:"(G:i.s T)"}}</td>
+			</tr>
+			
+			{{comp_form}}
+				
+			<th>Payscale:</th>
+			<td>
+				<table id="payscale_table">
+					<tr>
+						<td>Year{{ payscale_formset.management_form }}</td>
+						<td>Amount</td>
+						<td>Units</td>
+					</tr>
+				{% for form in payscale_formset.forms %}
+					<tr>
+						<td>{{form.year}}{{form.id}}</td>
+						<td>${{form.amount}}</td>
+						<td>{{form.salary_unit}}{{form.errors}}</td>
+					</tr>
+				{% endfor %}
+				</table>
+			</td>
+		</table>
+	</div>
+	
+{########################################################################}
 
-	<h2>Hiring Minimums</h2>
+	<h2>Hiring Status:</h2>
+	
+	<div class="form_holder">
+		<table class="form_table">
+			<tr>
+				<td colspan=2>Last modified:  <strong>{{status_form.instance.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{status_form.instance.last_modified|date:"(G:i.s T)"}}</td>
+			</tr>
+			<tr>
+				<th>{{status_form.reference.label_tag}}:</th>
+				<td>{{status_form.reference}}{{status_form.errors}}</td>
+			</tr>
+		
+			<tr>
+				<th>Hiring Bases:</th>
+			<td>
+				<table summary="hiring status form" id="status_table">
+				<tr>
+					<td>Base</td>
+					<td>Status Unknown</td>
+					<td>Laying Off</td>
+					<td>Not Hiring</td>
+					{% if bases|length_is:"1" %}
+					<td>Hiring</td>
+					{% else %}
+					<td>Hiring (Assign)</td>
+					<td>Hiring (Choice)</td>
+					{% endif %}
+				</tr>
 
-	<a href="/edit/mins/hard/{{form.instance.pk}}" class="edit">Click here to edit <strong>hard minimums</strong></a>
-	<br />
-	<a href="/edit/mins/pref/{{form.instance.pk}}" class="edit">Click here to edit <strong>preferred minimums</strong></a>
+				{% for base in bases %}
+				<tr>
+					<td><strong><a href="{{ base.get_absolute_url }}" class="immutable">{{base}}</a></strong><br />{{ base.location_summary}}</td>
+		
+					<td><input type="radio" name="{{base.identifier}}" value="unknown" {{base.unknown_checked|safe}}/></td>
+					<td><input type="radio" name="{{base.identifier}}" value="layoff" {{base.layoff_checked|safe}}/></td>
+					<td><input type="radio" name="{{base.identifier}}" value="not" {{base.not_checked|safe}}/></td>
+					{% if bases|length_is:"1" %}
+					<td><input type="radio" name="{{base.identifier}}" value="choice" {{base.choice_checked|safe}}/></td>
+					{% else %}
+					<td><input type="radio" name="{{base.identifier}}" value="assign" {{base.assign_checked|safe}}/></td>
+					<td><input type="radio" name="{{base.identifier}}" value="choice" {{base.choice_checked|safe}}/></td>
+					{% endif %}
+				</tr>
+				{% empty %}
+				<tr>
+					<td colspan="6">No bases for this position</td>
+				</tr>
+				{% endfor %}
+				</table>
+			</td>
+			</tr>
+		</table>
+	</div>
+	
+{########################################################################}
 
-	<hr />
-
-	<h2>Salary</h2>
-
-	<a href="/edit/salary/{{form.instance.pk}}" class="edit">Click here to edit salary info</a>
-
-	<hr />
-
-	<h2>Hiring Status</h2>
-
-	<a href="/edit/status/{{form.instance.pk}}" class="edit">click here to edit Hiring Status info</a>
-
-	<hr />
-
-	<h2>Operation</h2>
-
-	<a href="/edit/operation/{% for op in form.instance.operation_set.all %}{{op.pk}}{% endfor %}" class="edit">click here to edit this position's Operation (Bases and Routes)</a>
-
+	<h2>Hiring Minimums:</h2>
+	
+	<div class="form_holder">
+		<a href="/edit/mins/hard/{{form.instance.pk}}" class="edit">Click here to edit <strong>hard minimums</strong></a>
+		<br />
+		<a href="/edit/mins/pref/{{form.instance.pk}}" class="edit">Click here to edit <strong>preferred minimums</strong></a>
+	</div>
+	
+{###########################################################}
+	{% if operation %}
+		<h2>Operation:</h2>
+		<a href="/edit/operation/{% for op in form.instance.operation_set.all %}{{op.pk}}{% endfor %}" class="edit">click here to edit this position's Operation (Bases and Routes)</a>
+	{% endif %}
 {% endblock %}
