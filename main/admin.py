@@ -34,6 +34,9 @@ class CompanyAdmin(admin.ModelAdmin):
 class RouteAdmin(admin.ModelAdmin):
 	inlines = (RouteBaseInline,)
 
+class CompAdmin(admin.ModelAdmin):
+	inlines = (PayScaleInline,)
+
 class OperationAdmin(admin.ModelAdmin):
 	inlines = (OpBaseInline, )
 	list_display = ('company', 'all_fleet', 'all_bases')
@@ -46,7 +49,8 @@ class StatusAdmin(admin.ModelAdmin):
 	#inlines = (StatusBaseInline, )
 
 class PositionAdmin(admin.ModelAdmin):	
-	inlines = (PayScaleInline, )
+	pass
+	#inlines = (PayScaleInline, )
 	
 class BaseAdmin(admin.GeoModelAdmin):
 	list_display = ('identifier', 'name', 'country', 'region', 'municipality',)
@@ -58,6 +62,7 @@ class AircraftAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Position,		PositionAdmin)
+admin.site.register(Compensation,	CompAdmin)
 admin.site.register(Route, 		RouteAdmin)
 admin.site.register(Base, 		BaseAdmin)
 admin.site.register(RouteBase, 		)

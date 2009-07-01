@@ -71,8 +71,6 @@ def edit_mins(request, pk, min_type):
 	
 	#############################
 	
-	
-			
 	anyy =		mins_object.any_mins
 	airplane =	mins_object.airplane_mins
 	se =		mins_object.se_mins

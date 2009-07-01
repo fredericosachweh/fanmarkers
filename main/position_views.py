@@ -8,6 +8,38 @@ from django.shortcuts import get_object_or_404
 
 ########################################################################
 
+@render_to('view_position.html')	
+def view_position(request, pk):
+	position = get_object_or_404(Position, pk=pk)
+	opbases = position.operation_set.get().opbase_set.all()
+	
+	compensation = get_object_or_None(Compensation, position=position)
+	if compensation:
+		payscales = compensation.payscaleyear_set.all()
+		
+	
+	
+	status = get_object_or_None(Status, position=position)
+	if status:
+		not_bases = status.not_bases.all()
+		assign_bases = status.assign_bases.all()
+		choice_bases = status.choice_bases.all()
+		layoff_bases = status.layoff_bases.all()
+		
+		for opbase in opbases:
+			opbase.fill_in_status(status)
+	
+	watchers = position.watchers.count()
+	
+	if request.user in position.watchers.all():
+		already_watching = True
+	
+	
+	
+		
+	return locals()
+
+
 @login_required()
 @render_to('new_position.html')	
 def new_position(request, pk):
@@ -20,9 +52,6 @@ def new_position(request, pk):
 		form = PositionForm(request.POST, instance=pos)
 	
 		if form.is_valid():
-			form.save(commit=False)
-			form.hard_mins = Mins()
-			form.pref_mins = Mins()
 			form.save()
 			return HttpResponseRedirect( "/edit" + company.get_absolute_url() )
 	else:
@@ -91,22 +120,26 @@ def edit_position(request, pk):
 			#if payscale_formset.has_changed():
 			#	payscale_formset.save()
 			#######
-		
-			instance = status_form.save(commit=False)
+			
+			if not status_form.instance.pk:
+				instance = status_form.save()
+			else:
+				instance = status_form.save(commit=False)
 			
 			if list(instance.not_bases.all()) != field_bases["not"] or \
-			list(instance.not_bases.all()) != field_bases["layoff"] or \
-			list(instance.assign_bases.all()) != field_bases["assign"] or \
-			list(instance.choice_bases.all()) != field_bases["choice"] and \
-			status_form.has_changed():			#only run this block of code of the status has changed otherwise the last modified value will change
-				status_form.save()
-				c="C"
-			
-				instance.not_bases = field_bases["not"]
-				instance.layoff_bases = field_bases["layoff"]
-				instance.assign_bases = field_bases["assign"]
-				instance.choice_bases = field_bases["choice"]
-				instance.save()
+				list(instance.not_bases.all()) != field_bases["layoff"] or \
+				list(instance.assign_bases.all()) != field_bases["assign"] or \
+				list(instance.choice_bases.all()) != field_bases["choice"] and \
+				status_form.has_changed() or not status_form.instance.pk:
+				#only if the status has changed or its the first edit, otherwise dont run because we dibt want the last modified value to change
+				
+					status_form.save()
+					
+					instance.not_bases = field_bases["not"]
+					instance.layoff_bases = field_bases["layoff"]
+					instance.assign_bases = field_bases["assign"]
+					instance.choice_bases = field_bases["choice"]
+					instance.save()
 				
 			#assert False
 			#######

@@ -92,6 +92,8 @@ class Mins(models.Model):
 	type_rating	=	models.ForeignKey("Aircraft", verbose_name=MINIMUMS_VERBOSE["type_rating"], null=True, blank=True)
 	on_type		=	models.IntegerField(MINIMUMS_VERBOSE["on_type"], default=0)
 	
+	last_modified	=	models.DateTimeField(auto_now=True)
+	
 	#############################################################
 	
 	class Meta:
@@ -128,9 +130,6 @@ class Mins(models.Model):
 			
 		if self.degree > 0:
 			gen.append((MINIMUMS_VERBOSE["degree"], self.get_degree_display(), ))
-			
-		if self.atp_mins:
-			gen.append((MINIMUMS_VERBOSE["atp"],))
 			
 		if self.i135_mins:
 			gen.append((MINIMUMS_VERBOSE["i135"],))
@@ -213,6 +212,37 @@ class Mins(models.Model):
 	
 	def has(self):
 		return self.times.__len__() > 0 or self.general.__len__() > 0
+		
+	def as_table(self):
+		times = self.times
+		general = self.general
+		
+		general.update(times)
+		
+		all_reqs = general
+		
+		table = ""
+		
+		for cat_class in all_reqs:
+			title = cat_class
+			req_array = all_reqs[cat_class]
+			req_string = ""					
+			
+			for item in req_array:
+				try:
+					req = str(item[0]) + ": "
+					value = "<strong>" + str(item[1]) + "</strong>"
+				except:
+					req = "<strong>" + str(item[0]) + "</strong>"
+					value = ""
+					
+				req_string = req_string + "<li>" + req + value + "</li>"	
+				
+			req_string = "<td><ul>" + req_string + "</ul></td>"
+	
+			table = table + "<tr><th>" + title + ":</th>" + req_string + "</tr>"
+
+		return  table  #str(times) + "<br/> " + str(general)
 			
 #################################################################################################################
 

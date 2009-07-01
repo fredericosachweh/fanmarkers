@@ -72,6 +72,13 @@ JOB_DOMAIN	=	(	(1, "Captain: Crew"),
 				(13, "Other Non-flying"),
 				(14, "Other Flying") )
 				
+HIRING_STATUS	=	{	"not": "Not Hiring",
+				"assign": "Currently Hiring (assign)",
+				"choice": "Currently Hiring (choice)",
+				"unknown": "Hiring Status Unknown",
+				"layoff": "Laying-off/Furloughing",
+			}
+				
 SALARY_TYPE	=	(	(1, "/flight hour"),
 				(2, "/duty hour"),
 				(3, "/day"),

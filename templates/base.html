@@ -13,8 +13,6 @@
 			
 			h1			{margin-bottom: 0px}
 			
-			th			{text-align: right; vertical-align: top; line-height: 2em}
-			
 			a			{text-decoration: none}
 			a:hover			{text-decoration: underline}
 			
@@ -22,7 +20,7 @@
 			
 			.form_table td[colspan="2"] {border:none; text-align: right; background: white !important; padding: 0px}
 			
-			.form_table		{width: 80em; border-collapse: collapse}
+			.form_table		{width: 100%; border-collapse: collapse}
 			.form_table th		{width: 13em}
 			
 			.form_table th,
@@ -42,8 +40,8 @@
 			a.new			{color: blue}
 			a.new:visited		{color: darkblue}
 			
-			a.immutable		{color: red}
-			a.immutable:visited		{color: darkred}
+			a.immutable		{color: darkred}
+			a.immutable:visited	{color: darkred}
 			
 			/***********************************************************************/
 			
@@ -64,7 +62,9 @@
 			
 			#main_container		{padding: 10px; margin-top: 1em}
 			
-			.small_map		{height: 200px; width:400px; background: green; margin-bottom: 1em; margin-top: 1em}
+			.small_map		{height: 200px; width:400px; background: gray; margin-bottom: 1em; margin-top: 1em;}
+			
+			.plus			{cursor: pointer}
 		</style>
 		{% block css %}
 		{% endblock %}
@@ -96,8 +96,9 @@
 		<script type="text/javascript">
 			var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 			document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-			</script>
-			<script type="text/javascript">
+		</script>
+		
+		<script type="text/javascript">
 			try {
 			var pageTracker = _gat._getTracker("UA-501381-3");
 			pageTracker._trackPageview();

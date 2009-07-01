@@ -12,6 +12,7 @@ class Aircraft(models.Model):
 	manufacturer	=	models.CharField(max_length=32)
 	engine_type	=	models.IntegerField(choices=ENGINE_TYPE, default=0)
 	cat_class	=	models.IntegerField(choices=CAT_CLASSES, default=1)
+	watchers	=	models.ManyToManyField(User, blank=True, )
 	
 	class Meta:	
 		ordering = ["manufacturer", "type"]
@@ -21,18 +22,7 @@ class Aircraft(models.Model):
 
 		
 	def __unicode__(self):
-		extra = ""
-		name = ""
-	
-		if self.extra:
-			extra = " " + self.extra
-			
-		if not self.model and self.type:
-			name = self.type
-		else:
-			name = self.model
-			
-		return u'%s %s%s' % (self.manufacturer, name, extra)
+		return u'%s -- %s %s %s' % (self.type, self.manufacturer, self.model, self.extra)
 
 ###############################################################################################################################
 		
@@ -79,6 +69,7 @@ class Base(models.Model):
 	
 	elevation	=	models.IntegerField()
 	location	=	models.PointField()
+	watchers	=	models.ManyToManyField(User, blank=True, )
 	
 	objects		=	models.GeoManager()
 	
@@ -189,7 +180,8 @@ class Position(models.Model):
 	hard_mins	=	models.ForeignKey(Mins, related_name="hard", blank=True, null=True)
 	pref_mins	=	models.ForeignKey(Mins, related_name="pref", blank=True, null=True)
 	last_modified	=	models.DateTimeField(auto_now=True)
-	
+	watchers	=	models.ManyToManyField(User, blank=True, )
+		
 	class Meta:	
 		ordering = ["job_domain"]		#so captain shows up first when displayed on the page
 		
@@ -244,7 +236,9 @@ class Operation(models.Model):
 class OpBase(models.Model):
 	operation	=	models.ForeignKey("Operation", )
 	base		=	models.ForeignKey("Base")
-	workforce_size	=	models.IntegerField("Workforce Size", default=0)	
+	workforce_size	=	models.IntegerField("Workforce Size", default=0)
+	
+	hiring_status	=	"unknown"
 	
 	def __unicode__(self):	
 		return u"%s - %s" % (self.base.identifier, self.operation.company.name)
@@ -254,7 +248,31 @@ class OpBase(models.Model):
 		for route in self.route_set.all():
 			output.append(route.json())
 		return "[" + ",".join(output) + "]"
-	
+		
+	def fill_in_status(self, status):
+		not_bases = status.not_bases.all()
+		assign_bases = status.assign_bases.all()
+		choice_bases = status.choice_bases.all()
+		layoff_bases = status.layoff_bases.all()
+
+		if self.base in not_bases:
+			self.hiring_status = "not"
+			self.verbose_hiring_status = HIRING_STATUS["not"]
+			
+		elif self.base in assign_bases:
+			self.hiring_status = "assign"
+			self.verbose_hiring_status = HIRING_STATUS["assign"]
+		
+		elif self.base in choice_bases:
+			self.hiring_status = "choice"
+			self.verbose_hiring_status = HIRING_STATUS["choice"]
+		
+		elif self.base in layoff_bases:
+			self.hiring_status = "layoff"
+			self.verbose_hiring_status = HIRING_STATUS["layoff"]
+		else:
+			self.hiring_status = "unknown"
+			self.verbose_hiring_status = HIRING_STATUS["unknown"]
 	
 
 ###############################################################################################################################

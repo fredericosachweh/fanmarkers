@@ -1,28 +1,60 @@
-{% extends "base.html" %}
+{% extends "base_view.html" %}
 {% load humanize %}
 
-{% block title %}{{position}} - Profile{% endblock %}
+{% block title %}{{position.company.name}} - {{position.name}}{% endblock %}
+{% block top_links %}<a href="{{position.company.get_absolute_url}}">View {{position.company.name}}</a>{% endblock %}
+{% block edit_top %}"/edit{{ position.get_absolute_url }}"{% endblock %}
 
 {% block css %}
 	<style type="text/css">
-	.base			{border: 2px solid black; margin-top: 1em; padding: 0.5em; overflow: hidden}
-	.base_link		{font-weight: bold; color: darkred}
-	.base_info		{display: none}
-	.base_floats		{float: left; padding-right: 1em}
 	
-	.plus			{cursor: pointer}
 	
-	.position_box		{border: 0px solid black; margin-bottom: .5em; padding: .5em; font-size: medium}
-	.position_status	{font-size: medium}
-	.position_name		{font-size: x-large; font-weight: bold}
-	.payscale		{border-collapse: collapse; font-size: medium; margin-top: 1em}
-	.payscale td		{border: 1px solid gray;  padding: 3px}
+	.last_modified		{margin: 0px; padding-bottom: 2px; text-align: right; font-size: x-small !important; width: 800px; margin-top: 20px}
+	
+	.t_not			{background: #EEEEEE; border: 1px solid black}
+	.t_unknown		{background: #EEEEEE; border: 1px solid black}
+	.t_assign		{background: #9df39d; border: 1px solid green}
+	.t_choice		{background: #9df39d; border: 1px solid green}
+	.t_layoff		{background: #f39d9d; border: 1px solid darkred}
+	
+	.top_section		{padding: 3px; margin-top: 5px; border-bottom: 0px !important}
+	.bottom_section		{padding: 3px; margin-bottom: 5px; border-top: 0px !important}
+	
+	.b_not			{background: #CCCCCC; border: 1px solid black}
+	.b_unknown		{background: #CCCCCC; border: 1px solid black}
+	.b_assign		{background: #5db856; border: 1px solid green}
+	.b_choice		{background: #5db856; border: 1px solid green}
+	.b_layoff		{background: #c88181; border: 1px solid darkred}
+	
+	.right_box		{float: right; font-size: x-small; width: 18em; text-align: right}
 	
 	.position_mins		{margin-top: 1em; border-collapse: collapse}
 	.position_mins td	{border: 0px solid black; padding-right: 1em}
 	
-	.info_table		{border: 1px solid black; padding: 1em}
-	.info_table td:first-child	{width: 8em}
+	.double_fancy_table			{border-collapse: collapse; margin-top: 0px; width: 800px; border: 2px solid black}
+	.double_fancy_table thead td		{background: white; text-align: center; font-weight: bold; font-size: large}
+	.double_fancy_table tr:nth-child(even)	{background: #EEEEEE}
+	.double_fancy_table tr:nth-child(odd)	{background: #CCCCCC}
+	.double_fancy_table td			{border: 1px solid #AAAAAA; padding: 5px; font-weight: normal; width: 50%}
+	.double_fancy_table td:first-child	{width: 12em}
+	.double_fancy_table th			{border: 1px solid #AAAAAA; text-align: right; padding: 2px}
+	
+	.single_fancy_table			{border-collapse: collapse; margin-top: 0px; width: 800px; border: 2px solid black}
+	.single_fancy_table thead td		{background: white; text-align: center; font-weight: bold; font-size: large}
+	.single_fancy_table tr			{background: #CCCCCC}
+	.single_fancy_table td			{border: 1px solid black; padding: 5px; font-weight: normal}
+	.single_fancy_table td:first-child	{width: 12em}
+	.single_fancy_table th			{border: 1px solid black; text-align: right; padding: 2px}
+	
+	.base_hide		{display: none}
+	.bases			{}
+	
+	.mins ul		{margin: 0px; padding-left: 1.5em}
+	
+	.small_map		{height: 300px; width:500px; background: gray; margin-bottom: 1em; margin-top: 1em; margin-right: auto; margin-left: auto}
+	
+	.not_known		{color: gray; font-style: italic; text-align: center}
+	td.not_known		{height: 5em}
 	
 	ul			{margin-top: 0}
 	
@@ -35,7 +67,7 @@
 
 <script type="text/javascript">
 	var icon = new GIcon;
-	icon.image = '{{ MEDIA_URL }}/icons/big/red.png';
+	icon.image = '{{ MEDIA_URL }}/icons/big/base.png';
 	icon.iconSize = new GSize(16,16);
 	icon.iconAnchor = new GPoint(8,8);
 	icon.infoWindowAnchor = new GPoint(16,16);
@@ -60,94 +92,164 @@
 	data[{{ob.pk}}] = {% if ob.route_set.all %}{{ob.routes_json}}{%else%}"None";{% endif %}
 {% endfor %}
 </script>
-
 {% endblock %}
 
-{% block body %}
-<div id="main_container">
+Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a href="/watch/position/{{ position.pk }}">Watch this position</a>{%else%}<a href="/unwatch/position/{{ position.pk }}">Unwatch this position</a>{% endif %}
 
 
-	<h1>
-		{{position.company.name}} - {{position.name}}{% if user.is_authenticated %} <a class="edit_link_ui" href="/edit{{ position.get_absolute_url }}">(edit)</a>{% endif %}
-	</h1>
+{% block main_content %}
+<div class="last_modified">Last modified:  <strong>{{position.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.last_modified|date:"(G:i.s T)"}}</div>	
+	<table class="double_fancy_table" summary="Position general information">
 	
-	<a href="{{position.company.get_absolute_url}}">View {{position.company.name}}</a>
 	
-	<hr class="top_divider" />
-	
-	<table class="info_table" summary="payscale and hiring minimums information">
-	
-	{% if position.payscaleyear_set.all %}
-		<tr>
-			<td>Salary:</td>
-			<td>
-			<strong>
-				{% for ps in position.payscaleyear_set.all %}
-				{% if forloop.last and forloop.first %}
-					${{ ps.amount|floatformat:2|intcomma }} <small>{{ ps.get_salary_unit_display }}</small>		
-				{% else %}
-					{{ ps.year|ordinal }} year: ${{ ps.amount|floatformat:2|intcomma }} <small>{{ ps.get_salary_unit_display }}</small><br />
-				{% endif %}
-				{% endfor %}
-			</strong>
-			</td>
-		</tr>
-		
-	{% else %}
-		<tr><td><em>No known salary information</em></td></tr>
-	{% endif %}
-
-		<tr>
-			<td colspan="2"><hr /></td>
-		</tr>
-		
-		{% if position.hard_mins.has %}
-		<tr>
-			<td>Hard Minimums:</td>
-			<td>{{position.hard_mins.as_ul|safe}}</td>
-		</tr>
-		{% endif %}
-
-		{% if position.pref_mins.has %}
-		<tr>
-			<td>&nbsp;</td>
-		</tr>
-		
-		<tr>
-			<td>Preferred:</td>
-			<td>
-				{% for r in position.pref_mins.display_pref %}
-				{{r|join:" "}}<br />
-				{% endfor %}
-			</td>
-		</tr>
-		{% endif %}
-	
-		{% if not position.pref_mins.has and not position.hard_mins.has %}
+		<thead>
 			<tr>
-				<td colspan="2"><em>No known hiring minimums</em></td>
+				<td colspan="2">General Information</td>
 			</tr>
-		{% endif %}
+		</thead>
+		
+		<tr>
+			<th>Company:</th>  <td><a href="{{ position.company.get_absolute_url }}" class="view">{{position.company}}</a></td>
+		</tr>
+		<tr>
+			<th>Job Domain:</th>  <td>{{position.get_job_domain_display}}</td>
+		</tr>
+		<tr>
+			<th>Schedule Type:</th>  <td>{{position.get_schedule_type_display|default:"<span class='not_known'>Not Known</span>"}} </td>
+		</tr>
+		<tr>
+			<th>Number of people watching this position:</th>  <td>{{watchers|default:"<span class='not_known'>Not Known</span>"}} {% if not already_watching %}<a href="/watch/position/{{ position.pk }}">(Watch this position)</a>){%else%}<a href="/unwatch/position/{{ position.pk }}">(Unwatch this position)</a>{% endif %}</td>
+		</tr>
 	</table>
 
-	<h2>Bases:</h2>
+{##################################################}
+
+	<div class="last_modified">Last modified:  <strong>{{position.compensation.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.compensation.last_modified|date:"(G:i.s T)"}}</div>	
+	<table class="double_fancy_table" summary="payscale and hiring minimums information">
 	
-{% for ob in position.opbases %}
-	<div class="base b{{ ob.hiring_status }}">
-		<div class="base_floats">
-			<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="{{ MEDIA_URL }}/icons/plus.png" alt="+"/>
+	
+		<thead>
+			<tr>
+				<td colspan="2">Compensation Information</td>
+			</tr>
+		</thead>
+		
+	{% if compensation %}
+		<tr>
+			<th>Benefits:</th>  <td>{{compensation.benefits|default:"<span class='not_known'>Not Known</span>"}}</td>
+		</tr>
+		<tr>
+			<th>Per Diem:</th>  <td>{{compensation.perdiem|default:"<span class='not_known'>Not Known</span>"}}</td>
+		</tr>
+		<tr>
+			<th>Training Pay:</th>  <td>{{compensation.get_training_pay_display|default:"<span class='not_known'>Not Known</span>"}}</td>
+		</tr>
+		<tr>
+			<th>Flight Hours per month:</th>  <td>{{compensation.flight_hours|default:"<span class='not_known'>Not Known</span>"}} </td>
+		</tr>
+		
+		{% if compensation.extra_info %}
+		<tr>
+			<th>Extra Info:</th>  <td>{{compensation.extra_info}}</td>
+		</tr>
+		{% endif %}
+	
+		{% if payscales %}
+			<tr>
+				<th>Salary/Payscale:</th>
+				<td>
+					{% for ps in payscales %}
+					{% if forloop.last and forloop.first %}
+						<strong>${{ ps.amount|floatformat:2|intcomma }}</strong> <small>{{ ps.get_salary_unit_display }}</small>		
+					{% else %}
+						{{ ps.year|ordinal }} year: <strong>${{ ps.amount|floatformat:2|intcomma }}</strong> <small>{{ ps.get_salary_unit_display }}</small><br />
+					{% endif %}
+					{% endfor %}
+				</td>
+			</tr>
+		{% endif %}
+		
+	{% else %}
+		<tr>
+			<td class="not_known">Not known</td>
+		</tr>
+	{% endif %}
+		</table>
+		
+{##################################################}
+
+	<div class="last_modified">Last modified:  <strong>{{position.hard_mins.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.hard_mins.last_modified|date:"(G:i.s T)"}}</div>
+	<table class="double_fancy_table mins" summary="Hard hiring minimums information">
+	
+	<thead>
+		<tr>
+			<td colspan="2">Hard Minimums</td>
+		</tr>
+	</thead>
+		
+	{% if position.hard_mins.has %}		
+		
+		{{ position.hard_mins.as_table|safe }}
+
+	{% else %}
+		<tr>
+			<td class="not_known">Not known</td>
+		</tr>
+	
+	{% endif %}
+	</table>
+	
+{##################################################}
+	<div class="last_modified">Last modified:  <strong>{{position.pref_mins.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.pref_mins.last_modified|date:"(G:i.s T)"}}</div>
+	<table class="double_fancy_table mins" summary="Preferred hiring minimums information">
+	
+	<thead>
+		<tr>
+			<td colspan="2">Preferred Minimums</td>
+		</tr>
+	</thead>
+		
+	{% if position.pref_mins.has %}		
+			{{ position.pref_mins }}
+			</td>
+		</tr>
+	{% else %}
+		<tr>
+			<td class="not_known">Not known</td>
+		</tr>
+	
+	{% endif %}
+	</table>
+{##################################################}
+	<div class="last_modified">Last modified:  <strong>{{position.operation.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.operation.last_modified|date:"(G:i.s T)"}}</div>
+	<table class="single_fancy_table" summary="Bases">
+	
+	<thead>
+		<tr>
+			<td colspan="2">Bases & Routes</td>
+		</tr>
+	</thead>
+	<tr>
+	<td>
+{% for ob in opbases %}
+	
+	<div class="top_section t_{{ ob.hiring_status }}">
+		<a class="immutable" href="{{ ob.base.get_absolute_url }}">{{ ob.base.display_name }}</a> 
+		<br />
+		<small>{{ ob.base.location_summary}}</small>
+	</div>
+	
+	<div class="bottom_section b_{{ob.hiring_status}}">
+		<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="{{ MEDIA_URL }}/icons/plus.png" alt="+"/>
+		<div class="right_box">
+			{{ob.verbose_hiring_status}}
 		</div>
-		<div class="base_floats">
-			<a title="{{ ob.base.get_location }}" class="base_link" href="{{ ob.base.get_absolute_url }}">
-				{{ ob.base.display_name }}</a> ({{ob.workforce_size}})<br />
-				<small>{{ ob.base.location_summary}}</small>
-				
-			<div class="base_info" id="info_{{ob.pk}}" >
-				<div id="map_{{ob.pk}}" class="small_map"></div>
-			</div>
+		
+		<div class="base_hide" id="info_{{ob.pk}}" >
+			<div id="map_{{ob.pk}}" class="small_map"></div>
 			
 			{% if ob.route_set.all %}
-			<br /><br />
+			<br />
 			<div>
 				<strong>Routes:</strong>
 				<ul>
@@ -163,13 +265,16 @@
 				{% endfor %}
 				</ul>
 			</div>
+			{% else %}
+				<strong>No Routes</strong>
 			{% endif %}
-			
-			
 		</div>
 	</div>
-{% endfor %}
-	
+		{% endfor %}
+	</td>
+	</tr>
+
+	</table>
 	
 </div>
 {% endblock %}
