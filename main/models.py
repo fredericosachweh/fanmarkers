@@ -239,6 +239,7 @@ class OpBase(models.Model):
 	workforce_size	=	models.IntegerField("Workforce Size", default=0)
 	
 	hiring_status	=	"unknown"
+	verbose_hiring_status=	HIRING_STATUS["unknown"]
 	
 	def __unicode__(self):	
 		return u"%s - %s" % (self.base.identifier, self.operation.company.name)
