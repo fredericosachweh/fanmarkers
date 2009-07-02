@@ -5,6 +5,7 @@ from django.forms.models import inlineformset_factory
 from django.contrib.auth.models import User
 
 from models import *
+from base.models import *
 from django.template import Context, loader
 
 
@@ -35,7 +36,7 @@ class FleetForm(ModelForm):
 #####################################################################################################
 		
 class RouteBaseForm(ModelForm):
-	base = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.TextInput)
+	base = forms.ModelChoiceField(queryset=Airport.objects.all(), widget=forms.TextInput)
 
 	class Meta:
 		model = RouteBase
@@ -76,7 +77,7 @@ class OperationForm(ModelForm):
 			
 class OpBaseForm(ModelForm):
 
-	base = forms.ModelChoiceField(queryset=Base.objects.all(), widget=forms.TextInput)
+	base = forms.ModelChoiceField(queryset=Airport.objects.all(), widget=forms.TextInput)
 	
 	class Meta:
 		model = OpBase
@@ -88,10 +89,10 @@ OpBaseFormset = inlineformset_factory(Operation, OpBase, form=OpBaseForm, extra=
 
 			
 class StatusForm(ModelForm):
-	not_bases =    forms.ModelMultipleChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput, required=False)
-	choice_bases = forms.ModelMultipleChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput, required=False)
-	assign_bases = forms.ModelMultipleChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput, required=False)
-	layoff_bases = forms.ModelMultipleChoiceField(queryset=Base.objects.all(), widget=forms.HiddenInput, required=False)
+	not_bases =    forms.ModelMultipleChoiceField(queryset=Airport.objects.all(), widget=forms.HiddenInput, required=False)
+	choice_bases = forms.ModelMultipleChoiceField(queryset=Airport.objects.all(), widget=forms.HiddenInput, required=False)
+	assign_bases = forms.ModelMultipleChoiceField(queryset=Airport.objects.all(), widget=forms.HiddenInput, required=False)
+	layoff_bases = forms.ModelMultipleChoiceField(queryset=Airport.objects.all(), widget=forms.HiddenInput, required=False)
 
 	class Meta:
 		model = Status

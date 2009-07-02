@@ -20,13 +20,13 @@ class Airport(models.Model):
 	
 	class Meta:
 		ordering = ["identifier", "country"]
-		verbose_name_plural = "Bases"
+		verbose_name_plural = "Airports"
 		
 	def get_absolute_url(self):
 		return "/airport/%s/" % (self.identifier, )
 		
 	def __unicode__(self):
-		return u"%s" % (self.identifier,)
+		return u"%s - %s" % (self.identifier, self.location_summary())
 		
 	def display_name(self):
 		return " - ".join([self.identifier, self.name])
@@ -46,7 +46,7 @@ class Region(models.Model):
 	name = models.CharField(max_length=60)
 	
 	def __unicode__(self):
-		return "%s - %s" % (self.country.name, self.name)
+		return "%s" % (self.name)
 	
 class Country(models.Model):
 	name = models.CharField(max_length=48)

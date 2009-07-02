@@ -24,7 +24,7 @@ def jobmap(request):
 @render_to('view_airport.html')
 def airport(request, pk):
 
-	airport = get_object_or_404(Base, pk=pk)
+	airport = get_object_or_404(Airport, pk=pk)
 	
 	ops_base = 	Operation.objects.filter(opbase__in=OpBase.objects.filter(base=airport))					#ops where this airport is a base
 	ops_fly =	Operation.objects.filter(opbase__in=OpBase.objects.filter(route__in=Route.objects.filter(bases=airport)))	#ops where this airport is part of a route

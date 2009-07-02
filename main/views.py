@@ -167,7 +167,7 @@ def handle_route(request, type, pk):
 		
 		i=1
 		for index in range(0, int(request.POST["routebase_set-TOTAL_FORMS"])):
-			if request.POST["routebase_set-" + str(index) + "-base"]:
+			if request.POST["routebase_set-" + str(index) + "-airport"]:
 				newPOST["routebase_set-" + str(index) + "-sequence"]=i
 				i += 1
 			else:
@@ -264,7 +264,7 @@ def overlay(request, z, x, y, o):
 	from jobmap.settings import ICONS_DIR
 	from django.db.models import Q
 	
-	all_bases = Base.objects.filter(opbase__isnull=False)
+	all_bases = Airport.objects.filter(opbase__isnull=False)
 	
 	#bases
 	layoff = all_bases.filter(layoff__in=Status.objects.all())
@@ -272,8 +272,8 @@ def overlay(request, z, x, y, o):
 	all_hiring = all_bases.filter(Q(choice__in=Status.objects.all()) | Q(assign__in=Status.objects.all()))
 	not_hiring = all_bases.exclude(Q(choice__in=Status.objects.all()) | Q(assign__in=Status.objects.all()))
 	
-	just_hiring = Base.objects.filter(Q(choice__in=Status.objects.exclude(advertising=True)) | Q(assign__in=Status.objects.exclude(advertising=True)))
-	advertising = Base.objects.filter(Q(choice__in=Status.objects.filter(advertising=True)) | Q(assign__in=Status.objects.filter(advertising=True)))
+	just_hiring = Airport.objects.filter(Q(choice__in=Status.objects.exclude(advertising=True)) | Q(assign__in=Status.objects.exclude(advertising=True)))
+	advertising = Airport.objects.filter(Q(choice__in=Status.objects.filter(advertising=True)) | Q(assign__in=Status.objects.filter(advertising=True)))
 	
 	##########
 	

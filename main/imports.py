@@ -1,9 +1,10 @@
-def ia():
-	import csv, re
-	from django.contrib.gis.geos import Point
-	from base.models import Airport, Region, Country
-	from psycopg2 import IntegrityError 
+import csv, re
+from django.contrib.gis.geos import Point
+from base.models import Airport, Region, Country
+from psycopg2 import IntegrityError 
 
+
+def ia():
 	file = csv.reader(open('/home/chris/Desktop/airports.csv'), "excel")
 
 	count=0
@@ -79,10 +80,6 @@ def ia():
 	print "thrown out: " + count_to
 		
 def ir():
-	import csv, re
-	from django.contrib.gis.geos import Point
-	from base.models import Airport, Region, Country
-	
 	file = csv.reader(open('/home/chris/Desktop/regions.csv'), "excel")
 
 	count=0
@@ -104,11 +101,7 @@ def ir():
 				print code
 	print count
 
-def ic():
-	import csv, re
-	from django.contrib.gis.geos import Point
-	from base.models import Airport, Region, Country
-	
+def ic():	
 	file = csv.reader(open('/home/chris/Desktop/countries.csv'), "excel")
 
 	count=0
