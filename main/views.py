@@ -294,7 +294,3 @@ def overlay(request, z, x, y, o):
 	response = HttpResponse(mimetype="image/png")
 	ov.output().save(response, "PNG")
 	return response
-	
-			
-	
-	

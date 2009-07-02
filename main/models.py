@@ -1,7 +1,8 @@
-from django.contrib.gis.db import models
+from django.db import models
 from django.contrib.auth.models import User
 from constants import *
 from mins import Mins, CatClassMins
+from base.models import Airport
 
 ###############################################################################################################################
 
@@ -55,57 +56,9 @@ class Compensation(models.Model):
 		return "comp: %s" % self.position
 		
 ###############################################################################################################################
-	
-class Base(models.Model):
-	identifier	=	models.CharField(max_length=8, primary_key=True)
-	local		=	models.CharField(max_length=8)
-	iata		=	models.CharField(max_length=8)
-	
-	name		=	models.CharField(max_length=96)
-	municipality	=	models.CharField(max_length=60)
-	country		=	models.CharField(max_length=48)
-	region		=	models.CharField(max_length=48)
-	type		=	models.IntegerField(choices=AIRPORT_TYPE)
-	
-	elevation	=	models.IntegerField()
-	location	=	models.PointField()
-	watchers	=	models.ManyToManyField(User, blank=True, )
-	
-	objects		=	models.GeoManager()
-	
-	class Meta:
-		ordering = ["identifier", "country"]
-		verbose_name_plural = "Bases"
-		
-	def get_absolute_url(self):
-		return "/airport/%s/" % (self.identifier, )
-		
-	def __unicode__(self):
-		return u"%s" % (self.identifier,)
-			
-	
-
-		
-	def display_name(self):
-		ret = self.identifier
-		if len(self.name) > 0:
-			ret = ret + " - " + self.name
-			
-		return ret
-
-	def location_summary(self):
-		ret = []
-		
-		for item in (self.municipality, self.region, self.country, ):
-			if item and item != "United States":
-				ret.append(item)
-				
-		return ", ".join(ret)
-		
-###############################################################################################################################
 		
 class Route(models.Model):
-	bases		=	models.ManyToManyField("Base", through="RouteBase", blank=True)
+	bases		=	models.ManyToManyField(Airport, through="RouteBase", blank=True)
 	description	=	models.TextField(blank=True)
 	opbase		=	models.ForeignKey("OpBase", blank=True)
 	
@@ -126,7 +79,7 @@ class Route(models.Model):
 ###############################################################################################################################
 
 class RouteBase(models.Model):
-	base		=	models.ForeignKey("Base")
+	base		=	models.ForeignKey(Airport)
 	route		=	models.ForeignKey("Route")
 	sequence	=	models.IntegerField(blank=True)
 
@@ -202,7 +155,7 @@ class Position(models.Model):
 class Operation(models.Model):
 	company		=	models.ForeignKey("Company",)
 	fleet		=	models.ManyToManyField("Fleet", blank=True, null=True)
-	bases		=	models.ManyToManyField("Base", through="OpBase", blank=True)
+	bases		=	models.ManyToManyField(Airport, through="OpBase", blank=True)
 	positions	=	models.ManyToManyField("Position", blank=True)
 	last_modified	=	models.DateTimeField(auto_now=True)
 	
@@ -235,7 +188,7 @@ class Operation(models.Model):
 
 class OpBase(models.Model):
 	operation	=	models.ForeignKey("Operation", )
-	base		=	models.ForeignKey("Base")
+	base		=	models.ForeignKey(Airport)
 	workforce_size	=	models.IntegerField("Workforce Size", default=0)
 	
 	hiring_status	=	"unknown"
@@ -285,10 +238,10 @@ class Status(models.Model):
 	reference	=	models.TextField(blank=True, null=True)
 	last_modified	=	models.DateTimeField(auto_now=True)
 	
-	not_bases	=	models.ManyToManyField("Base", related_name="not", blank=True)
-	assign_bases	=	models.ManyToManyField("Base", related_name="assign", blank=True)
-	choice_bases	=	models.ManyToManyField("Base", related_name="choice", blank=True)
-	layoff_bases	=	models.ManyToManyField("Base", related_name="layoff", blank=True)
+	not_bases	=	models.ManyToManyField(Airport, related_name="not", blank=True)
+	assign_bases	=	models.ManyToManyField(Airport, related_name="assign", blank=True)
+	choice_bases	=	models.ManyToManyField(Airport, related_name="choice", blank=True)
+	layoff_bases	=	models.ManyToManyField(Airport, related_name="layoff", blank=True)
 	
 	advertising	=	models.BooleanField(default=False)
 	ad_start	=	models.DateTimeField(blank=True, null=True)
