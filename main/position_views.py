@@ -13,6 +13,8 @@ def view_position(request, pk):
 	position = get_object_or_404(Position, pk=pk)
 	opbases = position.operation_set.get().opbase_set.all()
 	
+	fleets = position.operation_set.get().fleet.all()
+	
 	compensation = get_object_or_None(Compensation, position=position)
 	if compensation:
 		payscales = compensation.payscaleyear_set.all()
@@ -71,7 +73,7 @@ def edit_position(request, pk):
 	
 	if operation:
 		opbases = operation.opbase_set.all()
-		bases = Base.objects.filter(opbase__in=opbases)
+		bases = Airport.objects.filter(opbase__in=opbases)
 	else:
 		bases = []
 		opbases = []
@@ -131,7 +133,7 @@ def edit_position(request, pk):
 				list(instance.assign_bases.all()) != field_bases["assign"] or \
 				list(instance.choice_bases.all()) != field_bases["choice"] and \
 				status_form.has_changed() or not status_form.instance.pk:
-				#only if the status has changed or its the first edit, otherwise dont run because we dibt want the last modified value to change
+				#only if the status has changed or its the first edit, otherwise dont run because we dont want the 'last modified' value to change
 				
 					status_form.save()
 					

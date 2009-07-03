@@ -34,8 +34,8 @@ class Airport(models.Model):
 	def location_summary(self):
 		ret = []
 		
-		for item in (self.municipality, self.region.code, self.country.code, ):
-			if item and item != "US":
+		for item in (self.municipality, self.region.name, self.country.name, ):
+			if item and item != "United States":
 				ret.append(item)
 				
 		return ", ".join(ret)

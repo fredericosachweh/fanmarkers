@@ -3,6 +3,26 @@
 
 {% block javascript %}{% endblock %}
 
+{% block css %}
+	<style type="text/css">
+		.last_modified		{margin: 0px; padding-bottom: 2px; text-align: right; font-size: x-small !important; width: 800px; margin-top: 20px}
+	
+		.fancy_table			{border-collapse: collapse; margin-top: 0px; width: 800px; border: 2px solid black}
+		.fancy_table thead td		{background: white; text-align: center; font-weight: bold; font-size: large}
+		.fancy_table tr:nth-child(even)	{background: #EEEEEE}
+		.fancy_table tr:nth-child(odd)	{background: #CCCCCC}
+		.fancy_table td			{border: 1px solid #AAAAAA; padding: 5px; font-weight: normal; width: 50%}
+		.fancy_table td:first-child	{width: 12em}
+		.fancy_table th			{border: 1px solid #AAAAAA; text-align: right; padding: 2px}
+		
+		.single tr			{background: #CCCCCC !important}
+		
+		.not_known		{color: gray; font-style: italic; text-align: center}
+		td.not_known		{height: 5em}
+		ul			{margin: 0px; padding-left: 1.5em}
+	
+	</style>
+{% endblock %}
 {% block body %}
 <div id="main_container">
 	<h1>

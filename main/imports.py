@@ -63,7 +63,7 @@ def ia():
 		if not throw_out:
 		
 			try:
-				Airport.objects.get_or_create(identifier=ident, name=name, region=Region.objects.get(code=region, country=country), municipality=city, country=Country.objects.get(code=country), elevation=elev, location=Point(float(lat), float(lng)), type=types[type])
+				Airport.objects.get_or_create(identifier=ident, name=name, region=Region.objects.get(code=region, country=country), municipality=city, country=Country.objects.get(code=country), elevation=elev, location=Point(float(lng), float(lat)), type=types[type])
 				count2 += 1
 				
 			except ValueError:
@@ -75,9 +75,9 @@ def ia():
 		else:
 			count_to += 1
 			
-	print "total:      " + count
-	print "success:    " + count2
-	print "thrown out: " + count_to
+	print "total:      " + str(count)
+	print "success:    " + str(count2)
+	print "thrown out: " + str(count_to)
 		
 def ir():
 	file = csv.reader(open('/home/chris/Desktop/regions.csv'), "excel")
@@ -99,7 +99,7 @@ def ir():
 				Region.objects.get_or_create(name=name, code=code, country=country)
 			except:
 				print code
-	print count
+	print str(count)
 
 def ic():	
 	file = csv.reader(open('/home/chris/Desktop/countries.csv'), "excel")
@@ -120,4 +120,4 @@ def ic():
 				Country.objects.get_or_create(name=name, code=code)
 			except:
 				print code
-	print count
+	print str(count)

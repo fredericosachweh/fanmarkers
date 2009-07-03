@@ -13,7 +13,7 @@ class Aircraft(models.Model):
 	manufacturer	=	models.CharField(max_length=32)
 	engine_type	=	models.IntegerField(choices=ENGINE_TYPE, default=0)
 	cat_class	=	models.IntegerField(choices=CAT_CLASSES, default=1)
-	watchers	=	models.ManyToManyField(User, blank=True, )
+	#watchers	=	models.ManyToManyField(User, blank=True, )
 	
 	class Meta:	
 		ordering = ["manufacturer", "type"]

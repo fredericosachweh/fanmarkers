@@ -1,103 +1,120 @@
-{% extends "base.html" %}
+{% extends "base_view.html" %}
 
-
-{%block title%}{{company.name}} - Company Profile{% endblock %}
+{% block edit_top %}"/edit{{ company.get_absolute_url }}"{% endblock %}
+{%block title%}{{company.name}}{% endblock %}
 
 {% block css %}
-<style type="text/css">
-	.alert			{color: darkred; font-weight: bold}
-
-	.operation_box		{border: 3px solid black; margin: 1em; padding: 1em; padding-top: 0px}
-	
-	.op_edit		{float: right; margin-top: 10px; border: 0px solid black}
-	
-	.fleet_box		{border: 1px solid black; margin-top: 0.5em; margin-bottom: 0.5em; background: lightgray; padding: .5em}
-	
-	#info_table td		{border: 1px solid black; padding: 0.5em}
-	#info_table		{margin-top: 1em}
+{{ block.super }}
+<style>
+	.optable		{background: white; border-collapse: collapse; width: 500px; margin-left: auto; margin-right: auto}
+	.optable td		{width: 400px; background: white; border: 1px solid gray}
+	.optable th		{border: 1px solid gray}
 </style>
 {% endblock %}
-
-{% block body %}
-	<div id="main_container">
 	
-		{# ------------company info--------------------------------- #}
+{% block main_content %}
+<div class="last_modified">Last modified:  <strong>{{company.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{company.last_modified|date:"(G:i.s T)"}}</div>	
+	<table class="fancy_table" summary="Position general information">
+		<thead>
+			<tr>
+				<td colspan="2">Company Information</td>
+			</tr>
+		</thead>
+		
+		<tr>
+			<th>Business Domain:</th>  <td>{{company.get_type_display|default:"<span class='not_known'>Not Known</span>"}} </td>
+		</tr>
+		
+		<tr>
+			<th>Description:</th>  <td>{{ company.description|default:"<span class='not_known'>Not Known</span>"}}</td>
+		</tr>
+		
+		<tr>
+			<th>Contact Info:</th>  <td>{{company.contact_info|default:"<span class='not_known'>Not Known</span>"}}</td>
+		</tr>
+		
+		<tr>
+			<th>Website:</th>  <td>{% if company.website %}<a href="{{company.website}}" class="external">{{company.website}}</a> <img src="http://en.wikipedia.org/skins-1.5/monobook/external.png" />{% else %}<span class='not_known'>Not Known</span>{% endif %} </td>
+		</tr>
+		
+		<tr>
+			<th>Call Sign:</th>  <td>{{company.callsign|default:"<span class='not_known'>Not Known</span>"}}</td>
+		</tr>
+		
+		<tr>
+			<th>Union:</th>  <td>{{company.union|default:"<span class='not_known'>Not Known</span>"}}</td>
+		</tr>
+		
+		<tr>
+			<th>Jumpseat Privileges:</th>  <td>{{company.get_jumpseat_display|default:"<span class='not_known'>Not Known</span>"}}</td>
+		</tr>
+		
+			
+		
+		<tr>
+			<th>Number of people watching this company:</th>  <td>{{watchers|default:"0"}} {% if not already_watching %}<a href="/watch/position/{{ company.pk }}">(Watch this company)</a>{%else%}<a href="/unwatch/position/{{ position.pk }}">(Unwatch this company)</a>{% endif %}</td>
+		</tr>
+	</table>
 	
-		<h1>
-			<h1>
-				{{company.name}} <a class="edit_link_ui" href="/edit{{ company.get_absolute_url }}">(edit)</a>
-			</h1>
-		</h1>
+<div class="last_modified">&nbsp;</div>	
+	<table class="fancy_table single" summary="Position general information">
+		<thead>
+			<tr>
+				<td colspan="2">Operations</td>
+			</tr>
+		</thead>
+		<tr>
+		<td>	
 		
-		<table id="info_table">
-			<tr>
-				<td>Description:</td>  <td>{{company.description}}</td>
-			</tr>
-			<tr>
-				<td>Call sign:</td>  <td>{% firstof company.call_sign "<em>None</em>"%}</td>
-			</tr>
-			<tr>
-				<td>Website:</td>  <td><a href="{{company.website}}">{{company.website}}</a></td>
-			</tr>
-			
-			<tr>
-				<td>Contact Info:</td>  <td>{{company.contact_info}}</td>
-			</tr>
-			
-			<tr>
-				<td>Business Type:</td>  <td><a href="/company/list/type/{{company.type}}" class="immutable">{{company.get_type_display}}</a></td>
-			</tr>
-			
-			<tr>
-				<td>Union:</td>  <td>{{company.union}}</td>
-			</tr>
-		</table>
-			
-		{% for op in company.operation_set.all %}
-		<div class="operation_box">
-			<div class="op_edit">
-				<a href="/edit/operation/{{ op.pk }}" class="edit_link_ui">(edit)</a>
-			</div>
-			
-			{# ------------position box--------------------------------- #}
+		{#######################################}
 		
-			{% for position in op.positions.all %}
-			<h2>
-				<a href="{{ position.get_absolute_url }}">{{position.name}}</a> <a class="edit_link_ui" href="/edit{{ position.get_absolute_url }}">(edit)</a>
-				{% if forloop.first %}<a name="op{{op.pk}}"></a>{% endif %}
-			</h2>
-			{% endfor %}
-			
-			{# ------------fleet below---------------------------------- #}
+		{% for operation in company.operation_set.all %}
+			<div style="margin: 3px; padding: 10px;">
+				<table class="optable">
+					<tr>
+						<th>Positions:</th>
+						<td>
+							<ul>
+							{% for position in operation.positions.all %}
+							<li><a href="{{position.get_absolute_url}}" class="view">{{position}}</a></li>
+							{% endfor %}
+							</ul>
+						</td>
+					</tr>
+					
+					<tr>
+						<th>Aircraft:</th>
+						<td>
+							<ul>
+							{% for fleet in operation.fleet.all %}
+							<li><a href="{{fleet.get_absolute_url}}" class="immutable">{{fleet}}</a></li>
+							{% endfor %}
+							</ul>
+						</td>
+					</tr>
+					
+					
+					<tr>
+						<th>Bases:</th>
+						<td>
+							<ul>
+							{% for base in operation.bases.all %}
+							<li><a href="{{base.get_absolute_url}}" class="immutable">{{base}}</a></li>
+							{% endfor %}
+							</ul>
+						</td>
+					</tr>
+				</table>
 				
-			{% for fleet in op.fleet.all %}
-			<div class="fleet_box">
-				<a href="{{ fleet.aircraft.get_absolute_url }}" class="immutable">{{ fleet.aircraft }}</a> ({{ fleet.size }})
 			</div>
-			{% endfor %}
-			
-			{# -------------bases below--------------------------------- #}
-				
-			{% for ob in op.opbase_set.all %}
-			<ul>
-				<li>
-					<a href="/airport/{{ ob.base.identifier }}" class="immutable">{{ ob.base.display_name }}</a> {{ ob.get_hiring_status_display }}
-					<br />
-					<small>{{ob.base.location_summary}}</small>
-				</li>
-			</ul>
-			{% endfor %}
-		</div>
-		
-		{#{% empty %}	#}
-		
-		{#<em>No operations</em>#}
-		
+		{% if not forloop.last %}<hr />{% endif %}
+		{% empty %}
+			<div style="text-align: center"><span class='not_known'>None</span></div>
 		{% endfor %}
 		
+		{#######################################}
 		
-		
-		
-
-	</div>
+		</td>
+		</tr>
+	</table>
 {% endblock %}

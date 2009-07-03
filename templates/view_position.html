@@ -6,11 +6,8 @@
 {% block edit_top %}"/edit{{ position.get_absolute_url }}"{% endblock %}
 
 {% block css %}
-	<style type="text/css">
-	
-	
-	.last_modified		{margin: 0px; padding-bottom: 2px; text-align: right; font-size: x-small !important; width: 800px; margin-top: 20px}
-	
+{{ block.super }}
+	<style type="text/css">	
 	.t_not			{background: #EEEEEE; border: 1px solid black}
 	.t_unknown		{background: #EEEEEE; border: 1px solid black}
 	.t_assign		{background: #9df39d; border: 1px solid green}
@@ -31,33 +28,13 @@
 	.position_mins		{margin-top: 1em; border-collapse: collapse}
 	.position_mins td	{border: 0px solid black; padding-right: 1em}
 	
-	.double_fancy_table			{border-collapse: collapse; margin-top: 0px; width: 800px; border: 2px solid black}
-	.double_fancy_table thead td		{background: white; text-align: center; font-weight: bold; font-size: large}
-	.double_fancy_table tr:nth-child(even)	{background: #EEEEEE}
-	.double_fancy_table tr:nth-child(odd)	{background: #CCCCCC}
-	.double_fancy_table td			{border: 1px solid #AAAAAA; padding: 5px; font-weight: normal; width: 50%}
-	.double_fancy_table td:first-child	{width: 12em}
-	.double_fancy_table th			{border: 1px solid #AAAAAA; text-align: right; padding: 2px}
-	
-	.single_fancy_table			{border-collapse: collapse; margin-top: 0px; width: 800px; border: 2px solid black}
-	.single_fancy_table thead td		{background: white; text-align: center; font-weight: bold; font-size: large}
-	.single_fancy_table tr			{background: #CCCCCC}
-	.single_fancy_table td			{border: 1px solid black; padding: 5px; font-weight: normal}
-	.single_fancy_table td:first-child	{width: 12em}
-	.single_fancy_table th			{border: 1px solid black; text-align: right; padding: 2px}
-	
 	.base_hide		{display: none}
 	.bases			{}
 	
 	.mins ul		{margin: 0px; padding-left: 1.5em}
 	
 	.small_map		{height: 300px; width:500px; background: gray; margin-bottom: 1em; margin-top: 1em; margin-right: auto; margin-left: auto}
-	
-	.not_known		{color: gray; font-style: italic; text-align: center}
-	td.not_known		{height: 5em}
-	
 	ul			{margin-top: 0}
-	
 	</style>
 {% endblock %}
 
@@ -99,7 +76,7 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 
 {% block main_content %}
 <div class="last_modified">Last modified:  <strong>{{position.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.last_modified|date:"(G:i.s T)"}}</div>	
-	<table class="double_fancy_table" summary="Position general information">
+	<table class="fancy_table" summary="Position general information">
 	
 	
 		<thead>
@@ -114,6 +91,18 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 		<tr>
 			<th>Job Domain:</th>  <td>{{position.get_job_domain_display}}</td>
 		</tr>
+		
+		<tr>
+			<th>Aircraft:</th>
+			<td>	
+				{% for fleet in fleets %}
+					
+					<a href="{{fleet.aircraft.get_absolute_url}}" class="immutable">{{fleet.aircraft}}</a><br />
+					
+				{% endfor %}
+			</td>
+		</tr>
+		
 		<tr>
 			<th>Schedule Type:</th>  <td>{{position.get_schedule_type_display|default:"<span class='not_known'>Not Known</span>"}} </td>
 		</tr>
@@ -125,7 +114,7 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 {##################################################}
 
 	<div class="last_modified">Last modified:  <strong>{{position.compensation.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.compensation.last_modified|date:"(G:i.s T)"}}</div>	
-	<table class="double_fancy_table" summary="payscale and hiring minimums information">
+	<table class="fancy_table" summary="payscale and hiring minimums information">
 	
 	
 		<thead>
@@ -179,7 +168,7 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 {##################################################}
 
 	<div class="last_modified">Last modified:  <strong>{{position.hard_mins.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.hard_mins.last_modified|date:"(G:i.s T)"}}</div>
-	<table class="double_fancy_table mins" summary="Hard hiring minimums information">
+	<table class="fancy_table mins" summary="Hard hiring minimums information">
 	
 	<thead>
 		<tr>
@@ -201,7 +190,7 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 	
 {##################################################}
 	<div class="last_modified">Last modified:  <strong>{{position.pref_mins.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.pref_mins.last_modified|date:"(G:i.s T)"}}</div>
-	<table class="double_fancy_table mins" summary="Preferred hiring minimums information">
+	<table class="fancy_table mins" summary="Preferred hiring minimums information">
 	
 	<thead>
 		<tr>
@@ -222,13 +211,14 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 	</table>
 {##################################################}
 	<div class="last_modified">Last modified:  <strong>{{position.operation.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.operation.last_modified|date:"(G:i.s T)"}}</div>
-	<table class="single_fancy_table" summary="Bases">
+	<table class="fancy_table" summary="Bases">
 	
 	<thead>
 		<tr>
 			<td colspan="2">Bases & Routes</td>
 		</tr>
 	</thead>
+{% if opbases %}
 	<tr>
 	<td>
 {% for ob in opbases %}
@@ -270,10 +260,16 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 			{% endif %}
 		</div>
 	</div>
-		{% endfor %}
+
+	
+{% endfor %}
 	</td>
 	</tr>
+{% else %}
 
+<td class='not_known'>Not Known</td>
+	
+{% endif %}
 	</table>
 	
 </div>
