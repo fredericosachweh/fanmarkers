@@ -7,7 +7,6 @@
 
 {% block css %}
 {{ block.super }}
-	<style type="text/css">	
 	.t_not			{background: #EEEEEE; border: 1px solid black}
 	.t_unknown		{background: #EEEEEE; border: 1px solid black}
 	.t_assign		{background: #9df39d; border: 1px solid green}
@@ -35,7 +34,6 @@
 	
 	.small_map		{height: 300px; width:500px; background: gray; margin-bottom: 1em; margin-top: 1em; margin-right: auto; margin-left: auto}
 	ul			{margin-top: 0}
-	</style>
 {% endblock %}
 
 {% block javascript %}
@@ -170,22 +168,21 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 	<div class="last_modified">Last modified:  <strong>{{position.hard_mins.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.hard_mins.last_modified|date:"(G:i.s T)"}}</div>
 	<table class="fancy_table mins" summary="Hard hiring minimums information">
 	
-	<thead>
-		<tr>
-			<td colspan="2">Hard Minimums</td>
-		</tr>
-	</thead>
+		<thead>
+			<tr>
+				<td colspan="2">Hard Minimums</td>
+			</tr>
+		</thead>
 		
-	{% if position.hard_mins.has %}		
-		
+		{% if position.hard_mins.has %}		
 		{{ position.hard_mins.as_table|safe }}
-
-	{% else %}
+		{% else %}
+		
 		<tr>
 			<td class="not_known">Not known</td>
 		</tr>
 	
-	{% endif %}
+		{% endif %}
 	</table>
 	
 {##################################################}
@@ -213,64 +210,59 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 	<div class="last_modified">Last modified:  <strong>{{position.operation.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.operation.last_modified|date:"(G:i.s T)"}}</div>
 	<table class="fancy_table" summary="Bases">
 	
-	<thead>
+		<thead>
+			<tr>
+				<td colspan="2">Bases & Routes</td>
+			</tr>
+		</thead>
+	{% if opbases %}
 		<tr>
-			<td colspan="2">Bases & Routes</td>
-		</tr>
-	</thead>
-{% if opbases %}
-	<tr>
-	<td>
-{% for ob in opbases %}
+			<td>
+	{% for ob in opbases %}
+				<div class="top_section t_{{ ob.hiring_status }}">
+					<a class="immutable" href="{{ ob.base.get_absolute_url }}">{{ ob.base.display_name }}</a> 
+					<br />
+					<small>{{ ob.base.location_summary}}</small>
+				</div>
 	
-	<div class="top_section t_{{ ob.hiring_status }}">
-		<a class="immutable" href="{{ ob.base.get_absolute_url }}">{{ ob.base.display_name }}</a> 
-		<br />
-		<small>{{ ob.base.location_summary}}</small>
-	</div>
-	
-	<div class="bottom_section b_{{ob.hiring_status}}">
-		<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="{{ MEDIA_URL }}/icons/plus.png" alt="+"/>
-		<div class="right_box">
-			{{ob.verbose_hiring_status}}
-		</div>
+				<div class="bottom_section b_{{ob.hiring_status}}">
+					<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="{{ MEDIA_URL }}/icons/plus.png" alt="+"/>
+					<div class="right_box">
+						{{ob.verbose_hiring_status}}
+					</div>
 		
-		<div class="base_hide" id="info_{{ob.pk}}" >
-			<div id="map_{{ob.pk}}" class="small_map"></div>
+					<div class="base_hide" id="info_{{ob.pk}}" >
+						<div id="map_{{ob.pk}}" class="small_map"></div>
 			
-			{% if ob.route_set.all %}
-			<br />
-			<div>
-				<strong>Routes:</strong>
-				<ul>
-				{% for r in ob.route_set.all %}		{# new row, new route #}
-				<li>
-					<a href="{{ ob.base.get_absolute_url }}" title="{{ ob.base.location_summary }}" class="immutable">{{ ob.base.identifier }}</a> &#8594; 
-						{% for b in r.routebase_set.all %}
-						<a href="{{ b.base.get_absolute_url }}" title="{{ b.base.location_summary }}" class="immutable">{{ b.base.identifier }}</a> &#8594; 
-						{% endfor%}
-					<a href="{{ ob.base.get_absolute_url }}" title="{{ ob.base.location_summary }}" class="immutable">{{ ob.base.identifier }}</a>
-					{{r.description}}
-				</li>
-				{% endfor %}
-				</ul>
-			</div>
-			{% else %}
-				<strong>No Routes</strong>
-			{% endif %}
-		</div>
-	</div>
-
-	
+						{% if ob.route_set.all %}
+						<br />
+						<div>
+							<strong>Routes:</strong>
+							<ul>
+							{% for r in ob.route_set.all %}		{# new row, new route #}
+							<li>
+								<a href="{{ ob.base.get_absolute_url }}" title="{{ ob.base.location_summary }}" class="immutable">{{ ob.base.identifier }}</a> &#8594; 
+									{% for b in r.routebase_set.all %}
+									<a href="{{ b.base.get_absolute_url }}" title="{{ b.base.location_summary }}" class="immutable">{{ b.base.identifier }}</a> &#8594; 
+									{% endfor%}
+								<a href="{{ ob.base.get_absolute_url }}" title="{{ ob.base.location_summary }}" class="immutable">{{ ob.base.identifier }}</a>
+								{{r.description}}
+							</li>
+							{% endfor %}
+							</ul>
+						</div>
+						{% else %}
+							<strong>No Routes</strong>
+						{% endif %}
+					</div>
+				</div>
 {% endfor %}
-	</td>
-	</tr>
+			</td>
+		</tr>
 {% else %}
-
-<td class='not_known'>Not Known</td>
-	
+		<tr>
+			<td class='not_known'>Not Known</td>
+		</tr>	
 {% endif %}
 	</table>
-	
-</div>
 {% endblock %}

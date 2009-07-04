@@ -5,29 +5,27 @@
 {########################################################################}
 
 {% block css %}
-	<style type="text/css">
-		fieldset input[type="text"]		{width: 3em; margin-right: 2em}
-		legend					{font-size: large}
-		.plus					{cursor: pointer}
-		
-		#base_mins				{display: none}
-		#pref_mins				{display: none}
-		
-		#status_table				{border-collapse: collapse;}
-		#status_table td:first-child		{width: 15em;}
-		#status_table td			{border: 1px solid black; width: 5em; text-align: center; padding: 2px; background: white}
-		#status_table td[colspan="6"]		{font-weight: bold; font-size: large}
-		
-		#status_table td:last-child		{background: lightred}
-		
-		.form_holder				{border: 0px solid red; margin-bottom: 30px}
-		
-		#payscale_table				{border-collapse: collapse; width: 25em}
-		#payscale_table input			{width: 5em}
-		#payscale_table td			{border: 1px solid black; padding: 2px; background: white; text-align: center}
-		#payscale_table tr:first-child		{text-align: center}
-		
-	</style>
+{{ block.super }}
+	fieldset input[type="text"]		{width: 3em; margin-right: 2em}
+	legend					{font-size: large}
+	.plus					{cursor: pointer}
+	
+	#base_mins				{display: none}
+	#pref_mins				{display: none}
+	
+	#status_table				{border-collapse: collapse;}
+	#status_table td:first-child		{width: 15em;}
+	#status_table td			{border: 1px solid black; width: 5em; text-align: center; padding: 2px; background: white}
+	#status_table td[colspan="6"]		{font-weight: bold; font-size: large}
+	
+	#status_table td:last-child		{background: lightred}
+	
+	.form_holder				{border: 0px solid red; margin-bottom: 30px}
+	
+	#payscale_table				{border-collapse: collapse; width: 25em}
+	#payscale_table input			{width: 5em}
+	#payscale_table td			{border: 1px solid black; padding: 2px; background: white; text-align: center}
+	#payscale_table tr:first-child		{text-align: center}
 {% endblock %}
 
 {########################################################################}

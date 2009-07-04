@@ -11,14 +11,13 @@
 {#############################################################}
 
 {% block css %}
-	<style type="text/css">
-		.opbase_formbox				{border: 1px solid green; background: lightgray; margin: 1em; padding: .5em}
-		.opbase_new				{border: 2px solid red;margin-top: 3em; padding: .5em}
-		.opbase_new table td:first-child	{text-align: center; font-weight: bold}
-		input[type="text"]			{width: 4em}
-		
-		.errorlist				{color: darkred}
-	</style>
+{{ block.super }}
+	.opbase_formbox				{border: 1px solid green; background: lightgray; margin: 1em; padding: .5em}
+	.opbase_new				{border: 2px solid red;margin-top: 3em; padding: .5em}
+	.opbase_new table td:first-child	{text-align: center; font-weight: bold}
+	input[type="text"]			{width: 4em}
+	
+	.errorlist				{color: darkred}
 {% endblock %}
 
 {#############################################################}
@@ -62,7 +61,7 @@
 				</tr>
 			
 				<tr>
-					<th>{{form.workforce_size.label_tag}}:</th> <td>{{form.workforce_size}}</td> <td>{% for error in form.workforce_size.errors %} <span class="errorlist">{{error}}</span>{% endfor %}</td>
+					<th>{{form.info.label_tag}}:</th> <td>{{form.info}}</td> <td>{% for error in form.info.errors %} <span class="errorlist">{{error}}</span>{% endfor %}</td>
 				</tr>
 			
 				{% if form.instance.pk %}

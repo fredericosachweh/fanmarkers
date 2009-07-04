@@ -59,7 +59,7 @@ DEGREE		=	(	(0, "Unknown"),
 				
 JOB_DOMAIN	=	(	(1, "Captain: Crew"),
 				(2, "Captain: Single Pilot"),
-				(3, "Captain: Crew/SP"),
+				(3, "Captain: Crew/Single Pilot"),
 				(4, "Line SIC"),
 				(5, "Instructor Pilot"),
 				(6, "Flight Engineer"),

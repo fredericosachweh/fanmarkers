@@ -3,9 +3,11 @@
 {% block title %}Company List{% endblock %}
 
 {% block css %}
-	<style type="text/css">
-		#company_filter_box		{margin: 1em; border: 1px solid black; background: lightgreen;}
-	</style>
+{{ block.super }}
+	#company_filter_box		{margin: 1em; border: 1px solid black; background: lightgreen; overflow: hidden; width: 46em}
+	#company_filter_box div		{text-align: center; border: 0px solid gray; float: left; width: 15em}
+	
+	.highlight			{background: green}
 {% endblock %}
 
 {% block javascript %}
@@ -20,13 +22,11 @@
 	<h1>{{title}}</h1>
 	
 	<div id="company_filter_box">
-		<table>
-			<tr>
-				{% for type in types %}
-				<td><a href="/company/list/type/{{ type.0 }}">{{type.1}}</a></td>
-				{% endfor %}
-			</tr>
-		</table>
+		
+		{% for type in types %}
+		<div{% ifequal type disp_type%} class="highlight"{% endifequal %}><a href="/company/list/type/{{ type.0 }}">{{type.1}}</a></div>
+		{% endfor %}
+
 	</div>
 	<ol>
 	{% for company in company_list %}

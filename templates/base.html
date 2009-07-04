@@ -8,6 +8,7 @@
 		{#<link rel="icon" type="image/png" href="/icons/favicon_{{ profile.style }}.png" />#}
 		
 		<style type="text/css">
+		{% block css %}
 			body			{font-family: Bitstream Vera Sans; font-size: small}
 			input			{font-family: Bitstream Vera Sans; font-size: small}
 			
@@ -17,17 +18,6 @@
 			a:hover			{text-decoration: underline}
 			
 			/***********************************************************************/
-			
-			.form_table td[colspan="2"] {border:none; text-align: right; background: white !important; padding: 0px}
-			
-			.form_table		{width: 100%; border-collapse: collapse}
-			.form_table th		{width: 13em}
-			
-			.form_table th,
-			.form_table td		{border: 2px solid gray; padding: 8px}
-			
-			.form_table tr:nth-child(even) {background: #BBBBBB}
-			.form_table tr:nth-child(odd) {background: #EEEEEE}
 			
 			/***********************************************************************/
 			
@@ -65,9 +55,8 @@
 			.small_map		{height: 200px; width:400px; background: gray; margin-bottom: 1em; margin-top: 1em;}
 			
 			.plus			{cursor: pointer}
-		</style>
-		{% block css %}
 		{% endblock %}
+		</style>
 		
 		{#<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/javascripts/jquery/css/black-tie/jquery-ui-1.7.1.custom.css">#}
 		

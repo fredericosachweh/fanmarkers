@@ -189,7 +189,7 @@ class Operation(models.Model):
 class OpBase(models.Model):
 	operation	=	models.ForeignKey("Operation", )
 	base		=	models.ForeignKey(Airport)
-	workforce_size	=	models.IntegerField("Workforce Size", default=0)
+	info		=	models.TextField("Extra Info", blank=True)
 	
 	hiring_status	=	"unknown"
 	verbose_hiring_status=	HIRING_STATUS["unknown"]
