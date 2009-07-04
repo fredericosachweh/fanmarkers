@@ -5,9 +5,8 @@ def google_maps(request):
 	return {'GOOGLE_MAPS_KEY': GOOGLE_MAPS_KEY}
 	
 def top_numbers(request):
-	#hiring =	Status.objects.exclude(  choice_bases__isnull=True, assign_bases__isnull=True  )
+	hiring =	Status.objects.exclude(  choice_bases__isnull=True, assign_bases__isnull=True  )
+	advertising =	hiring.filter(advertising=True)
 	
-	#advertising =	hiring.filter(advertising=True)
-	
-	#return {'advertising': str(advertising.count()), 'hiring': str(hiring.count())}
-	return {"aa": "aa"}
+	return {'advertising': "Advertising: " + str(advertising.count()), 'hiring': "Hiring: " + str(hiring.count())}
+	#return {"aa": "aa"}

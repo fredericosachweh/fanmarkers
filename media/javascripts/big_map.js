@@ -19,21 +19,21 @@ var offset = new GSize(-17,10)
 
 var labels =
 	[	
-		new ELabel(new GLatLng(10.885097,20.361325), "38", "overlay_number", offset),		// africa
-		new ELabel(new GLatLng(-13.137258, -59.824226), "38", "overlay_number", offset),	// americas
-		new ELabel(new GLatLng(18.746149, -71.777351), "38", "overlay_number", offset),		// carribean
-		new ELabel(new GLatLng(65.315500, -153.662113), "38", "overlay_number", offset),	// alaska
-		new ELabel(new GLatLng(-25.593975,138.837887), "38", "overlay_number", offset),		// australia
-		new ELabel(new GLatLng(59.471873,-103.037113), "38", "overlay_number", offset),		// canada
-		new ELabel(new GLatLng(34.328693,100.869137), "38", "overlay_number", offset),		// china
-		new ELabel(new GLatLng(49.187448,27.919918), "38", "overlay_number", offset),		// east-europe
-		new ELabel(new GLatLng(49.644869,1.419918), "38", "overlay_number", offset),		// europe
-		new ELabel(new GLatLng(24.415142,78.7207), "38", "overlay_number", offset),		// india
-		new ELabel(new GLatLng(1.810246,113.87695), "38", "overlay_number", offset),		// indonesia
-		new ELabel(new GLatLng(28.659744,49.716793), "38", "overlay_number", offset),		// middle-east
-		new ELabel(new GLatLng(65.3155,82.412106), "38", "overlay_number", offset),		// russia
-		new ELabel(new GLatLng(67.960532,20.712887), "38", "overlay_number", offset),		// scandanavia
-		new ELabel(new GLatLng(39.524382, -98.100588), "38", "overlay_number", offset),		// usa		
+		new ELabel(new GLatLng(10.885097,20.361325), "38<br>34", "overlay_number", offset),		// africa
+		new ELabel(new GLatLng(-13.137258, -59.824226), "38<br>34", "overlay_number", offset),		// americas
+		new ELabel(new GLatLng(18.746149, -71.777351), "38<br>34", "overlay_number", offset),		// carribean
+		new ELabel(new GLatLng(65.315500, -153.662113), "38<br>34", "overlay_number", offset),		// alaska
+		new ELabel(new GLatLng(-25.593975,138.837887), "38<br>34", "overlay_number", offset),		// australia
+		new ELabel(new GLatLng(59.471873,-103.037113), "38<br>34", "overlay_number", offset),		// canada
+		new ELabel(new GLatLng(34.328693,100.869137), "38<br>34", "overlay_number", offset),		// china
+		new ELabel(new GLatLng(49.187448,27.919918), "38<br>34", "overlay_number", offset),		// east-europe
+		new ELabel(new GLatLng(49.644869,1.419918), "38<br>34", "overlay_number", offset),		// europe
+		new ELabel(new GLatLng(24.415142,78.7207), "38<br>34", "overlay_number", offset),		// india
+		new ELabel(new GLatLng(1.810246,113.87695), "38<br>34", "overlay_number", offset),		// indonesia
+		new ELabel(new GLatLng(28.659744,49.716793), "38<br>34", "overlay_number", offset),		// middle-east
+		new ELabel(new GLatLng(65.3155,82.412106), "38<br>34", "overlay_number", offset),		// russia
+		new ELabel(new GLatLng(67.960532,20.712887), "38<br>34", "overlay_number", offset),		// scandanavia
+		new ELabel(new GLatLng(39.524382, -98.100588), "38<br>34", "overlay_number", offset),		// usa		
 	]
 	
 
