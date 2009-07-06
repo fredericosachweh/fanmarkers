@@ -27,21 +27,21 @@
 	<script type="text/javascript">
 		var map;		//map is in global scope
 		
-		africa = 	[new GGeoXml('{{ MEDIA_URL }}/kml/africa.kmz'), {{africa_h}}, {{africa_t}} ]
-		americas = 	[new GGeoXml('{{ MEDIA_URL }}/kml/americas.kmz'), {{americas_h}}, {{americas_t}} ]
-		carribean =	[new GGeoXml('{{ MEDIA_URL }}/kml/carribean.kmz'), {{carribean_h}}, {{carribean_t}} ]
-		alaska = 	[new GGeoXml('{{ MEDIA_URL }}/kml/alaska.kmz'), {{alaska_h}}, {{alaska_t}} ]
-		australia =	[new GGeoXml('{{ MEDIA_URL }}/kml/australia.kmz'), {{australia_h}}, {{australia_t}} ]
-		canada =	[new GGeoXml('{{ MEDIA_URL }}/kml/canada.kmz'), {{canada_h}}, {{canada_t}} ]
-		china =		[new GGeoXml('{{ MEDIA_URL }}/kml/china.kmz'), {{china_h}}, {{china_t}} ]
-		e_europe =	[new GGeoXml('{{ MEDIA_URL }}/kml/eastern_europe.kmz'), {{e_europe_h}}, {{e_europe_t}} ]
-		europe =	[new GGeoXml('{{ MEDIA_URL }}/kml/europe.kmz'), {{europe_h}}, {{europe_t}} ]
-		india =		[new GGeoXml('{{ MEDIA_URL }}/kml/india.kmz'), {{india_h}}, {{india_t}} ]
-		indonesia =	[new GGeoXml('{{ MEDIA_URL }}/kml/indonesia.kmz'), {{indonesia_h}}, {{indonesia_t}} ]
-		middle_east =	[new GGeoXml('{{ MEDIA_URL }}/kml/middle_east.kmz'), {{midle_east_h}}, {{midle_east_t}} ]
-		russia =	[new GGeoXml('{{ MEDIA_URL }}/kml/russia.kmz'), {{russia_h}}, {{russia_t}} ]
-		scandanavia =	[new GGeoXml('{{ MEDIA_URL }}/kml/scandanavia.kmz'), {{scandanavia_h}}, {{scandanavia_t}} ]
-		usa =		[new GGeoXml('{{ MEDIA_URL }}/kml/usa.kmz'), {{usa_h}}, {{usa_t}} ]
+		africa = 	[new GGeoXml('{{ MEDIA_URL }}/kml/africa.kmz'), {{africa_h|default:"0"}}, {{africa_t|default:"0"}} ]
+		americas = 	[new GGeoXml('{{ MEDIA_URL }}/kml/americas.kmz'), {{americas_h|default:"0"}}, {{americas_t|default:"0"}} ]
+		carribean= 	[new GGeoXml('{{ MEDIA_URL }}/kml/carribean.kmz'), {{carribean_h|default:"0"}}, {{carribean_t|default:"0"}} ]
+		alaska  =	[new GGeoXml('{{ MEDIA_URL }}/kml/alaska.kmz'), {{alaska_h|default:"0"}}, {{alaska_t|default:"0"}} ]
+		australia =	[new GGeoXml('{{ MEDIA_URL }}/kml/australia.kmz'), {{australia_h|default:"0"}}, {{australia_t|default:"0"}} ]
+		canada =	[new GGeoXml('{{ MEDIA_URL }}/kml/canada.kmz'), {{canada_h|default:"0"}}, {{canada_t|default:"0"}} ]
+		china =		[new GGeoXml('{{ MEDIA_URL }}/kml/china.kmz'), {{china_h|default:"0"}}, {{china_t|default:"0"}} ]
+		e_europe =	[new GGeoXml('{{ MEDIA_URL }}/kml/eastern_europe.kmz'), {{e_europe_h|default:"0"}}, {{e_europe_t|default:"0"}} ]
+		europe =	[new GGeoXml('{{ MEDIA_URL }}/kml/europe.kmz'), {{europe_h|default:"0"}}, {{europe_t|default:"0"}} ]
+		india =		[new GGeoXml('{{ MEDIA_URL }}/kml/india.kmz'), {{india_h|default:"0"}}, {{india_t|default:"0"}} ]
+		indonesia =	[new GGeoXml('{{ MEDIA_URL }}/kml/indonesia.kmz'), {{indonesia_h|default:"0"}}, {{indonesia_t|default:"0"}} ]
+		middle_east =	[new GGeoXml('{{ MEDIA_URL }}/kml/middle_east.kmz'), {{midle_east_h|default:"0"}}, {{midle_east_t|default:"0"}} ]
+		russia =	[new GGeoXml('{{ MEDIA_URL }}/kml/russia.kmz'), {{russia_h|default:"0"}}, {{russia_t|default:"0"}} ]
+		scandanavia =	[new GGeoXml('{{ MEDIA_URL }}/kml/scandanavia.kmz'), {{scandanavia_h|default:"0"}}, {{scandanavia_t|default:"0"}} ]
+		usa =		[new GGeoXml('{{ MEDIA_URL }}/kml/usa.kmz'), {{usa_h|default:"0"}}, {{usa_t|default:"0"}} ]
 		
 	</script>
 	

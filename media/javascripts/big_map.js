@@ -32,7 +32,7 @@ var labels =
 		new ELabel(new GLatLng(1.810246,119.87695), indonesia[1] + "<br>" + indonesia[2], "overlay_number", offset),		// indonesia
 		new ELabel(new GLatLng(28.659744,49.716793), middle_east[1] + "<br>" + middle_east[2], "overlay_number", offset),	// middle-east
 		new ELabel(new GLatLng(65.3155,82.412106),  russia[1] + "<br>" + russia[2], "overlay_number", offset),			// russia
-		new ELabel(new GLatLng(67.960532,20.712887), scandanavia[1] + "<br>" + scandanavia[2], "overlay_number", offset),	// scandanavia
+		new ELabel(new GLatLng(65.960532,20.712887), scandanavia[1] + "<br>" + scandanavia[2], "overlay_number", offset),	// scandanavia
 		new ELabel(new GLatLng(39.524382, -98.100588), usa[1] + "<br>" + usa[2], "overlay_number", offset),			// usa		
 	]
 	
