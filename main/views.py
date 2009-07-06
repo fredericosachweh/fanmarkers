@@ -11,16 +11,6 @@ from django.shortcuts import get_object_or_404
 from main.immutable_views import *
 from main.position_views import *
 
-def sortdict(d):
-    """ returns a dictionary sorted by keys """
-    our_list = d.items()
-    our_list.sort()
-    k = {}
-    for item in our_list:
-        k[item[0]] = item[1]
-    return k
-
-
 ###############################################################################
 
 @login_required()

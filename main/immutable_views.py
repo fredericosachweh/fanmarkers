@@ -8,16 +8,28 @@ from django.shortcuts import get_object_or_404
 def jobmap(request):
 	from django.db.models import Q
 	
-	#usa_bases = Base.objects.filter(country__exact="United States")
+	usa_bases = Airport.objects.filter(country__exact="US")
+	alaska_bases = usa_bases.filter(region__name__exact="AK")
+	russia_bases = Airport.objects.filter(country__exact="RU")
+	india_bases = Airport.objects.filter(country__exact="IN")
+	canada_bases = Airport.objects.filter(country__exact="CA")
 	
-	#all_hiring = Position.objects.exclude(status__choice_bases__isnull=True, status__assign_bases__isnull=True).values('pk')
-	#just_hiring = all_hiring.exclude(status__advertising=True)
-	#advertising = all_hiring.filter(status__advertising=True)
-	#layoff = Status.objects.filter(layoff_bases__isnull=False).values('pk')
-	
-	usa_h = "ff" #Status.objects.filter(   Q(assign_bases__in=usa_bases) | Q(choice_bases__in=usa_bases)    ).count()
+	usa_h = Status.objects.filter(   Q(assign_bases__in=usa_bases) | Q(choice_bases__in=usa_bases)    ).count()
+	usa_t = Position.objects.filter( operation__bases__in=usa_bases ).count()
 
-	return {"usa_h": usa_h}
+	canada_h = Status.objects.filter(   Q(assign_bases__in=canada_bases) | Q(choice_bases__in=canada_bases)    ).count()
+	canada_t = Position.objects.filter( operation__bases__in=canada_bases ).count()
+	
+	india_h = Status.objects.filter(   Q(assign_bases__in=india_bases) | Q(choice_bases__in=india_bases)    ).count()
+	india_t = Position.objects.filter( operation__bases__in=india_bases ).count()
+
+	russia_h = Status.objects.filter(   Q(assign_bases__in=russia_bases) | Q(choice_bases__in=russia_bases)    ).count()
+	russia_t = Position.objects.filter( operation__bases__in=russia_bases ).count()
+	
+	alaska_h = Status.objects.filter(   Q(assign_bases__in=alaska_bases) | Q(choice_bases__in=alaska_bases)    ).count()
+	alaska_t = Position.objects.filter( operation__bases__in=alaska_bases ).count()
+
+	return locals()
 
 ###############################################################################	
 	
