@@ -1,6 +1,21 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 from main.constants import AIRPORT_TYPE
+from django.db.models import Q
+
+class BaseManager(models.GeoManager):
+	def get_query_set(self):
+		return super(BaseManager, self).get_query_set().filter(opbase__isnull=False).distinct()					#all airports which are part of an opbase
+		
+class HiringManager(BaseManager):
+	def get_query_set(self):
+		return super(BaseManager, self).get_query_set().filter( Q(assign__isnull=False) | Q(choice__isnull=False)).distinct()	#either choice or assign are not null
+		
+class NotHiringManager(BaseManager):
+	def get_query_set(self):
+		return super(BaseManager, self).get_query_set().filter( Q(assign__isnull=True) & Q(choice__isnull=True))		#both choice and assign are null
+		
+
 
 class Airport(models.Model):
 	identifier	=	models.CharField(max_length=8, primary_key=True)
@@ -17,6 +32,9 @@ class Airport(models.Model):
 	watchers	=	models.ManyToManyField(User, blank=True, )
 	
 	objects		=	models.GeoManager()
+	hiring		=	HiringManager()
+	base		=	BaseManager()
+	not_hiring	=	NotHiringManager()
 	
 	class Meta:
 		ordering = ["identifier", "country"]

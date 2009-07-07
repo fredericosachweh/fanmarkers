@@ -254,13 +254,14 @@ def overlay(request, z, x, y, o):
 	from jobmap.settings import ICONS_DIR
 	from django.db.models import Q
 	
-	all_bases = Airport.objects.filter(opbase__isnull=False)
+	#all_bases = Airport.objects.filter(opbase__isnull=False)
+	all_bases = Airport.base.all()
 	
 	#bases
 	layoff = all_bases.filter(layoff__in=Status.objects.all())
 	
-	all_hiring = all_bases.filter(Q(choice__in=Status.objects.all()) | Q(assign__in=Status.objects.all()))
-	not_hiring = all_bases.exclude(Q(choice__in=Status.objects.all()) | Q(assign__in=Status.objects.all()))
+	all_hiring = Airport.hiring.all()
+	not_hiring = Airport.not_hiring.all()
 	
 	just_hiring = Airport.objects.filter(Q(choice__in=Status.objects.exclude(advertising=True)) | Q(assign__in=Status.objects.exclude(advertising=True)))
 	advertising = Airport.objects.filter(Q(choice__in=Status.objects.filter(advertising=True)) | Q(assign__in=Status.objects.filter(advertising=True)))
@@ -270,13 +271,13 @@ def overlay(request, z, x, y, o):
 	ov = GoogleOverlay(z,x,y, queryset=all_bases, field="location")
 	ov.icon(ICONS_DIR + '/big/base.png')						# green icons for no status bases
 	
-	ov = GoogleOverlay(z,x,y, queryset=all_hiring, image=ov.output(), field="location")		# yellow for hiring bases
+	ov = GoogleOverlay(z,x,y, queryset=all_hiring, image=ov.output(shuffle=False), field="location")		# yellow for hiring bases
 	ov.icon(ICONS_DIR + '/big/hiring.png')
 	
 	#ov = GoogleOverlay(z,x,y, queryset=layoff, image=ov.output(), field="location")		# green for hiring bases
 	#ov.icon(ICONS_DIR + '/big/red.png')
 	
-	ov = GoogleOverlay(z,x,y, queryset=advertising, image=ov.output(), field="location")		# red-gold for advertising bases
+	ov = GoogleOverlay(z,x,y, queryset=advertising, image=ov.output(shuffle=False), field="location")		# red-gold for advertising bases
 	ov.icon(ICONS_DIR + '/big/advertising.png')
 	
 	#############################################################
@@ -284,3 +285,29 @@ def overlay(request, z, x, y, o):
 	response = HttpResponse(mimetype="image/png")
 	ov.output().save(response, "PNG")
 	return response
+
+@render_to('click.html')	
+def map_click(request, lat, lng, z):
+	from django.contrib.gis.geos import Point
+	from django.db.models import Q
+	
+	point = Point(float(lng), float(lat))
+	
+	airports = Airport.hiring.distance(point).order_by('distance')[:10]
+	
+	return {"lat": lat, "lng": lng, "airports": airports}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	

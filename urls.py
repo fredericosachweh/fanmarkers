@@ -37,6 +37,8 @@ position_view = {
 urlpatterns = patterns('',
 
 	(r'^overlay/(?P<z>\d{1,2})_(?P<x>\d{1,5})_(?P<y>\d{1,5})_(?P<o>\S{1,5})/$', 'main.views.overlay'),
+	(r'^map_click/(?P<z>\d{1,2})_(?P<lat>\-?\d+\.\d*)_(?P<lng>\-?\d+\.\d*)/$',		'main.views.map_click'),
+	
 	(r'^admin/doc/',						include('django.contrib.admindocs.urls')),
 	(r'^comments/',							include('django.contrib.comments.urls')),
 	(r'^admin/(.*)',						admin.site.root),

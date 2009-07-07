@@ -20,9 +20,9 @@ var offset = new GSize(-17,20)
 var labels =
 	[	
 		new ELabel(new GLatLng(10.885097,20.361325),  africa[1] + "<br>" + africa[2], "overlay_number", offset),		// africa
-		new ELabel(new GLatLng(-13.137258, -59.824226), americas[1] + "<br>" + americas[2], "overlay_number", offset),		// americas
-		new ELabel(new GLatLng(18.746149, -71.777351), carribean[1] + "<br>" + carribean[2], "overlay_number", offset),		// carribean
-		new ELabel(new GLatLng(65.315500, -153.662113), alaska[1] + "<br>" + alaska[2], "overlay_number", offset),		// alaska
+		new ELabel(new GLatLng(-13.137258,-59.824226), americas[1] + "<br>" + americas[2], "overlay_number", offset),		// americas
+		new ELabel(new GLatLng(18.746149,-71.777351), carribean[1] + "<br>" + carribean[2], "overlay_number", offset),		// carribean
+		new ELabel(new GLatLng(65.315500,-153.662113), alaska[1] + "<br>" + alaska[2], "overlay_number", offset),		// alaska
 		new ELabel(new GLatLng(-25.593975,138.837887), australia[1] + "<br>" + australia[2], "overlay_number", offset),		// australia
 		new ELabel(new GLatLng(59.471873,-103.037113),  canada[1] + "<br>" + canada[2], "overlay_number", offset),		// canada
 		new ELabel(new GLatLng(34.328693,100.869137), china[1] + "<br>" + china[2], "overlay_number", offset),			// china
@@ -33,7 +33,7 @@ var labels =
 		new ELabel(new GLatLng(28.659744,49.716793), middle_east[1] + "<br>" + middle_east[2], "overlay_number", offset),	// middle-east
 		new ELabel(new GLatLng(65.3155,82.412106),  russia[1] + "<br>" + russia[2], "overlay_number", offset),			// russia
 		new ELabel(new GLatLng(65.960532,20.712887), scandanavia[1] + "<br>" + scandanavia[2], "overlay_number", offset),	// scandanavia
-		new ELabel(new GLatLng(39.524382, -98.100588), usa[1] + "<br>" + usa[2], "overlay_number", offset),			// usa		
+		new ELabel(new GLatLng(39.524382,-98.100588), usa[1] + "<br>" + usa[2], "overlay_number", offset),			// usa		
 	]
 	
 
@@ -61,6 +61,14 @@ function initialize()
 		figure_zoom();
 		
 		GEvent.addListener(map, "zoomend", figure_zoom);
+		
+		GEvent.addListener(map, "click", function(marker, point) {
+			GDownloadUrl("/map_click/" + map.getZoom() + "_" + point.lat() + "_" + point.lng(),
+			
+			function(data, responseCode) {
+				map.openInfoWindow(point, "<b>" + data + "</b>");
+			});
+		});
 	}
 }
 
@@ -90,13 +98,8 @@ function figure_zoom()
 			map.addOverlay(labels[item]);
 		}
 	}
-
-	else if(map.getZoom() < 10){
+	else
 		map.addOverlay(BaseOverlay);
-	}
-	else{
-		map.addOverlay(MarkerLayer);
-	}
 	
 }
 
