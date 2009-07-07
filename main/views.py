@@ -293,7 +293,7 @@ def map_click(request, lat, lng, z):
 	
 	point = Point(float(lng), float(lat))
 	
-	airports = Airport.hiring.distance(point).order_by('distance')[:10]
+	airports = Airport.base.distance(point).order_by('distance')[:1]
 	
 	return {"lat": lat, "lng": lng, "airports": airports}
 	

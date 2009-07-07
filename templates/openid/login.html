@@ -3,22 +3,21 @@
 {% block title %}Sign in using OpenID{% endblock %}
 
 {% block css %}
-	<link rel="stylesheet" href="{{ MEDIA_URL }}/openid_ui/css/openid.css" />
-	<style type="text/css">
-			input.openid {
-			  font-size: x-large;
-			  width: 35em;
-			  background: url({% url openid-logo %}) no-repeat; 
-			  background-position: 0 50%;
-			  padding-left: 16px;
-			}
-	</style>
+{{ block.super }}
+	input.openid {
+		font-size: x-large;
+		width: 35em;
+		background: url({% url openid-logo %}) no-repeat; 
+		background-position: 0 50%;
+		padding-left: 16px;
+	}
 {% endblock %}
 
 {#######################################################################################}
 
 {% block javascript %}
 <script type="text/javascript" src="{{ MEDIA_URL }}/openid_ui/js/openid-jquery.js"></script>	
+<link rel="stylesheet" href="{{ MEDIA_URL }}/openid_ui/css/openid.css" />
 
 <script type="text/javascript">
 	$(document).ready(function() {
