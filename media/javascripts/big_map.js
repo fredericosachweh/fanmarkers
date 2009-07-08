@@ -63,10 +63,18 @@ function initialize()
 		GEvent.addListener(map, "zoomend", figure_zoom);
 		
 		GEvent.addListener(map, "click", function(marker, point) {
-			GDownloadUrl("/map_click/" + map.getZoom() + "_" + point.lat() + "_" + point.lng(),
+			GDownloadUrl("/map_click/" + map.getZoom() + "_" + point.lat() + "_" + point.lng() + "/",
 			
 			function(data, responseCode) {
-				map.openInfoWindow(point, data);
+				json = eval(data);
+				var mytabs = [
+						new MaxContentTab('All Positions ' + json["all_t"],	json["all"]),
+						new MaxContentTab('Hiring ' + json["hiring_t"], 	json["hiring"]),
+						new MaxContentTab('Laying Off ' + json["layoff_t"],	json["layoff"]), 
+						new MaxContentTab('Route ' + json["route_t"],		json["route"])
+					];
+
+				map.openMaxContentTabs(point, json["title"], json["title"], mytabs);
 			});
 		});
 	}

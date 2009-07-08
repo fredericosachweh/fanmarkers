@@ -1,30 +1,36 @@
+json = {
+		"title":	"<div class='popup_title'>\
+					<a class='immutable' href='{{airport.get_absolute_url}}'>{{airport.identifier}}</a> - {{airport.name}}<br>\
+					<small>{{airport.location_summary}}</small>\
+				</div>",
+				
+		"all":		"{% for position in bases %}\
+					<div class='popup_small_div'>\
+						<a href='{{ operation.company.get_absolute_url }}'>{{position.company }}</a> - <a href='{{position.get_absolute_url}}'>{{position.name}}</a><br>\
+						<small>{{position.operation_set.all.0.all_fleet}}</small><br><br>\
+					</div>\
+					{% empty %}\
+					<span class='not_known'>None</span>\
+				{% endfor %}",
+				
+		
+				
+		"route":	"{% for position in routes %}\
+					<div class='popup_small_div'>\
+						<a href='{{ operation.company.get_absolute_url }}'>{{position.company }}</a> - <a href='{{position.get_absolute_url}}'>{{position.name}}</a><br>\
+						<small>{{position.operation_set.all.0.all_fleet}}</small><br><br>\
+					</div>\
+					{% empty %}\
+					<span class='not_known'>None</span>\
+				{% endfor %}",
+				
+		"layoff":	"none yet",
+		"hiring":	"none yet",
+		"all_t":	"(4)",
+		"hiring_t":	"(6)",
+		"layoff_t":	"(2)",
+		"route_t":	"(0)",
+	};
 
-<a class="immutable" href="{{airport.get_absolute_url}}">{{airport.identifier}}</a> - {{airport.name}}<br>
-<small>{{airport.location_summary}}</small>
 
-
-{##########################################}
-<div class="popup_small_div">
-	All Positions with bases here:<br>
-	{% for position in bases %}
-	<a href="{{ operation.company.get_absolute_url }}">{{position.company }}</a> - <a href={{position.get_absolute_url}}>{{position.name}}</a><br>
-	<small>{{position.operation_set.all.0.all_fleet}}</small><br><br>
-	{% empty %}
-	<span class="not_known">None</span>
-	{% endfor %}
-</div>
-
-{##########################################}
-
-<div class="popup_small_div">
-Positions with routes here:<br>
-
-	{% for position in routes %}
-	<a href="{{ operation.company.get_absolute_url }}">{{position.company }}</a> - <a href={{position.get_absolute_url}}>{{position.name}}</a><br>
-	<small>{{position.operation_set.all.0.all_fleet}}</small><br><br>
-	{% empty %}
-	<span class="not_known">None</span>
-	{% endfor %}
-	
-</div>
 
