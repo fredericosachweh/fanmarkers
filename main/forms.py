@@ -153,3 +153,8 @@ class UserForm(ModelForm):
 		
 #####################################
 
+class AircraftForm(ModelForm):
+	class Meta:
+		model = Aircraft
+		#exclude = ('user', )
+

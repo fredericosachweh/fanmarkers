@@ -76,6 +76,8 @@ urlpatterns = patterns('',
 	
 	(r'^edit/mins/hard/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Hard"}),
 	(r'^edit/mins/pref/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Preferred"}),
+	
+	(r'^new/aircraft/$',						create_update.create_object, {"form_class": AircraftForm, "template_name": "new_aircraft.html"}),
 )
 
 urlpatterns += patterns('django.contrib.auth',
