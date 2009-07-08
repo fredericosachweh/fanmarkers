@@ -68,13 +68,11 @@ function initialize()
 			function(data, responseCode) {
 				json = eval(data);
 				var mytabs = [
-						new MaxContentTab('All Positions ' + json["all_t"],	json["all"]),
-						new MaxContentTab('Hiring ' + json["hiring_t"], 	json["hiring"]),
-						new MaxContentTab('Laying Off ' + json["layoff_t"],	json["layoff"]), 
-						new MaxContentTab('Route ' + json["route_t"],		json["route"])
+						new MaxContentTab('Based Here ' + json["base_t"],	json["base"]),
+						new MaxContentTab('Flies Here ' + json["route_t"],	json["route"])
 					];
 
-				map.openMaxContentTabs(point, json["title"], json["title"], mytabs);
+				map.openMaxContentTabs(point, json["title"], json["title"], mytabs, {width: "300px"});
 			});
 		});
 	}
