@@ -73,9 +73,9 @@ def edit_position(request, pk):
 	
 	if operation:
 		opbases = operation.opbase_set.all()
-		bases = Airport.objects.filter(opbase__in=opbases)
+		airports = Airport.objects.filter(opbase__in=opbases)
 	else:
-		bases = []
+		airports = []
 		opbases = []
 	
 	#######################################################################
@@ -105,7 +105,7 @@ def edit_position(request, pk):
 		newPOST = request.POST.copy()
 		newPOST.update({"position": position.pk})
 		
-		field_bases = rearrange_fields(newPOST, bases)	
+		field_bases = rearrange_fields(newPOST, airports)	
 					
 		status_form = StatusForm(newPOST, instance=status)
 		pos_form = PositionForm(newPOST, instance=position)
@@ -151,7 +151,7 @@ def edit_position(request, pk):
 		payscale_formset = PayscaleFormset(instance=compensation)
 			
 		status_form = StatusForm(instance=status)
-		newbases = make_newbases(bases, status)
+		newbases = make_newbases(airports, status)
 		
 		pos_form = PositionForm(instance=position)
 		comp_form = CompensationForm(instance=compensation)
@@ -169,14 +169,14 @@ def edit_position(request, pk):
 ###################################################################
 ###################################################################
 	
-def rearrange_fields(newPOST, bases):
+def rearrange_fields(newPOST, airports):
 	field_bases = {}
 	field_bases["not"] = field_bases["assign"] = field_bases["choice"] = field_bases["layoff"] = []
 	
-	for base in bases:
+	for airport in airports:
 		for item in ("not", "assign", "choice", "layoff", ):
-			if newPOST[str(base)] == item:
-				field_bases[item] = field_bases[item] + [base]
+			if newPOST[airport.identifier] == item:				# if airport exists in approprate column...
+				field_bases[item] = field_bases[item] + [airport]	# add that airport object to the appropriate list
 	return field_bases
 	
 def make_newbases(bases, status):

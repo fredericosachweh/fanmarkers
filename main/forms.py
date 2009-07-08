@@ -47,7 +47,7 @@ class RouteForm(ModelForm):
 		model = Route
 		exclude = ('opbase', 'bases')
 		
-RouteBaseFormset = inlineformset_factory(Route, RouteBase, form=RouteBaseForm, extra=5, )
+RouteBaseFormset = inlineformset_factory(Route, RouteBase, form=RouteBaseForm, extra=5, can_delete=False)
 	
 #####################################################################################################
 		

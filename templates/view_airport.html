@@ -3,9 +3,8 @@
 {% block title %}{{ airport.identifier }} - Airport Profile{% endblock %}
 
 {% block css %}
-	<style type="text/css">
-		.airport_positions		{background: #DDDDDD; border: 1px solid black; padding: 1em; margin-bottom: 1em}
-	</style>
+{{ block.super }}
+	.airport_positions		{background: #DDDDDD; border: 1px solid black; padding: 1em; margin-bottom: 1em}
 {% endblock %}
 
 {% block javascript %}

@@ -1,7 +1,26 @@
-{{lat}}
-<br>
-{{lng}}
-<br>
-{% for airport in airports %}
-{{airport}}<br>
-{% endfor %}
+<a class="immutable" href="{{airport.get_absolute_url}}">{{airport.identifier}}</a> - {{airport.name}}<br>
+<small>{{airport.location_summary}}</small>
+
+
+{##########################################}
+<div class="popup_small_div">
+	All Positions with bases here:<br>
+	{% for operation in bases %}
+	<a href="{{ operation.company.get_absolute_url }}">{{operation.company }}</a> - {{operation.all_fleet}}<br>
+	{% empty %}
+	<span class="not_known">None</span>
+	{% endfor %}
+</div>
+
+{##########################################}
+
+<div class="popup_small_div">
+Positions with routes here:<br>
+
+	{% for operation in routes %}
+	<a href="{{ operation.company.get_absolute_url }}">{{operation.company }}</a> - {{operation.all_fleet}}<br>
+	{% empty %}
+	<span class="not_known">None</span>
+	{% endfor %}
+	
+</div>

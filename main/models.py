@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from constants import *
 from mins import Mins, CatClassMins
 from base.models import Airport
+from django.db.models import Q
 
 ###############################################################################################################################
 
@@ -23,7 +24,15 @@ class Aircraft(models.Model):
 
 		
 	def __unicode__(self):
-		return u'%s -- %s %s %s' % (self.type, self.manufacturer, self.model, self.extra)
+	
+
+		if self.extra:
+			model = self.model + " " + self.extra
+		else:
+			model = self.model
+			
+			
+		return u'%s (%s %s)' % (self.type, self.manufacturer, model, )
 
 ###############################################################################################################################
 		
@@ -230,6 +239,15 @@ class OpBase(models.Model):
 	
 
 ###############################################################################################################################
+
+class HiringManager(models.Manager):
+	def get_query_set(self):
+		return super(HiringManager, self).get_query_set().filter( Q(assign_bases__isnull=False) | Q(choice_bases__isnull=False) ).distinct()
+		
+class NotHiringManager(models.Manager):
+	def get_query_set(self):
+		return super(HiringManager, self).get_query_set().filter( Q(assign_bases__isnull=True) & Q(choice_bases__isnull=True) ).distinct()		
+
 		
 class Status(models.Model):
 
@@ -246,6 +264,10 @@ class Status(models.Model):
 	advertising	=	models.BooleanField(default=False)
 	ad_start	=	models.DateTimeField(blank=True, null=True)
 	ad_stop		=	models.DateTimeField(blank=True, null=True)
+	
+	objects		=	models.Manager()
+	hiring		=	HiringManager()
+	not_hiring	=	NotHiringManager()
 	
 	def __unicode__(self):
 		return str(self.position) + " - " + str(self.last_modified)

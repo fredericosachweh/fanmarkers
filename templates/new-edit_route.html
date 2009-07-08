@@ -3,9 +3,8 @@
 {% block title %}New Route for {{opbase.base}}{% endblock %}
 
 {% block css %}
-	<style type="text/css">
-		input[type="text"]		{width:4em}
-	</style>
+{{ block.super }}
+	input[type="text"]		{width:4em}
 {% endblock %}
 
 {% block heading %}
@@ -21,14 +20,14 @@
 {% endblock %}	
 	
 {% block form%}
-	<div>
-		{{opbase.base}} - {% for form in formset.forms %}{{form.base}}{{form.id}} - {{form.errors}}{% endfor %}{{opbase.base}}
-		{{ formset.management_form }}
-	</div>
 	
-	<hr />
+	<table class="form_table">
+		<tr>
+			<th>Route:</th>
+			
+			<td>{{opbase.base.identifier}} - {% for form in formset.forms %}{{form.base}}{{form.id}} - {{form.errors}}{% endfor %}{{opbase.base.identifier}}
+		{{ formset.management_form }}</td>
 	
-	<table>
 		{{routeform}}
 	</table>
 {% endblock %}

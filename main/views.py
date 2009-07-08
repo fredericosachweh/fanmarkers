@@ -155,17 +155,21 @@ def handle_route(request, type, pk):
 	if request.method == "POST":	
 		newPOST = request.POST.copy()
 		
+		#assert False
+		
 		i=1
-		for index in range(0, int(request.POST["routebase_set-TOTAL_FORMS"])):
-			if request.POST["routebase_set-" + str(index) + "-airport"]:
+		for index in range(0, int(request.POST["routebase_set-TOTAL_FORMS"])-1):
+			if request.POST["routebase_set-" + str(index) + "-base"]:
 				newPOST["routebase_set-" + str(index) + "-sequence"]=i
 				i += 1
 			else:
 				newPOST["routebase_set-" + str(index) + "-sequence"] = ""
+				
+		#assert False
 		
 		########################################################
-		formset = RouteBaseFormset(newPOST)
-		routeform = RouteForm(request.POST, instance=route)
+		formset = RouteBaseFormset(newPOST, instance=route)
+		routeform = RouteForm(request.POST, instance=route)		#only contains the description
 		
 		if routeform.is_valid() and formset.is_valid():
 			route = routeform.save()
@@ -254,7 +258,7 @@ def overlay(request, z, x, y, o):
 	from jobmap.settings import ICONS_DIR
 	from django.db.models import Q
 	
-	#all_bases = Airport.objects.filter(opbase__isnull=False)
+	just_routes = Airport.route.all()
 	all_bases = Airport.base.all()
 	
 	#bases
@@ -268,14 +272,14 @@ def overlay(request, z, x, y, o):
 	
 	##########
 	
-	ov = GoogleOverlay(z,x,y, queryset=all_bases, field="location")
-	ov.icon(ICONS_DIR + '/big/base.png')						# green icons for no status bases
+	ov = GoogleOverlay(z,x,y, queryset=just_routes, field="location")
+	ov.icon(ICONS_DIR + '/big/route.png')										# light blue icons for route bases
 	
-	ov = GoogleOverlay(z,x,y, queryset=all_hiring, image=ov.output(shuffle=False), field="location")		# yellow for hiring bases
+	ov = GoogleOverlay(z,x,y, queryset=all_bases, image=ov.output(shuffle=False), field="location")
+	ov.icon(ICONS_DIR + '/big/base.png')										# green icons for no status bases
+	
+	ov = GoogleOverlay(z,x,y, queryset=all_hiring, image=ov.output(shuffle=False), field="location")		# red for hiring bases
 	ov.icon(ICONS_DIR + '/big/hiring.png')
-	
-	#ov = GoogleOverlay(z,x,y, queryset=layoff, image=ov.output(), field="location")		# green for hiring bases
-	#ov.icon(ICONS_DIR + '/big/red.png')
 	
 	ov = GoogleOverlay(z,x,y, queryset=advertising, image=ov.output(shuffle=False), field="location")		# red-gold for advertising bases
 	ov.icon(ICONS_DIR + '/big/advertising.png')
@@ -291,11 +295,14 @@ def map_click(request, lat, lng, z):
 	from django.contrib.gis.geos import Point
 	from django.db.models import Q
 	
-	point = Point(float(lng), float(lat))
+	point = Point(float(lng), float(lat))	#the point where the user clicked
 	
-	airports = Airport.base.distance(point).order_by('distance')[:1]
+	airport = Airport.relevant.distance(point).order_by('distance')[0]
 	
-	return {"lat": lat, "lng": lng, "airports": airports}
+	bases = Operation.objects.filter(opbase__in=OpBase.objects.filter(base=airport))
+	routes = Operation.objects.filter(opbase__in=OpBase.objects.filter(route__in=Route.objects.filter(bases=airport)))
+	
+	return locals()
 	
 	
 	

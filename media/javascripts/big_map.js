@@ -66,7 +66,7 @@ function initialize()
 			GDownloadUrl("/map_click/" + map.getZoom() + "_" + point.lat() + "_" + point.lng(),
 			
 			function(data, responseCode) {
-				map.openInfoWindow(point, "<b>" + data + "</b>");
+				map.openInfoWindow(point, data);
 			});
 		});
 	}
