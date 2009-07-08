@@ -271,17 +271,22 @@ def overlay(request, z, x, y, o):
 	
 	##########
 	
+	if int(z) < 6:
+		size = "/small"
+	else:
+		size = "/big"
+	
 	ov = GoogleOverlay(z,x,y, queryset=just_routes, field="location")
-	ov.icon(ICONS_DIR + '/big/route.png')										# light blue icons for route bases
+	ov.icon(ICONS_DIR + size + '/route.png')										# light blue icons for route bases
 	
 	ov = GoogleOverlay(z,x,y, queryset=all_bases, image=ov.output(shuffle=False), field="location")
-	ov.icon(ICONS_DIR + '/big/base.png')										# green icons for no status bases
+	ov.icon(ICONS_DIR + size + '/base.png')										# green icons for no status bases
 	
 	ov = GoogleOverlay(z,x,y, queryset=all_hiring, image=ov.output(shuffle=False), field="location")		# red for hiring bases
-	ov.icon(ICONS_DIR + '/big/hiring.png')
+	ov.icon(ICONS_DIR + size + '/hiring.png')
 	
 	ov = GoogleOverlay(z,x,y, queryset=advertising, image=ov.output(shuffle=False), field="location")		# red-gold for advertising bases
-	ov.icon(ICONS_DIR + '/big/advertising.png')
+	ov.icon(ICONS_DIR + size + '/advertising.png')
 	
 	#############################################################
 
