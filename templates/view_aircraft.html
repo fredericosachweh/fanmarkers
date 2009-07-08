@@ -5,9 +5,8 @@
 {% block title %}{{aircraft}}{% endblock %}
 
 {% block css %}
-	<style type="text/css">
-		.operations_box			{border: 1px solid black; background: lightgray; padding: 5px}
-	</style>
+{{block.super }}
+	.operations_box			{border: 1px solid black; background: lightgray; padding: 5px}
 {% endblock %}
 
 {% block main_content %}
