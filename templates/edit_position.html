@@ -104,7 +104,7 @@
 					<td>Status Unknown</td>
 					<td>Laying Off</td>
 					<td>Not Hiring</td>
-					{% if bases|length_is:"1" %}
+					{% if opbases|length_is:"1" %}
 					<td>Hiring</td>
 					{% else %}
 					<td>Hiring (Assign)</td>
@@ -112,18 +112,18 @@
 					{% endif %}
 				</tr>
 
-				{% for base in bases %}
+				{% for opbase in opbases %}
 				<tr>
-					<td><strong><a href="{{ base.get_absolute_url }}" class="immutable">{{base}}</a></strong><br />{{ base.location_summary}}</td>
+					<td><strong><a href="{{ base.get_absolute_url }}" class="immutable">{{opbase.base.identifier}}</a></strong><br />{{ opbase.base.location_summary}}</td>
 		
-					<td><input type="radio" name="{{base.identifier}}" value="unknown" {{base.unknown_checked|safe}}/></td>
-					<td><input type="radio" name="{{base.identifier}}" value="layoff" {{base.layoff_checked|safe}}/></td>
-					<td><input type="radio" name="{{base.identifier}}" value="not" {{base.not_checked|safe}}/></td>
-					{% if bases|length_is:"1" %}
-					<td><input type="radio" name="{{base.identifier}}" value="choice" {{base.choice_checked|safe}}/></td>
+					<td><input type="radio" name="opb-{{opbase.pk}}" value="unknown" {{opbase.unknown_checked|safe}}/></td>
+					<td><input type="radio" name="opb-{{opbase.pk}}" value="layoff" {{opbase.layoff_checked|safe}}/></td>
+					<td><input type="radio" name="opb-{{opbase.pk}}" value="not" {{opbase.not_checked|safe}}/></td>
+					{% if opbases|length_is:"1" %}
+					<td><input type="radio" name="opb-{{opbase.pk}}" value="choice" {{opbase.choice_checked|safe}}/></td>
 					{% else %}
-					<td><input type="radio" name="{{base.identifier}}" value="assign" {{base.assign_checked|safe}}/></td>
-					<td><input type="radio" name="{{base.identifier}}" value="choice" {{base.choice_checked|safe}}/></td>
+					<td><input type="radio" name="opb-{{opbase.pk}}" value="assign" {{opbase.assign_checked|safe}}/></td>
+					<td><input type="radio" name="opb-{{opbase.pk}}" value="choice" {{opbase.choice_checked|safe}}/></td>
 					{% endif %}
 				</tr>
 				{% empty %}
@@ -148,8 +148,8 @@
 	</div>
 	
 {###########################################################}
-	{% if operation %}
-		<h2>Operation:</h2>
-		<a href="/edit/operation/{% for op in form.instance.operation_set.all %}{{op.pk}}{% endfor %}" class="edit">click here to edit this position's Operation (Bases and Routes)</a>
+	{% if position.operation_set %}
+		<h2>Bases and Routes:</h2>
+		<a href="/edit/operation/{% for op in position.operation_set.all %}{{op.pk}}{% endfor %}" class="edit">click here to edit this position's Operation</a><br>
 	{% endif %}
 {% endblock %}

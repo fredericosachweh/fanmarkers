@@ -9,11 +9,11 @@ class BaseManager(models.GeoManager):
 		
 class HiringManager(BaseManager):
 	def get_query_set(self):				#is a base, and either choice or assign are not null
-		return super(BaseManager, self).get_query_set().filter( Q(assign__isnull=False) | Q(choice__isnull=False)).distinct()	
+		return super(BaseManager, self).get_query_set().filter( Q(opbase__assign__isnull=False) | Q(opbase__choice__isnull=False)).distinct()	
 		
 class NotHiringManager(BaseManager):
 	def get_query_set(self):				#is a base, and both choice and assign are null
-		return super(BaseManager, self).get_query_set().filter( Q(assign__isnull=True) & Q(choice__isnull=True)).distinct()	
+		return super(BaseManager, self).get_query_set().filter( Q(opbase__assign__isnull=True) & Q(opbase__choice__isnull=True)).distinct()	
 		
 class RouteManager(models.GeoManager):
 	def get_query_set(self):				#is a routebase, but not an opbase

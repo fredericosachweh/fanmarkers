@@ -218,19 +218,19 @@ class OpBase(models.Model):
 		choice_bases = status.choice_bases.all()
 		layoff_bases = status.layoff_bases.all()
 
-		if self.base in not_bases:
+		if self in not_bases:
 			self.hiring_status = "not"
 			self.verbose_hiring_status = HIRING_STATUS["not"]
 			
-		elif self.base in assign_bases:
+		elif self in assign_bases:
 			self.hiring_status = "assign"
 			self.verbose_hiring_status = HIRING_STATUS["assign"]
 		
-		elif self.base in choice_bases:
+		elif self in choice_bases:
 			self.hiring_status = "choice"
 			self.verbose_hiring_status = HIRING_STATUS["choice"]
 		
-		elif self.base in layoff_bases:
+		elif self in layoff_bases:
 			self.hiring_status = "layoff"
 			self.verbose_hiring_status = HIRING_STATUS["layoff"]
 		else:
@@ -256,10 +256,10 @@ class Status(models.Model):
 	reference	=	models.TextField(blank=True, null=True)
 	last_modified	=	models.DateTimeField(auto_now=True)
 	
-	not_bases	=	models.ManyToManyField(Airport, related_name="not", blank=True)
-	assign_bases	=	models.ManyToManyField(Airport, related_name="assign", blank=True)
-	choice_bases	=	models.ManyToManyField(Airport, related_name="choice", blank=True)
-	layoff_bases	=	models.ManyToManyField(Airport, related_name="layoff", blank=True)
+	not_bases	=	models.ManyToManyField(OpBase, related_name="not", blank=True)
+	assign_bases	=	models.ManyToManyField(OpBase, related_name="assign", blank=True)
+	choice_bases	=	models.ManyToManyField(OpBase, related_name="choice", blank=True)
+	layoff_bases	=	models.ManyToManyField(OpBase, related_name="layoff", blank=True)
 	
 	advertising	=	models.BooleanField(default=False)
 	ad_start	=	models.DateTimeField(blank=True, null=True)

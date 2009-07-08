@@ -73,9 +73,7 @@ def edit_position(request, pk):
 	
 	if operation:
 		opbases = operation.opbase_set.all()
-		airports = Airport.objects.filter(opbase__in=opbases)
 	else:
-		airports = []
 		opbases = []
 	
 	#######################################################################
@@ -105,7 +103,9 @@ def edit_position(request, pk):
 		newPOST = request.POST.copy()
 		newPOST.update({"position": position.pk})
 		
-		field_bases = rearrange_fields(newPOST, airports)	
+		#assert False
+		
+		field_bases = rearrange_fields(newPOST, opbases)	
 					
 		status_form = StatusForm(newPOST, instance=status)
 		pos_form = PositionForm(newPOST, instance=position)
@@ -151,14 +151,14 @@ def edit_position(request, pk):
 		payscale_formset = PayscaleFormset(instance=compensation)
 			
 		status_form = StatusForm(instance=status)
-		newbases = make_newbases(airports, status)
+		mark_opbases(opbases, status)
 		
 		pos_form = PositionForm(instance=position)
 		comp_form = CompensationForm(instance=compensation)
 	
 	return {"payscale_formset": payscale_formset,
 		"comp_form": comp_form,
-		"bases": newbases,
+		"opbases": opbases,
 		"status_form": status_form,
 		"position": position,
 		"pos_form": pos_form,
@@ -169,47 +169,35 @@ def edit_position(request, pk):
 ###################################################################
 ###################################################################
 	
-def rearrange_fields(newPOST, airports):
+def rearrange_fields(newPOST, opbases):
 	field_bases = {}
 	field_bases["not"] = field_bases["assign"] = field_bases["choice"] = field_bases["layoff"] = []
 	
-	for airport in airports:
+	for opbase in opbases:
 		for item in ("not", "assign", "choice", "layoff", ):
-			if newPOST[airport.identifier] == item:				# if airport exists in approprate column...
-				field_bases[item] = field_bases[item] + [airport]	# add that airport object to the appropriate list
+			if newPOST["opb-" + str(opbase.pk)] == item:			# if airport exists in approprate column...
+				field_bases[item] = field_bases[item] + [opbase]	# add that airport object to the appropriate list
 	return field_bases
 	
-def make_newbases(bases, status):
-	from main.forms import newBase
-	
-	newbases = []
-	
-	for base in bases:
-		
-		newbase = newBase()
-		newbase.identifier = base.identifier
-		newbase.location_summary = base.location_summary
-		
+def mark_opbases(opbases, status):
+
+	for opbase in opbases:
 		if not status.pk:
-			newbase.unknown_checked = 'checked="checked"'
+			opbase.unknown_checked = 'checked="checked"'
 			
-		elif base in status.not_bases.all():
-			newbase.not_checked = 'checked="checked"'
+		elif opbase in status.not_bases.all():
+			opbase.not_checked = 'checked="checked"'
 			
-		elif base in status.choice_bases.all():
-			newbase.choice_checked = 'checked="checked"'
+		elif opbase in status.choice_bases.all():
+			opbase.choice_checked = 'checked="checked"'
 			
-		elif base in status.assign_bases.all():
-			newbase.assign_checked = 'checked="checked"'
+		elif opbase in status.assign_bases.all():
+			opbase.assign_checked = 'checked="checked"'
 			
-		elif base in status.layoff_bases.all():
-			newbase.layoff_checked = 'checked="checked"'
+		elif opbase in status.layoff_bases.all():
+			opbase.layoff_checked = 'checked="checked"'
 			
 		else:
-			newbase.unknown_checked = 'checked="checked"'
-		
-		newbases.append(newbase)
-		
-	return newbases
+			opbase.unknown_checked = 'checked="checked"'
 
 	

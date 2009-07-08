@@ -261,13 +261,13 @@ def overlay(request, z, x, y, o):
 	just_routes = Airport.route.all()
 	all_bases = Airport.base.all()
 	
-	layoff = all_bases.filter(layoff__in=Status.objects.all())
+	#layoff = all_bases.filter(layoff__in=Status.objects.all())
 	
 	all_hiring = Airport.hiring.all()
 	not_hiring = Airport.not_hiring.all()
 	
-	just_hiring = Airport.objects.filter(Q(choice__in=Status.objects.exclude(advertising=True)) | Q(assign__in=Status.objects.exclude(advertising=True)))
-	advertising = Airport.objects.filter(Q(choice__in=Status.objects.filter(advertising=True)) | Q(assign__in=Status.objects.filter(advertising=True)))
+	just_hiring = Airport.objects.filter(Q(opbase__choice__in=Status.objects.exclude(advertising=True)) | Q(opbase__assign__in=Status.objects.exclude(advertising=True)))
+	advertising = Airport.objects.filter(Q(opbase__choice__in=Status.objects.filter(advertising=True)) | Q(opbase__assign__in=Status.objects.filter(advertising=True)))
 	
 	##########
 	
