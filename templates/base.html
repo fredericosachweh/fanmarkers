@@ -105,24 +105,28 @@
 					</li>
 				
 					<li>
-						<a href="/company/list/all">Company Profiles</a>
+						<a href="/company/list/all">Companies</a>
 					</li>
-				
-				
+					
+					<li>
+						<a href="/position/list/all">Positions</a>
+					</li>
+					
+					<li>
+						<a href="/aircraft/list/all">Aircraft</a>
+					</li>
+
 				{% if user.is_authenticated %}
 					<li>
 						<a href="/profile">
 						{{user.username}}</a>
 					</li>
-					
-					
 				{% else %}
 					<a href="/openid/login">
 						<li>Sign in / Register</li>
 					</a>
-						
-					
 				{% endif %}
+				
 					<li>
 						<a href="/forum">Forum</a>
 					</li>

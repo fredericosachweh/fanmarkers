@@ -1,0 +1,17 @@
+{% extends "base_list.html" %}
+
+{% block title %}List Positions{% endblock %}
+
+{% block css %}
+{{ block.super }}
+{% endblock %}
+
+{% block main_content %}
+	<ol>
+	{% for position in positions %}
+	
+		<li><a href="{{ position.get_absolute_url }}">{{position.company}} - {{ position }}</li>
+		
+	{% endfor %}
+	</ol>
+{% endblock %}

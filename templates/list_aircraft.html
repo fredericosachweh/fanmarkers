@@ -1,6 +1,6 @@
 {% extends "base_list.html" %}
 
-{% block title %}List Companies{% endblock %}
+{% block title %}List Aircraft{% endblock %}
 
 {% block css %}
 {{ block.super }}
@@ -8,9 +8,9 @@
 
 {% block main_content %}
 	<ol>
-	{% for company in companies %}
+	{% for aircraft in aircrafts %}
 	
-		<li><a href="{{ company.get_absolute_url }}">{{company}}</li>
+		<li><a href="{{ aircraft.get_absolute_url }}">{{aircraft}}</li>
 		
 	{% endfor %}
 	</ol>
