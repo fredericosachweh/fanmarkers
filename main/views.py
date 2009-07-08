@@ -261,7 +261,6 @@ def overlay(request, z, x, y, o):
 	just_routes = Airport.route.all()
 	all_bases = Airport.base.all()
 	
-	#bases
 	layoff = all_bases.filter(layoff__in=Status.objects.all())
 	
 	all_hiring = Airport.hiring.all()
@@ -299,8 +298,8 @@ def map_click(request, lat, lng, z):
 	
 	airport = Airport.relevant.distance(point).order_by('distance')[0]
 	
-	bases = Operation.objects.filter(opbase__in=OpBase.objects.filter(base=airport))
-	routes = Operation.objects.filter(opbase__in=OpBase.objects.filter(route__in=Route.objects.filter(bases=airport)))
+	bases = Position.objects.filter(operation__opbase__in=OpBase.objects.filter(base=airport)).select_related()
+	routes = Position.objects.filter(operation__opbase__in=OpBase.objects.filter(route__in=Route.objects.filter(bases=airport))).select_related()
 	
 	return locals()
 	

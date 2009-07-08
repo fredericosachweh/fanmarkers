@@ -1,3 +1,4 @@
+
 <a class="immutable" href="{{airport.get_absolute_url}}">{{airport.identifier}}</a> - {{airport.name}}<br>
 <small>{{airport.location_summary}}</small>
 
@@ -5,8 +6,9 @@
 {##########################################}
 <div class="popup_small_div">
 	All Positions with bases here:<br>
-	{% for operation in bases %}
-	<a href="{{ operation.company.get_absolute_url }}">{{operation.company }}</a> - {{operation.all_fleet}}<br>
+	{% for position in bases %}
+	<a href="{{ operation.company.get_absolute_url }}">{{position.company }}</a> - <a href={{position.get_absolute_url}}>{{position.name}}</a><br>
+	<small>{{position.operation_set.all.0.all_fleet}}</small><br><br>
 	{% empty %}
 	<span class="not_known">None</span>
 	{% endfor %}
@@ -17,10 +19,12 @@
 <div class="popup_small_div">
 Positions with routes here:<br>
 
-	{% for operation in routes %}
-	<a href="{{ operation.company.get_absolute_url }}">{{operation.company }}</a> - {{operation.all_fleet}}<br>
+	{% for position in routes %}
+	<a href="{{ operation.company.get_absolute_url }}">{{position.company }}</a> - <a href={{position.get_absolute_url}}>{{position.name}}</a><br>
+	<small>{{position.operation_set.all.0.all_fleet}}</small><br><br>
 	{% empty %}
 	<span class="not_known">None</span>
 	{% endfor %}
 	
 </div>
+
