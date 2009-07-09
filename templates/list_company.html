@@ -9,9 +9,7 @@
 {% block main_content %}
 	<ol>
 	{% for company in companies %}
-	
 		<li><a href="{{ company.get_absolute_url }}">{{company}}</li>
-		
 	{% endfor %}
 	</ol>
 {% endblock %}

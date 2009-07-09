@@ -84,6 +84,8 @@ urlpatterns = patterns('',
 	(r'^edit/mins/hard/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Hard"}),
 	(r'^edit/mins/pref/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Preferred"}),
 	
+	(r'^kml/position-(?P<position>\d{1,4}).kml$',			"jobmap.main.views.kml"),
+	(r'^kml/company-(?P<company>\d{1,4}).kml$',			"jobmap.main.views.kml"),
 	
 )
 

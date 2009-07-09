@@ -7,6 +7,9 @@
 
 {% block css %}
 {{ block.super }}
+
+	#map_canvas		{width: 100%; height: 400px; background: green; margin-left: auto; margin-right: auto}
+
 	.t_not			{background: #EEEEEE; border: 1px solid black}
 	.t_unknown		{background: #EEEEEE; border: 1px solid black}
 	.t_assign		{background: #9df39d; border: 1px solid green}
@@ -38,41 +41,75 @@
 
 {% block javascript %}
 
-<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}" type="text/javascript"></script>
-
-<script type="text/javascript">
-	var icon = new GIcon;
-	icon.image = '{{ MEDIA_URL }}/icons/big/base.png';
-	icon.iconSize = new GSize(16,16);
-	icon.iconAnchor = new GPoint(8,8);
-	icon.infoWindowAnchor = new GPoint(16,16);
-
-	var sicon = new GIcon;
-	sicon.image = "{{ MEDIA_URL }}/icons/small/red.png";
-	sicon.iconSize = new GSize(8,8);
-	sicon.iconAnchor = new GPoint(4,4);
-	sicon.infoWindowAnchor = new GPoint(8,8);
-</script>
-
+<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/small_map.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/position_doc_ready.js"></script>
 
 <script type="text/javascript">
-	var bases = [];	//lat longs of all bases, indexed by the pk of that opbase
-	var maps = [];	//array of the Gmap2 objects
-	var data = [];	//array of all the points, indexed by the opbase pk
+
+	var map;
+
+	$(document).ready(function() {
+		initialize();
+		
+		var overlay = new GGeoXml('/kml/position-{{position.pk}}.kml')
+		map.addOverlay(overlay);
+	});
 	
-{% for ob in position.opbases %}
-	bases[{{ob.pk}}] = [{{ob.base.location.y}},{{ob.base.location.x}}]; 
-	data[{{ob.pk}}] = {% if ob.route_set.all %}{{ob.routes_json}}{%else%}"None";{% endif %}
-{% endfor %}
+	
+
+	window.onunload = GUnload;
 </script>
+
 {% endblock %}
 
 Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a href="/watch/position/{{ position.pk }}">Watch this position</a>{%else%}<a href="/unwatch/position/{{ position.pk }}">Unwatch this position</a>{% endif %}
 
 
 {% block main_content %}
+	<table class="fancy_table" summary="Bases">
+	
+		<thead>
+			<tr>
+				<td colspan="2">Bases & Routes</td>
+			</tr>
+		</thead>
+		
+		<tr>
+			<td>
+				<div id="map_canvas"></div>
+			</td>
+		
+		</tr>
+		
+	{% if opbases %}
+		<tr>
+			<td>
+			{% for ob in opbases %}
+				<div class="top_section t_{{ ob.hiring_status }}">
+					<a class="immutable" href="{{ ob.base.get_absolute_url }}">{{ ob.base.display_name }}</a> 
+					<br />
+					<small>{{ ob.base.location_summary}}</small>
+				</div>
+	
+				<div class="bottom_section b_{{ob.hiring_status}}">
+					<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="{{ MEDIA_URL }}/icons/plus.png" alt="+"/>
+					<div class="right_box">
+						{{ob.verbose_hiring_status}}
+					</div>
+				</div>
+			{% endfor %}
+			</td>
+		</tr>
+	{% else %}
+		<tr>
+			<td class='not_known'>Not Known</td>
+		</tr>	
+	{% endif %}
+	</table>
+	
+{####################################################}
+
+
 <div class="last_modified">Last modified:  <strong>{{position.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.last_modified|date:"(G:i.s T)"}}</div>	
 	<table class="fancy_table" summary="Position general information">
 	
@@ -207,62 +244,4 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 	{% endif %}
 	</table>
 {##################################################}
-	<div class="last_modified">Last modified:  <strong>{{position.operation.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.operation.last_modified|date:"(G:i.s T)"}}</div>
-	<table class="fancy_table" summary="Bases">
-	
-		<thead>
-			<tr>
-				<td colspan="2">Bases & Routes</td>
-			</tr>
-		</thead>
-	{% if opbases %}
-		<tr>
-			<td>
-	{% for ob in opbases %}
-				<div class="top_section t_{{ ob.hiring_status }}">
-					<a class="immutable" href="{{ ob.base.get_absolute_url }}">{{ ob.base.display_name }}</a> 
-					<br />
-					<small>{{ ob.base.location_summary}}</small>
-				</div>
-	
-				<div class="bottom_section b_{{ob.hiring_status}}">
-					<img title="Click to expand" class="plus" id="expand_{{ob.pk}}" src="{{ MEDIA_URL }}/icons/plus.png" alt="+"/>
-					<div class="right_box">
-						{{ob.verbose_hiring_status}}
-					</div>
-		
-					<div class="base_hide" id="info_{{ob.pk}}" >
-						<div id="map_{{ob.pk}}" class="small_map"></div>
-			
-						{% if ob.route_set.all %}
-						<br />
-						<div>
-							<strong>Routes:</strong>
-							<ul>
-							{% for r in ob.route_set.all %}		{# new row, new route #}
-							<li>
-								<a href="{{ ob.base.get_absolute_url }}" title="{{ ob.base.location_summary }}" class="immutable">{{ ob.base.identifier }}</a> &#8594; 
-									{% for b in r.routebase_set.all %}
-									<a href="{{ b.base.get_absolute_url }}" title="{{ b.base.location_summary }}" class="immutable">{{ b.base.identifier }}</a> &#8594; 
-									{% endfor%}
-								<a href="{{ ob.base.get_absolute_url }}" title="{{ ob.base.location_summary }}" class="immutable">{{ ob.base.identifier }}</a>
-								{{r.description}}
-							</li>
-							{% endfor %}
-							</ul>
-						</div>
-						{% else %}
-							<strong>No Routes</strong>
-						{% endif %}
-					</div>
-				</div>
-{% endfor %}
-			</td>
-		</tr>
-{% else %}
-		<tr>
-			<td class='not_known'>Not Known</td>
-		</tr>	
-{% endif %}
-	</table>
 {% endblock %}
