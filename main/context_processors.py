@@ -10,4 +10,3 @@ def top_numbers(request):
 	advertising =	hiring.filter(advertising=True)
 	
 	return {"SITE_URL": SITE_URL, 'advertising': "Advertising: " + str(advertising.count()), 'hiring': "Hiring: " + str(hiring.count())}
-	#return {"aa": "aa"}

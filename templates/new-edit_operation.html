@@ -76,7 +76,7 @@
 			{% if form.instance.pk %}
 			<ul>
 				{% for route in form.instance.route_set.all %}
-				<li><a href="/edit/route/{{route.pk}}" class="edit">{{form.instance.base.identifier}}-{{ route }}-{{form.instance.base.identifier}}</a></li>
+				<li><a href="/edit/route/{{route.pk}}" class="edit">{{route}}</a></li>
 				{% endfor %}
 
 				<li><a href="/new/route/{{form.instance.pk}}" class="new">Add route</a></li>
