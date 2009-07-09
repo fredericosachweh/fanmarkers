@@ -328,7 +328,7 @@ def kml(request, position=None, company=None):
 		
 	kml = get_template('base.kml').render(Context(locals() ))
 
-	return HttpResponse(kml, mimetype="application/xml")
+	return HttpResponse(kml, mimetype="application/vnd.google-earth.kml+xml")
 
 	
 	
