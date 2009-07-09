@@ -55,7 +55,9 @@
 		
 		initialize();
 		
-		map.addOverlay(new GGeoXml('{{ SITE_URL }}/kml/position-{{position.pk}}.kml'));
+		var kml = new GGeoXml('{{ SITE_URL }}/kml/position-{{position.pk}}.kml')
+		map.addOverlay(kml);
+		kml.gotoDefaultViewport(map)	
 	});
 	
 	
