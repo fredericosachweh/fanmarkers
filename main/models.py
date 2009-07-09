@@ -72,7 +72,11 @@ class Route(models.Model):
 	opbase		=	models.ForeignKey("OpBase", blank=True)
 	
 	def __unicode__(self):
-		return self.name()
+		ret = []
+		for rb in self.real_route():
+			ret.append(rb.base.identifier)
+			
+		return "-".join(ret)
 		
 	def json(self):
 		ret = []
@@ -89,12 +93,6 @@ class Route(models.Model):
 	
 		return [base] + list(points) + [base]
 		
-	def name(self):
-		ret = []
-		for rb in self.real_route():
-			ret.append(rb.base.identifier)
-			
-		return "-".join(ret)
 		
 ###############################################################################################################################
 
