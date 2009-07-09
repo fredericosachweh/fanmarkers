@@ -49,6 +49,8 @@ def airport(request, pk):
 def aircraft(request, pk):
 
 	aircraft = get_object_or_404(Aircraft, pk=pk)
-	operations = Operation.objects.filter(fleet__in=Fleet.objects.filter(aircraft=aircraft))
+	companies = Company.objects.filter(fleet__aircraft=aircraft)
 	
-	return {'aircraft': aircraft, "operations": operations}
+	return locals()
+	
+

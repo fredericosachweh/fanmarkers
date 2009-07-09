@@ -11,52 +11,52 @@
 
 {% block main_content %}
 
-	<table summary="aircraft specs">
+	<table class="fancy_table" summary="aircraft specs">
+		<thead>
 		<tr>
-			<td>Type:</td>
+			<td colspan=2>General Information</td>
+		</tr>
+		</thead>
+		
+		<tr>
+			<th>Type:</th>
 			<td>{{aircraft.type}}</td>
 		</tr>
 		
 		<tr>
-			<td>Model:</td>
+			<th>Model:</th>
 			<td>{{aircraft.model}}</td>
 		</tr>
 		
 		<tr>
-			<td>Manufacturer:</td>
+			<th>Manufacturer:</th>
 			<td>{{aircraft.manufacturer}}</td>
 		</tr>
 		
 		<tr>
-			<td>Category/Class:</td>
+			<th>Category/Class:</th>
 			<td>{{aircraft.get_cat_class_display}}</td>
 		</tr>
 		
 		<tr>
-			<td>Engine Type:</td>
+			<th>Engine Type:</th>
 			<td>{{aircraft.get_engine_type_display}}</td>
 		</tr>
-	</table>
-	
-	<hr />
-	
-	<div class="operations_box">
-	<h3>Operations that use this aircraft:</h3>
-	{% if operations %}
-	<ul>
-	{% for op in operations %}
-	<li>
-	<a href="/company/{{op.company.pk}}/#op{{op.pk}}">{{op}}</a>
-	</li>
-	{% endfor %}
-	</ul>
-	{% else %}
-	
-	<em>None</em>
-	
-	{% endif%}
-	</div>
 
+		<tr>
+			<th>Companies that use this aircraft:</th>
+	
+			<td>
+				<ul>
+				{% for company in companies %}
+					<li><a href="{{company.get_absolute_url}}">{{company}}</a></li>
+				{% empty %}
+					<em>None</em>
+				{% endfor %}
+				</ul>
+			</td>
+		</tr>
+	</table>
 </div>
 
 
