@@ -56,16 +56,15 @@ urlpatterns = patterns('',
 	
 	(r'^airport/(?P<pk>\S{1,7})/$',					"jobmap.main.views.airport"),
 	
-	(r'^aircraft/list/(?P<type>[a-z]*)/$',				"jobmap.main.list_views.aircraft"),	
+		
 	(r'^aircraft/(?P<pk>\d{1,5})/$',				"jobmap.main.views.aircraft"),
 	(r'^new/aircraft/$',						create_update.create_object, {"form_class": AircraftForm, "template_name": "new_aircraft.html"}),
 	
-	(r'^position/list/(?P<type>[a-z]*)/$',				"jobmap.main.list_views.position"),
 	(r'^position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.view_position"),
 	(r'^new/position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_position"),
 	(r'^edit/position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_position"),
 	
-	(r'^company/list/(?P<type>[a-z]*)/$',				"jobmap.main.list_views.company"),
+	
 	(r'^company/(?P<object_id>\d{1,4})/$',				list_detail.object_detail, company_view),
 	(r'^new/company/$',						create_update.create_object, {"form_class": CompanyForm, "template_name": "new_company.html"}),
 	(r'^edit/company/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": CompanyForm, "template_name": "edit_company.html"}),
@@ -87,9 +86,15 @@ urlpatterns = patterns('',
 	(r'^kml/position-(?P<position>\d{1,4}).kml$',			"jobmap.main.views.kml"),
 	(r'^kml/company-(?P<company>\d{1,4}).kml$',			"jobmap.main.views.kml"),
 	
+	###########################################################################################################################################
+	
+	(r'^company/list/$',						"jobmap.main.list_views.company"),
+	(r'^position/list/$',						"jobmap.main.list_views.position"),
+	(r'^aircraft/list/$',						"jobmap.main.list_views.aircraft"),
+	
 )
 
-urlpatterns += patterns('django.contrib.auth',
-	(r'^accounts/login/$','views.login', {'template_name': 'admin/login.html'}),
-	(r'^accounts/logout/$','views.logout', {"template_name": "view_jobmap.html"}),
-)
+#urlpatterns += patterns('django.contrib.auth',
+#	(r'^accounts/login/$','views.login', {'template_name': 'admin/login.html'}),
+#	(r'^accounts/logout/$','views.logout', {"template_name": "view_jobmap.html"}),
+#)

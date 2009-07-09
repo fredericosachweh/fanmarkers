@@ -4,7 +4,7 @@
 	<name>{{title}}</name>
 	<Style id="line_style">
 		<LineStyle>
-			<color>ccff0011</color>
+			<color>ccff0099</color>
 			<width>2</width>
 		</LineStyle>
 	</Style>
@@ -43,16 +43,6 @@
 	</Placemark>
 	{% endfor %}
 	
-	{% for point in bases %}
-	<Placemark>
-		<name>{{point.identifier}}</name>
-		<styleUrl>#base_icon</styleUrl>
-		<Point>
-			<coordinates>{{point.location.x}},{{point.location.y}},0</coordinates>
-		</Point>
-	</Placemark>
-	{% endfor %}
-	
 	{% for point in routebases %}
 	<Placemark>
 		<name>{{point.identifier}}</name>
@@ -63,6 +53,14 @@
 	</Placemark>
 	{% endfor %}
 	
-	
+	{% for point in bases %}
+	<Placemark>
+		<name>{{point.identifier}}</name>
+		<styleUrl>#base_icon</styleUrl>
+		<Point>
+			<coordinates>{{point.location.x}},{{point.location.y}},0</coordinates>
+		</Point>
+	</Placemark>
+	{% endfor %}
 </Document>
 </kml>

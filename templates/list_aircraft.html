@@ -1,17 +1,51 @@
 {% extends "base_list.html" %}
 
-{% block title %}List Aircraft{% endblock %}
+{% block title %}{{title}} Aircraft{% endblock %}
 
 {% block css %}
 {{ block.super }}
+	.list_options		{overflow: hidden; margin: 3px; padding: 3px}
+	.list_options div	{float: left; margin: 5px}
 {% endblock %}
 
 {% block main_content %}
+	<form action="." method="get">
+		<div class="list_options">
+		By Category/Class:<br>
+			<div><input name="cat" type="radio" value="0" checked="checked">Any</div>
+		{% for cc in cat_classes %}
+			<div><input name="cat" type="radio" value="{{ cc.0 }}">{{cc.1}}</div>
+		{% endfor %}	
+		</div>
+	
+		<hr>
+		
+		<div class="list_options">
+		By Engine Type:<br>
+			<div><input name="engine" type="radio" value="0" checked="checked">Any</div>
+		{% for e in engines %}
+			<div><input name="engine" type="radio" value="{{ e.0 }}">{{e.1}}</div>
+		{% endfor %}
+		</div>
+		
+		<input type="submit">
+	</form>
+	
+	<hr>
+
 	<ol>
 	{% for aircraft in aircrafts %}
 	
 		<li><a href="{{ aircraft.get_absolute_url }}">{{aircraft}}</li>
 		
+	{% empty %}
+	
+		<li><strong>Nothing to show, sorry</strong></li>
+		
 	{% endfor %}
 	</ol>
+	
+	<br><br>
+	
+	<a href="/new/aircraft" class="new">Create New Aircraft</a>
 {% endblock %}
