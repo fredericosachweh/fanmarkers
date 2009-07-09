@@ -7,6 +7,9 @@
 
 {% block css %}
 {{ block.super }}
+/******************************************/
+/*             view position              */
+/******************************************/
 
 	#map_canvas		{width: 100%; height: 400px; background: green; margin-left: auto; margin-right: auto}
 
@@ -49,10 +52,10 @@
 	var map;
 
 	$(document).ready(function() {
+		
 		initialize();
 		
-		var overlay = new GGeoXml('/kml/position-{{position.pk}}.kml')
-		map.addOverlay(overlay);
+		map.addOverlay(new GGeoXml('/kml/position-{{position.pk}}.kml'));
 	});
 	
 	

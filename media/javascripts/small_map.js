@@ -15,7 +15,5 @@ function initialize()
 		map.addControl(new GHierarchicalMapTypeControl());
 		map.enableContinuousZoom();
 		map.enableScrollWheelZoom();
-		
-		map.addOverlay(overlay);
 	}
 }
