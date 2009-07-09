@@ -41,5 +41,8 @@ def aircraft(request):
 		if request.GET['engine'] != "0":
 			aircrafts = aircrafts.filter(engine_type=request.GET['engine'])
 	 
+	 	if request.GET['search']:
+			s = request.GET['search']
+			aircrafts = aircrafts.filter( Q(manufacturer__icontains=s) | Q(type__icontains=s) | Q(model__icontains=s) | Q(extra__icontains=s) )
 
 	return locals()

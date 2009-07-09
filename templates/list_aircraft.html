@@ -12,9 +12,9 @@
 	<form action="." method="get">
 		<div class="list_options">
 		By Category/Class:<br>
-			<div><input name="cat" type="radio" value="0" checked="checked">Any</div>
+			<label><input name="cat" type="radio" value="0" checked="checked">Any</label>
 		{% for cc in cat_classes %}
-			<div><input name="cat" type="radio" value="{{ cc.0 }}">{{cc.1}}</div>
+			<label><input name="cat" type="radio" value="{{ cc.0 }}">{{cc.1}}</label>
 		{% endfor %}	
 		</div>
 	
@@ -22,12 +22,18 @@
 		
 		<div class="list_options">
 		By Engine Type:<br>
-			<div><input name="engine" type="radio" value="0" checked="checked">Any</div>
+			<label><input name="engine" type="radio" value="0" checked="checked">Any</label>
 		{% for e in engines %}
-			<div><input name="engine" type="radio" value="{{ e.0 }}">{{e.1}}</div>
+			<label><input name="engine" type="radio" value="{{ e.0 }}">{{e.1}}</label>
 		{% endfor %}
 		</div>
 		
+		<hr>
+		
+		Search: <input type="text" name="search">
+		
+		<hr>
+			
 		<input type="submit">
 	</form>
 	
