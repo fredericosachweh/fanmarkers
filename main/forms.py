@@ -142,7 +142,7 @@ class UserForm(ModelForm):
 class AircraftForm(ModelForm):
 	class Meta:
 		model = Aircraft
-		#exclude = ('user', )
+		exclude = ('watchers', )
 		
 class AircraftSearch(ModelForm):
 	search = forms.CharField(max_length=100, required=False)

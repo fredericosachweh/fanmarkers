@@ -59,6 +59,7 @@ urlpatterns = patterns('',
 		
 	(r'^aircraft/(?P<pk>\d{1,5})/$',				"jobmap.main.views.aircraft"),
 	(r'^new/aircraft/$',						create_update.create_object, {"form_class": AircraftForm, "template_name": "new_aircraft.html"}),
+	(r'^edit/aircraft/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": AircraftForm, "template_name": "edit_aircraft.html"}),
 	
 	(r'^position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.view_position"),
 	(r'^new/position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_position"),
