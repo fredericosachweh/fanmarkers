@@ -57,9 +57,15 @@
 		
 		initialize();
 		
-		var kml = new GGeoXml('{{ SITE_URL }}/kml/position-{{position.pk}}.kml')
-		map.addOverlay(kml);
-		kml.gotoDefaultViewport(map)	
+		var kml = new GGeoXml('{{ SITE_URL }}/kml/position-{{position.pk}}.kml', function(){
+		
+			map.addOverlay(kml);
+			kml.gotoDefaultViewport(map)
+			
+			if (map.getZoom() > 6)
+				map.setZoom(6)
+		});
+		
 	});
 	
 	window.onunload = GUnload;
