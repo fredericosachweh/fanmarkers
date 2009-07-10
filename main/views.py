@@ -229,7 +229,7 @@ def profile(request):
 		profile = Profile(user=user)
 		
 	if request.method == "POST":
-		profile_form = ProfileForm(request.POST, instance=profile)
+		profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
 		user_form = UserForm(request.POST, instance=user)
 		
 		if profile_form.is_valid() and user_form.is_valid():

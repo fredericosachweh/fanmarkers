@@ -10,7 +10,7 @@
 	<ol>
 	{% for position in positions %}
 	
-		<li><a href="{{ position.get_absolute_url }}">{{position.company}} - {{ position }}</li>
+		<li><a class="view" href="{{ position.get_absolute_url }}">{{position.company}} - {{ position }}</li>
 		
 	{% endfor %}
 	</ol>

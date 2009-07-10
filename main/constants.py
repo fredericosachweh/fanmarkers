@@ -5,19 +5,19 @@ VOTE_WEIGHT	=	(	(1, "I have no idea what I'm talking about"),
 				(5, "I have first hand experience")
 			)
 			
-JUMPSEAT_TYPE	=	(	(0, "Unknown"),
+JUMPSEAT_TYPE	=	(	(0, "Not Known"),
 				(1, "None"),
 				(2, "Custom Agreement"),
 				(3, "CASS") )
 				
-PAY_TYPE	=	(	(0, "Unknown"),
+PAY_TYPE	=	(	(0, "Not Known"),
 				(1, "The pilot pays the full price of training"),
 				(2, "The pilot pays for part of the training"),
 				(3, "No Pay"),
 				(4, "Pilot gets reduced salary during training"),
 				(5, "Pilot gets full salary during training") )
 			
-AIRPORT_TYPE	=	(	(0, "Unknown"),
+AIRPORT_TYPE	=	(	(0, "Not Known"),
 				(1, "Small Airport"),
 				(2, "Medium Airport"),
 				(3, "Large Airport"),
@@ -26,8 +26,7 @@ AIRPORT_TYPE	=	(	(0, "Unknown"),
 				(6, "Seaplane Base"),
 				(7, "Balloon Port") )
 				
-ENGINE_TYPE	=	(	(0, "None"),
-				(1, "Low Performance Piston"),
+ENGINE_TYPE	=	(	(1, "Low Performance Piston"),
 				(2, "High Performance Piston"),
 				(3, "Turboprop"),
 				(4, "Jet") )
@@ -50,7 +49,7 @@ CERT_AGENCY	=	(	(0, "None"),
 				(3, "Any ICAO"),
 				(4, "Other") )
 				
-DEGREE		=	(	(0, "Unknown"),
+DEGREE		=	(	(0, "Not Known"),
 				(1, "No degree required"),
 				(2, "High School Degree"),
 				(3, "4-year University Degree"),

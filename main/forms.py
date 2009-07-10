@@ -12,8 +12,7 @@ from django.template import Context, loader
 class TemplatedForm(forms.Form):
 	def output_via_template(self):
 		"Helper function for fieldsting fields data from form."
-		bound_fields = [BoundField(self, field, name) for name, field \
-			in self.fields.items()]
+		bound_fields = [BoundField(self, field, name) for name, field in self.fields.items()]
 		c = Context(dict(form = self, bound_fields = bound_fields))
 		t = loader.get_template('mins.html')
 		return t.render(c)
@@ -97,19 +96,6 @@ class StatusForm(ModelForm):
 	class Meta:
 		model = Status
 
-class newBase(object):
-	not_checked = ""
-	assign_checked = ""
-	choice_checked = ""
-	layoff_checked = ""
-	unknown_checked = ""
-	
-	identifier = ""
-	location_summary = ""
-	
-	def __unicode__(self):
-		return self.identifier
-		
 class PositionForm(ModelForm):
 	class Meta:
 		model = Position
@@ -157,4 +143,19 @@ class AircraftForm(ModelForm):
 	class Meta:
 		model = Aircraft
 		#exclude = ('user', )
+		
+class AircraftSearch(ModelForm):
+	search = forms.CharField(max_length=100, required=False)
+	class Meta:
+		model = Aircraft
+		fields = ('engine_type', 'cat_class', )
+		
+
+
+
+
+
+
+
+
 

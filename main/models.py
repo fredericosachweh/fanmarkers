@@ -127,7 +127,7 @@ class Company(models.Model):
 	description	=	models.TextField(blank=True)
 	type		=	models.IntegerField(choices=BUSINESS_TYPE, default=0)
 	jumpseat	=	models.IntegerField(choices=JUMPSEAT_TYPE, default=0)
-	union		=	models.CharField(max_length=32, blank=True, default="Unknown")
+	union		=	models.CharField(max_length=32, blank=True, default="")
 	contact_info	=	models.TextField(blank=True)
 	watchers	=	models.ManyToManyField(User, blank=True, )
 	last_modified	=	models.DateTimeField(auto_now=True)
@@ -290,4 +290,14 @@ class Profile(models.Model):
 	user		=	models.ForeignKey(User, primary_key=True)
 					
 	dob		=	models.DateField("Date of Birth", blank=True, default="1900-01-01")
-	resume		=	models.FileField(upload_to="/resume/")
+	#resume		=	models.FileField(upload_to="resume/")
+
+
+
+
+
+
+
+
+
+

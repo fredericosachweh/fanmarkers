@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block main_content %}
-	<form action="." method="get">
+	<form action="." method="get" style="display: none">
 		<div class="list_options">
 		By Category/Class:<br>
 			<label><input name="cat" type="radio" value="0" checked="checked">Any</label>
@@ -37,17 +37,22 @@
 		<input type="submit">
 	</form>
 	
+	<form action="." method="get">
+		<table>
+		{{searchform}}
+		</table>
+		
+		<input type="submit">
+	</form>
+	
+	
 	<hr>
 
 	<ol>
 	{% for aircraft in aircrafts %}
-	
-		<li><a href="{{ aircraft.get_absolute_url }}">{{aircraft}}</li>
-		
+		<li><a class="immutable" href="{{ aircraft.get_absolute_url }}">{{aircraft}}</li>
 	{% empty %}
-	
 		<li><strong>Nothing to show, sorry</strong></li>
-		
 	{% endfor %}
 	</ol>
 	

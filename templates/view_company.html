@@ -36,7 +36,7 @@
 		</tr>
 		
 		<tr>
-			<th>Call Sign:</th>  <td>{{company.callsign|default:"<span class='not_known'>Not Known</span>"}}</td>
+			<th>Call Sign:</th>  <td>{{company.call_sign|default:"<span class='not_known'>Not Known</span>"}}</td>
 		</tr>
 		
 		<tr>
@@ -44,7 +44,12 @@
 		</tr>
 		
 		<tr>
-			<th>Jumpseat Privileges:</th>  <td>{{company.get_jumpseat_display|default:"<span class='not_known'>Not Known</span>"}}</td>
+			<th>Jumpseat Privileges:</th>  <td>	{% ifequal company.jumpseat 0 %}
+									<span class='not_known'>Not Known</span>
+								{% else %}
+									{{ company.get_jumpseat_display }}
+								{% endifequal %}
+							</td>
 		</tr>
 		
 			
