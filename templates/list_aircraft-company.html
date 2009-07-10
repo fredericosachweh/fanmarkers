@@ -1,14 +1,9 @@
 {% extends "base_list.html" %}
 
-{% block title %}{{title}}Aircraft{% endblock %}
-
-{% block css %}
-{{ block.super }}
-	.filter_form		{background: #DDDDDD; padding:5px}
-{% endblock %}
+{% block title %}{{type}}{% endblock %}
 
 {% block under_heading %}
-<a href="/new/aircraft" class="new">Create New Aircraft</a>
+<a href="/new/{{ type|lower }}" class="new">Create New {{ type }}</a>
 {% endblock %}
 
 {% block main_content %}
@@ -23,8 +18,8 @@
 	</div>
 	
 	<ul>
-	{% for aircraft in aircrafts %}
-		<li><a class="immutable" href="{{ aircraft.get_absolute_url }}">{{aircraft}}</li>
+	{% for object in objects %}
+		<li><a class="view" href="{{ object.get_absolute_url }}">{{object}}</li>
 	{% empty %}
 		<li><strong>Nothing to show, sorry</strong></li>
 	{% endfor %}

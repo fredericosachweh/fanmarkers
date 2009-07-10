@@ -155,9 +155,10 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 		<tr>
 			<th>Schedule Type:</th>  <td>{{position.get_schedule_type_display|default:"<span class='not_known'>Not Known</span>"}} </td>
 		</tr>
-		<tr>
-			<th>Number of people watching this position:</th>  <td>{{watchers}} {% if not already_watching %}<a href="/watch/position/{{ position.pk }}">(Watch this position)</a>{%else%}<a href="/unwatch/position/{{ position.pk }}">(Unwatch this position)</a>{% endif %}</td>
-		</tr>
+		{#<tr>#}
+		{#	<th>Number of people watching this position:</th>#}
+		{#	<td>{{watchers}} {% if not already_watching %}<a class="watch" href="/watch/position/{{ position.pk }}">(Watch this position)</a>{%else%}<a href="/unwatch/position/{{ position.pk }}">(Unwatch this position)</a>{% endif %}</td>#}
+		{#</tr>#}
 	</table>
 
 {##################################################}

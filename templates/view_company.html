@@ -54,9 +54,10 @@
 		
 			
 		
-		<tr>
-			<th>Number of people watching this company:</th>  <td>{{watchers|default:"0"}} {% if not already_watching %}<a href="/watch/position/{{ company.pk }}">(Watch this company)</a>{%else%}<a href="/unwatch/position/{{ position.pk }}">(Unwatch this company)</a>{% endif %}</td>
-		</tr>
+		{#<tr>#}
+		{#	<th>Number of people watching this company:</th>#}
+		{#	<td>{{watchers|default:"0"}} {% if not already_watching %}<a class="watch" href="/watch/position/{{ company.pk }}">(Watch this company)</a>{%else%}<a href="/unwatch/position/{{ position.pk }}">(Unwatch this company)</a>{% endif %}</td>#}
+		{#</tr>#}
 	</table>
 	
 <div class="last_modified">&nbsp;</div>	

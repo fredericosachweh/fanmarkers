@@ -98,7 +98,7 @@ SALARY_TYPE	=	[	(1, "/flight hour"),
 				(8, "/contract")
 			]
 				
-SCHEDULE_TYPE	=	[	(0, "Unknown"),
+SCHEDULE_TYPE	=	[	(0, "Not Known"),
 				(1, "Scheduled"),
 				(2, "On Call"),
 				(3, "You pick your schedule"),

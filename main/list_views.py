@@ -18,21 +18,43 @@ def position(request):
 	
 	return locals()
 	
-@render_to('list_company.html')
+@render_to('list_aircraft-company.html')
 def company(request):
 
-	companies = Company.objects.all()
+	type="Company"
+
+	from main.forms import CompanySearch
 	
+	objects = Company.objects.all()
+	
+	if request.GET:
+	
+		searchform = CompanySearch(request.GET)
+		
+		if searchform.is_valid():
+
+			if int(searchform.cleaned_data["type"]) >= 0:
+				objects = objects.filter(type=searchform.cleaned_data["type"])
+		
+			if int(searchform.cleaned_data["jumpseat"]) >= 0:
+				objects = objects.filter(jumpseat=searchform.cleaned_data["jumpseat"])
+		 
+		 	if searchform.cleaned_data["search"]:
+				s = searchform.cleaned_data["search"]
+				objects = objects.filter( Q(name__icontains=s) | Q(description__icontains=s) )
+				
+	else:
+		searchform = CompanySearch()
+
 	return locals()
 	
-@render_to('list_aircraft.html')
+@render_to('list_aircraft-company.html')
 def aircraft(request):
 	from main.forms import AircraftSearch
-
-	cat_classes = CAT_CLASSES
-	engines = ENGINE_TYPE
 	
-	aircrafts = Aircraft.objects.all()
+	objects = Aircraft.objects.all()
+	
+	type="Aircraft"
 	
 	if request.GET:
 	
@@ -40,15 +62,15 @@ def aircraft(request):
 		
 		if searchform.is_valid():
 
-			if searchform.cleaned_data["cat_class"] != "0":
-				aircrafts = aircrafts.filter(cat_class=searchform.cleaned_data["cat_class"])
+			if int(searchform.cleaned_data["cat_class"]) >= 0:
+				objects = objects.filter(cat_class=searchform.cleaned_data["cat_class"])
 		
-			if searchform.cleaned_data["engine_type"] != "0":
-				aircrafts = aircrafts.filter(engine_type=searchform.cleaned_data["engine_type"])
+			if int(searchform.cleaned_data["engine_type"]) >= 0:
+				objects = objects.filter(engine_type=searchform.cleaned_data["engine_type"])
 		 
 		 	if searchform.cleaned_data["search"]:
 				s = searchform.cleaned_data["search"]
-				aircrafts = aircrafts.filter( Q(manufacturer__icontains=s) | Q(type__icontains=s) | Q(model__icontains=s) | Q(extra__icontains=s) )
+				objects = objects.filter( Q(manufacturer__icontains=s) | Q(type__icontains=s) | Q(model__icontains=s) | Q(extra__icontains=s) )
 				
 	else:
 		searchform = AircraftSearch()

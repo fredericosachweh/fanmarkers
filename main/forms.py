@@ -147,12 +147,15 @@ class AircraftForm(ModelForm):
 ##############################################################################
 		
 class AircraftSearch(forms.Form):
-	search = forms.CharField(max_length=100, required=False)
-	engine_type = forms.ChoiceField(label="Engine Type", choices=[(0,"Any",),]+ENGINE_TYPE)
-	cat_class = forms.ChoiceField(label="Category/Class", choices=[(0,"Any",),]+CAT_CLASSES)
+	search		=	forms.CharField(max_length=100, required=False)
+	engine_type	=	forms.ChoiceField(choices=[(-1,"Any",),]+ENGINE_TYPE, label="Engine Type")
+	cat_class	=	forms.ChoiceField(choices=[(-1,"Any",),]+CAT_CLASSES, label="Category/Class")
 		
 
-
+class CompanySearch(forms.Form):
+	search		=	forms.CharField(max_length=100, required=False)
+	type		=	forms.ChoiceField(choices=[(-1,"Any",),]+BUSINESS_TYPE, label="Business Type")
+	jumpseat	=	forms.ChoiceField(choices=[(-1,"Any",),]+JUMPSEAT_TYPE)
 
 
 

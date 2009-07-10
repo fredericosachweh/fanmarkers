@@ -95,7 +95,7 @@ urlpatterns = patterns('',
 	
 )
 
-#urlpatterns += patterns('django.contrib.auth',
+urlpatterns += patterns('django.contrib.auth',
 #	(r'^accounts/login/$','views.login', {'template_name': 'admin/login.html'}),
-#	(r'^accounts/logout/$','views.logout', {"template_name": "view_jobmap.html"}),
-#)
+	(r'^accounts/logout/$','views.logout', {"template_name": "view_jobmap.html"}),
+)
