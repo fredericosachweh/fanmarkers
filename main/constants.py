@@ -106,15 +106,17 @@ BUSINESS_TYPE	=	(	(1, "FBO-type flight school"),
 				(11, "Scenic flights / Aerial Tours"),
 				(12, "Other") )
 				
-CAT_CLASSES	=	(	(1, "Airplane SEL"),
-				(2, "Airplane MEL"),
-				(3, "Airplane SES"),
-				(4, "Airplane MES"),
-				(5, "Glider"),
-				(6, "Helicopter"),
-				(7, "Airplane Simulator"),
-				(8, "Helicopter Simulator"),
-				(9, "Other"), )
+CAT_CLASSES	=	(	(1, "Landplane Single-Engine"),
+				(2, "Tailwheel Single-Engine"),
+				(3, "Landplane Multi-Engine"),
+				(4, "Tailwheel Multi-Engine"), 
+				(5, "Seaplane Single-Engine"),
+				(6, "Seaplane Multi-Engine"),
+				(7, "Glider"),
+				(8, "Helicopter"),
+				(9, "Airplane Simulator"),
+				(10, "Helicopter Simulator"),
+				(11, "Other"), )
 				
 MINIMUMS_VERBOSE=	{	"total":		"Total",
 				"night":		"Night",
