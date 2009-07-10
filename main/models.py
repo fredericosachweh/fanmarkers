@@ -8,10 +8,10 @@ from django.db.models import Q
 ###############################################################################################################################
 
 class Aircraft(models.Model):
-	manufacturer	=	models.CharField(max_length=32)
-	type		=	models.CharField(max_length=32)
-	model		=	models.CharField(max_length=64, blank=True)
-	extra		=	models.CharField(max_length=32, blank=True)
+	manufacturer	=	models.CharField(max_length=32, help_text="e.g: Cessna, Beechcraft")
+	type		=	models.CharField(max_length=32, help_text="e.g: C-172, BE-76")
+	model		=	models.CharField(max_length=64, help_text="e.g: Skyhawk, Duchess", blank=True)
+	extra		=	models.CharField(max_length=32, help_text="e.g: RG, on floats", blank=True)
 	engine_type	=	models.IntegerField(choices=ENGINE_TYPE, default=0)
 	cat_class	=	models.IntegerField("Category/Class", choices=CAT_CLASSES, default=1)
 	watchers	=	models.ManyToManyField(User, blank=True, )
@@ -27,12 +27,16 @@ class Aircraft(models.Model):
 	
 
 		if self.extra:
-			model = self.model + " " + self.extra
+			model = " " + self.model + " " + self.extra
+
+		elif self.model:
+			model = " " + self.model
+
 		else:
-			model = self.model
+			model = ""
 			
 			
-		return u'%s (%s %s)' % (self.type, self.manufacturer, model, )
+		return u'%s (%s%s)' % (self.type, self.manufacturer, model, )
 
 ###############################################################################################################################
 		

@@ -4,39 +4,15 @@
 
 {% block css %}
 {{ block.super }}
-	.list_options		{overflow: hidden; margin: 3px; padding: 3px}
-	.list_options div	{float: left; margin: 5px}
+	.filter_form		{background: #DDDDDD; padding:5px}
+{% endblock %}
+
+{% block under_heading %}
+<a href="/new/aircraft" class="new">Create New Aircraft</a>
 {% endblock %}
 
 {% block main_content %}
-	<form action="." method="get" style="display: none">
-		<div class="list_options">
-		By Category/Class:<br>
-			<label><input name="cat" type="radio" value="0" checked="checked">Any</label>
-		{% for cc in cat_classes %}
-			<label><input name="cat" type="radio" value="{{ cc.0 }}">{{cc.1}}</label>
-		{% endfor %}	
-		</div>
-	
-		<hr>
-		
-		<div class="list_options">
-		By Engine Type:<br>
-			<label><input name="engine" type="radio" value="0" checked="checked">Any</label>
-		{% for e in engines %}
-			<label><input name="engine" type="radio" value="{{ e.0 }}">{{e.1}}</label>
-		{% endfor %}
-		</div>
-		
-		<hr>
-		
-		Search: <input type="text" name="search">
-		
-		<hr>
-			
-		<input type="submit">
-	</form>
-	
+	<div class="filter_form">
 	<form action="." method="get">
 		<table>
 		{{searchform}}
@@ -44,19 +20,13 @@
 		
 		<input type="submit">
 	</form>
+	</div>
 	
-	
-	<hr>
-
-	<ol>
+	<ul>
 	{% for aircraft in aircrafts %}
 		<li><a class="immutable" href="{{ aircraft.get_absolute_url }}">{{aircraft}}</li>
 	{% empty %}
 		<li><strong>Nothing to show, sorry</strong></li>
 	{% endfor %}
-	</ol>
-	
-	<br><br>
-	
-	<a href="/new/aircraft" class="new">Create New Aircraft</a>
+	</ul>
 {% endblock %}

@@ -143,12 +143,13 @@ class AircraftForm(ModelForm):
 	class Meta:
 		model = Aircraft
 		exclude = ('watchers', )
+
+##############################################################################
 		
-class AircraftSearch(ModelForm):
+class AircraftSearch(forms.Form):
 	search = forms.CharField(max_length=100, required=False)
-	class Meta:
-		model = Aircraft
-		fields = ('engine_type', 'cat_class', )
+	engine_type = forms.ChoiceField(label="Engine Type", choices=[(0,"Any",),]+ENGINE_TYPE)
+	cat_class = forms.ChoiceField(label="Category/Class", choices=[(0,"Any",),]+CAT_CLASSES)
 		
 
 

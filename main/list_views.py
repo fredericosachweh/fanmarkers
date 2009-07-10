@@ -39,12 +39,11 @@ def aircraft(request):
 		searchform = AircraftSearch(request.GET)
 		
 		if searchform.is_valid():
-			searchform.save(commit=False)
 
-			if searchform.cleaned_data["cat_class"] != 0:
+			if searchform.cleaned_data["cat_class"] != "0":
 				aircrafts = aircrafts.filter(cat_class=searchform.cleaned_data["cat_class"])
 		
-			if searchform.cleaned_data["engine_type"] != 0:
+			if searchform.cleaned_data["engine_type"] != "0":
 				aircrafts = aircrafts.filter(engine_type=searchform.cleaned_data["engine_type"])
 		 
 		 	if searchform.cleaned_data["search"]:
