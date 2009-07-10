@@ -14,7 +14,7 @@ class Aircraft(models.Model):
 	manufacturer	=	models.CharField(max_length=32)
 	engine_type	=	models.IntegerField(choices=ENGINE_TYPE, default=0)
 	cat_class	=	models.IntegerField("Category/Class", choices=CAT_CLASSES, default=1)
-	#watchers	=	models.ManyToManyField(User, blank=True, )
+	watchers	=	models.ManyToManyField(User, blank=True, )
 	
 	class Meta:	
 		ordering = ["manufacturer", "type"]
@@ -55,8 +55,6 @@ class Compensation(models.Model):
 	
 	training_pay	=	models.IntegerField(choices=PAY_TYPE, default=0)
 	training_contract=	models.BooleanField(default=False)
-	
-	flight_hours	=	models.FloatField("Typical Flight Hours", help_text="(per month)", blank=True, null=True)
 
 	extra_info	=	models.TextField(blank=True)
 	last_modified	=	models.DateTimeField(auto_now=True)
@@ -178,6 +176,8 @@ class Operation(models.Model):
 	fleet		=	models.ManyToManyField("Fleet", blank=True, null=True)
 	bases		=	models.ManyToManyField(Airport, through="OpBase", blank=True)
 	positions	=	models.ManyToManyField("Position", blank=True)
+	flight_hours	=	models.FloatField("Typical Flight Hours", help_text="(per month)", blank=True, null=True)
+	extra_info	=	models.TextField("Extra Info", blank=True)
 	last_modified	=	models.DateTimeField(auto_now=True)
 	
 	def get_absolute_url(self):

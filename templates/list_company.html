@@ -1,6 +1,6 @@
 {% extends "base_list.html" %}
 
-{% block title %}List Companies{% endblock %}
+{% block title %}Lisdddt Companies{% endblock %}
 
 {% block css %}
 {{ block.super }}
@@ -10,6 +10,12 @@
 	<ol>
 	{% for company in companies %}
 		<li><a class="view" href="{{ company.get_absolute_url }}">{{company}}</li>
+	{% empty %}
+		<li><strong>Nothing to show, sorry</strong></li>
 	{% endfor %}
 	</ol>
+	
+	<br><br>
+	
+	<a href="/new/company" class="new">Create New Company</a>
 {% endblock %}

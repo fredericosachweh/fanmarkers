@@ -120,7 +120,7 @@ def edit_position(request, pk):
 				comp_form.save()
 				
 			#if payscale_formset.has_changed():
-			#	payscale_formset.save()
+			payscale_formset.save()
 			#######
 			
 			if not status_form.instance.pk:
