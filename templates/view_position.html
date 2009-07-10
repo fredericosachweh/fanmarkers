@@ -39,8 +39,6 @@
 	.bases			{}
 	
 	.mins ul		{margin: 0px; padding-left: 1.5em}
-	
-	.small_map		{height: 300px; width:500px; background: gray; margin-bottom: 1em; margin-top: 1em; margin-right: auto; margin-left: auto}
 	ul			{margin-top: 0}
 {% endblock %}
 
@@ -77,11 +75,17 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 
 
 {% block main_content %}
+
+{##################################################}
+{#############routes and bases map#################}
+{##################################################}
+{##################################################}
+
 	<table class="fancy_table" summary="Bases">
 	
 		<thead>
 			<tr>
-				<td colspan="2">Bases & Routes <a class="kml_link" href="http://flightjobwiki.com/kml/position-{{position.pk}}.kml">kml</a></td>
+				<td colspan="2">Bases & Routes <a title="Download KML file for viewing in Google Earth" class="kml_link" href="http://flightjobwiki.com/kml/position-{{position.pk}}.kml">kml</a></td>
 			</tr>
 		</thead>
 		
@@ -126,9 +130,11 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 		</tr>	
 	{% endif %}
 	</table>
-	
-{####################################################}
 
+{##################################################}
+{#############general information##################}
+{##################################################}
+{##################################################}
 
 <div class="last_modified">Last modified:  <strong>{{position.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.last_modified|date:"(G:i.s T)"}}</div>	
 	<table class="fancy_table" summary="Position general information">
@@ -168,8 +174,11 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 	</table>
 
 {##################################################}
+{###########compensation###########################}
+{##################################################}
+{##################################################}
 
-	<div class="last_modified">Last modified:  <strong>{{position.compensation.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.compensation.last_modified|date:"(G:i.s T)"}}</div>	
+	<div class="last_modified">Last modified:  <strong>{{position.compensation_set.get.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.compensation_set.get.last_modified|date:"(G:i.s T)"}}</div>	
 	<table class="fancy_table" summary="payscale and hiring minimums information">
 	
 	
@@ -187,7 +196,13 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 			<th>Per Diem:</th>  <td>{{compensation.perdiem|default:"<span class='not_known'>Not Known</span>"}}</td>
 		</tr>
 		<tr>
-			<th>Training Pay:</th>  <td>{{compensation.get_training_pay_display|default:"<span class='not_known'>Not Known</span>"}}</td>
+			<th>Training Pay:</th>  <td>
+						{%ifequal compensation.training_pay 0%}
+							<span class='not_known'>Not Known</span>
+						{% else %}
+							{{compensation.get_training_pay_display}}
+						{% endifequal %}
+						</td>
 		</tr>
 		<tr>
 			<th>Flight Hours per month:</th>  <td>{{compensation.flight_hours|default:"<span class='not_known'>Not Known</span>"}} </td>
@@ -222,6 +237,9 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 		</table>
 		
 {##################################################}
+{##################################################}
+{############hard minimums#########################}
+{##################################################}
 
 	<div class="last_modified">Last modified:  <strong>{{position.hard_mins.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.hard_mins.last_modified|date:"(G:i.s T)"}}</div>
 	<table class="fancy_table mins" summary="Hard hiring minimums information">
@@ -243,6 +261,9 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 		{% endif %}
 	</table>
 	
+{##################################################}
+{##################################################}
+{################pref minimums#####################}
 {##################################################}
 	<div class="last_modified">Last modified:  <strong>{{position.pref_mins.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.pref_mins.last_modified|date:"(G:i.s T)"}}</div>
 	<table class="fancy_table mins" summary="Preferred hiring minimums information">

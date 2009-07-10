@@ -12,7 +12,7 @@ class Aircraft(models.Model):
 	type		=	models.CharField(max_length=32, help_text="e.g: C-172, BE-76")
 	model		=	models.CharField(max_length=64, help_text="e.g: Skyhawk, Duchess", blank=True)
 	extra		=	models.CharField(max_length=32, help_text="e.g: RG, on floats", blank=True)
-	engine_type	=	models.IntegerField(choices=ENGINE_TYPE, default=0)
+	engine_type	=	models.IntegerField("Engine Type", choices=ENGINE_TYPE, default=0)
 	cat_class	=	models.IntegerField("Category/Class", choices=CAT_CLASSES, default=1)
 	watchers	=	models.ManyToManyField(User, blank=True, )
 	

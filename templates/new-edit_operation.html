@@ -16,6 +16,12 @@
 	.opbase_new				{border: 2px solid red;margin-top: 3em; padding: .5em}
 	.opbase_new table td:first-child	{text-align: center; font-weight: bold}
 	input[type="text"]			{width: 4em}
+	textarea				{height: 100px}
+	
+	.bases_table td,
+	.bases_table th				{border: 0px; background: white; margin-top: 5px; margin-bottom: 5px; padding: 3px}
+	
+	.bases_table				{border: 1px solid #444444; margin-top: 5px; margin-bottom: 5px}
 	
 	.errorlist				{color: darkred}
 {% endblock %}
@@ -23,8 +29,6 @@
 {#############################################################}
 
 {% block top_links %}
-
-
 	{% ifequal type "edit" %}
 	<a href="{{ form.instance.get_absolute_url }}" class="view">View {{ form.instance }}</a><br />
 	<a href="/edit{{ form.instance.company.get_absolute_url }}" class="edit">Edit {{ form.instance.company }}</a>
@@ -39,50 +43,57 @@
 		{{ formset.management_form }}
 	</div>
 	<div>
-		<table summary="Operation fleet and positions">
-			{{form}}
+		<table class="form_table" summary="Operation fleet and positions">
+		{% for field in form %}
+			<tr>
+				<th>{{field.label_tag}}:</th>  <td>{{field}} <span class="help_text">{{field.help_text}}</span></td>
+			</tr>
+		{% endfor %}
+			<tr>
+				<th>Bases:</th>
+				<td>
+				{% for form in formset.forms %}
+					<table class="bases_table">
+					<tr>
+						<th>{{form.base.label_tag}}:</th>
+						<td>
+							{{form.id}}{{form.base}}
+							{% for error in form.base.errors %}  <span class="errorlist">{{error}}</span>{% endfor %}
+						</td>
+					</tr>
+					
+					<tr>					
+						<th>{{form.info.label_tag}}:</th>
+						<td>
+							{{form.info}}
+							{% for error in form.info.errors %} <span class="errorlist">{{error}}</span>{% endfor %}
+						</td>
+					</tr>
+					
+					{% if form.instance.pk %}
+					<tr>
+						<th>Delete?</th>
+						<td>{{form.DELETE}}</td>
+					</tr>
+					
+					<tr>
+						<th>Routes</th>
+						<td>
+							<ul>
+							{% for route in form.instance.route_set.all %}
+							<li><a href="/edit/route/{{route.pk}}" class="edit">{{route}}</a></li>
+							{% endfor %}
+
+							<li><a href="/new/route/{{form.instance.pk}}" class="new">Add route</a></li>
+							</ul>
+						</td>
+					</tr>
+					
+					{% endif %}
+					</table>
+				{% endfor %}
+				</td>
+			</tr>
 		</table>
 	</div>
-
-	{% for form in formset.forms %}
-		{% ifchanged form.instance.pk %}
-		{% if not form.instance.pk %}
-		<hr />
-		<h2>Add New Bases:</h2>
-		{% endif %}
-		{% endifchanged %}
-	
-	
-		<div class="opbase_formbox">
-		
-			<table summary="Operation Base box">
-				<tr>
-					<th>{{form.base.label_tag}}:{{form.id}}</th> <td>{{form.base}}</td> <td>{% for error in form.base.errors %}  <span class="errorlist">{{error}}</span>{% endfor %}</td>
-				</tr>
-			
-				<tr>
-					<th>{{form.info.label_tag}}:</th> <td>{{form.info}}</td> <td>{% for error in form.info.errors %} <span class="errorlist">{{error}}</span>{% endfor %}</td>
-				</tr>
-			
-				{% if form.instance.pk %}
-				<tr>
-					<th>Delete?</th> <td>{{form.DELETE}}</td> 
-				</tr>
-				{% endif %}
-			
-			</table>
-
-				
-			{% if form.instance.pk %}
-			<ul>
-				{% for route in form.instance.route_set.all %}
-				<li><a href="/edit/route/{{route.pk}}" class="edit">{{route}}</a></li>
-				{% endfor %}
-
-				<li><a href="/new/route/{{form.instance.pk}}" class="new">Add route</a></li>
-			</ul>
-			{% endif %}
-	
-		</div>
-	{% endfor %}
 {% endblock %}

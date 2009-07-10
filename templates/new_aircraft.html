@@ -4,6 +4,15 @@
 
 {% block form%}
 <table class="form_table">
-	{{form}}
+	{% for field in form%}
+	<tr>
+		<th>{{field.label_tag}}:</th>
+		
+		<td>{{field}}
+			<br><span class="help_text">{{field.help_text}}</span>
+		</td>
+	</tr>
+	
+	{% endfor %}
 </table>
 {% endblock %}
