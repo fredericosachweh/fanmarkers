@@ -144,7 +144,7 @@
 						<td>
 							<ul>
 							{% for fleet in operation.fleet.all %}
-							<li><a href="{{fleet.get_absolute_url}}" class="immutable">{{fleet}}</a></li>
+							<li><a href="{{fleet.aircraft.get_absolute_url}}" class="immutable">{{fleet}}</a></li>
 							{% endfor %}
 							</ul>
 						</td>
