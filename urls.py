@@ -86,6 +86,7 @@ urlpatterns = patterns('',
 	
 	(r'^kml/position-(?P<position>\d{1,4}).kml$',			"jobmap.main.views.kml"),
 	(r'^kml/company-(?P<company>\d{1,4}).kml$',			"jobmap.main.views.kml"),
+	(r'^kml/airport-(?P<airport>[A-Z]{1,5}).kml$',			"jobmap.main.views.kml"),
 	
 	###########################################################################################################################################
 	

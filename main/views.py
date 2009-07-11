@@ -309,7 +309,7 @@ def map_click(request, lat, lng, z):
 	return locals()
 	
 	
-def kml(request, position=None, company=None):
+def kml(request, position=None, company=None, airport=None):
 	from django.template.loader import get_template
 	from django.http import HttpResponse
 	from django.template import Context
@@ -331,6 +331,14 @@ def kml(request, position=None, company=None):
 		routebases = Airport.objects.filter(routebase__route__in=routes).exclude(opbase__operation__company=company).distinct()
 		
 		title = str(company)
+		
+	if airport:
+		bases = get_object_or_404(Airport, pk=airport)
+		
+				
+		title = str(airport)  + " - " + str(bases.name)
+		
+		bases = [bases]
 		
 	kml = get_template('base.kml').render(Context(locals() ))
 

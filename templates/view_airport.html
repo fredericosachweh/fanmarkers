@@ -1,6 +1,9 @@
-{% extends "base.html" %}
+{% extends "base_view.html" %}
 
-{% block title %}{{ airport.identifier }} - Airport Profile{% endblock %}
+{% block title %}{{ airport.identifier }} - {{ airport.name }}{% endblock %}
+{% block sub_heading %}{{airport.location_summary}}{% endblock %}
+
+{% block edit %}&nbsp;{% endblock %}
 
 {% block css %}
 {{ block.super }}
@@ -10,39 +13,39 @@
 {% block javascript %}
 
 	<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key={{ GOOGLE_MAPS_KEY }}" type="text/javascript"></script>
-	
-	<script type="text/javascript">
-		airport_lat = {{airport.location.y}};
-		airport_long = {{ airport.location.x}};
-		
-		var icon = new GIcon;
-		icon.image = '{{ MEDIA_URL }}/icons/big/base.png';
-		icon.iconSize = new GSize(16,16);
-		icon.iconAnchor = new GPoint(8,8);
-		icon.infoWindowAnchor = new GPoint(16,16);
-
-		var sicon = new GIcon;
-		sicon.image = "{{ MEDIA_URL }}/icons/small/red.png";
-		sicon.iconSize = new GSize(8,8);
-		sicon.iconAnchor = new GPoint(4,4);
-		sicon.infoWindowAnchor = new GPoint(8,8);
-	</script>
-	
 	<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/small_map.js"></script>
 	
 	<script type="text/javascript">
-		window.onunload = GUnload;
-		window.onload = initialize_airport;
+
+	var map;
+
+	$(document).ready(function() {
+		
+		initialize();
+		
+		var kml = new GGeoXml('{{ SITE_URL }}/kml/airport-{{airport.pk}}.kml', function(){
+		
+			if (kml.loadedCorrectly())
+			{
+				map.addOverlay(kml);
+				kml.gotoDefaultViewport(map)
+			}
+			
+			if (map.getZoom() > 6)
+				map.setZoom(6)
+		});
+		
+	});
+	
+	window.onunload = GUnload;
 	</script>
 
 {% endblock %}
 
-{% block body %}
+{% block main_content %}
 <div id="main_container">
-	<h1>{{ airport.identifier }} - {{ airport.name }}</h1>
-	<div>{{airport.location_summary}}</div>
 
-	<div id="small_map" class="small_map"></div>
+	<div id="map_canvas" class="small_map"></div>
 
 	<div class="airport_positions">
 		<big>Operations based at this airport:</big>
