@@ -55,8 +55,11 @@
 		
 		var kml = new GGeoXml('{{ SITE_URL }}/kml/position-{{position.pk}}.kml', function(){
 		
-			map.addOverlay(kml);
-			kml.gotoDefaultViewport(map)
+			if (kml.loadedCorrectly())
+			{
+				map.addOverlay(kml);
+				kml.gotoDefaultViewport(map)
+			}
 			
 			if (map.getZoom() > 6)
 				map.setZoom(6)

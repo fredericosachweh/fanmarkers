@@ -48,16 +48,14 @@
 	<div id="map_canvas" class="small_map"></div>
 
 	<div class="airport_positions">
-		<big>Operations based at this airport:</big>
+		<big>Companies with a base at this airport:</big>
 		<br /><br />
 
-		{% for op in ops_base %}
-			<a href="{{ op.get_absolute_url }}" class="view">{{ op.company }} - {{ op.all_fleet }}</a><br />
+		{% for company in company_base %}
+			<a href="{{ op.get_absolute_url }}" class="view">{{ company }}</a><br />
+		{% empty %}
+			<span class="not_known">None</span>
 		{% endfor %}
-	
-		{% if not ops_base %}
-			<em>None</em>
-		{% endif %}
 	</div>
 
 	<div class="airport_positions">
@@ -66,11 +64,9 @@
 
 		{% for op in ops_fly %}
 			<a href="/company/{{ op.company.pk }}#op{{ op.pk }}" class="view">{{ op.company }} - {{ op.all_fleet }}</a><br />
+		{% empty %}
+			<span class="not_known">None</span>
 		{% endfor %}
-	
-		{% if not ops_fly %}
-			<em>None</em>
-		{% endif %}
 	</div>
 </div>
 {% endblock %}

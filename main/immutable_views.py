@@ -38,10 +38,10 @@ def airport(request, pk):
 
 	airport = get_object_or_404(Airport, pk=pk)
 	
-	ops_base = 	Operation.objects.filter(opbase__in=OpBase.objects.filter(base=airport))					#ops where this airport is a base
+	company_base = 	Company.objects.filter(operation__opbase__base=airport)					#ops where this airport is a base
 	ops_fly =	Operation.objects.filter(opbase__in=OpBase.objects.filter(route__in=Route.objects.filter(bases=airport)))	#ops where this airport is part of a route
 	
-	return {'airport': airport, "ops_base": ops_base, "ops_fly": ops_fly}
+	return locals()
 	
 ###############################################################################
 	
