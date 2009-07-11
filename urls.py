@@ -65,7 +65,6 @@ urlpatterns = patterns('',
 	(r'^new/position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_position"),
 	(r'^edit/position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_position"),
 	
-	
 	(r'^company/(?P<object_id>\d{1,4})/$',				list_detail.object_detail, company_view),
 	(r'^new/company/$',						create_update.create_object, {"form_class": CompanyForm, "template_name": "new_company.html"}),
 	(r'^edit/company/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": CompanyForm, "template_name": "edit_company.html"}),
@@ -83,6 +82,8 @@ urlpatterns = patterns('',
 	
 	(r'^edit/mins/hard/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Hard"}),
 	(r'^edit/mins/pref/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Preferred"}),
+	
+	###########################################################################################################################################
 	
 	(r'^kml/position-(?P<position>\d{1,4}).kml$',			"jobmap.main.views.kml"),
 	(r'^kml/company-(?P<company>\d{1,4}).kml$',			"jobmap.main.views.kml"),

@@ -25,7 +25,18 @@
 		<tr>
 			<th>Route:</th>
 			
-			<td>{{opbase.base.identifier}} - {% for form in formset.forms %}{{form.base}}{{form.id}} - {{form.errors}}{% endfor %}{{opbase.base.identifier}}
+			<td>
+			{{opbase.base.identifier}} - 
+			
+			{% for form in formset.forms %}
+				{{form.base}}{{form.id}} -
+			 		{% if form.errors %}
+			 			{{form.errors}}
+			 		{% endif %}
+			 {% endfor %}
+			 
+			 {{opbase.base.identifier}}
+			 
 		{{ formset.management_form }}</td>
 	
 		{{routeform}}

@@ -8,7 +8,7 @@
 		{#<link rel="icon" type="image/png" href="/icons/favicon_{{ profile.style }}.png" />#}
 		
 		<style type="text/css">
-		{% block css %}
+{% block css %}
 	body			{font-family: Bitstream Vera Sans; font-size: small}
 	input			{font-family: Bitstream Vera Sans; font-size: small}
 	
@@ -54,7 +54,7 @@
 	.plus			{cursor: pointer}
 	
 	.not_known		{color: gray; font-style: italic; text-align: center}
-		{% endblock %}
+{% endblock %}
 		</style>
 		
 		{#<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}/javascripts/jquery/css/black-tie/jquery-ui-1.7.1.custom.css">#}
@@ -63,9 +63,6 @@
 		<script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/jquery/jquery-ui-1.7.1.custom.min.js"></script>
 		
 		<script type="text/javascript">
-		
-			var plus_path = '{{ MEDIA_URL }}/icons/plus.png';
-			var minus_path = '{{ MEDIA_URL }}/icons/minus.png';
 			
 			{% if not user.is_authenticated %}
 			$(document).ready(function() {

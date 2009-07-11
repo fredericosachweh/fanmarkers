@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 
 from models import *
 from base.models import *
+
+from empty_formset import DeleteIfEmptyInlineFormSet, DeleteIfEmptyModelForm
+
 from django.template import Context, loader
 
 
@@ -34,7 +37,7 @@ class FleetForm(ModelForm):
 		
 #####################################################################################################
 		
-class RouteBaseForm(ModelForm):
+class RouteBaseForm(DeleteIfEmptyModelForm): ###DeleteIfEmptyModelForm
 	base = forms.ModelChoiceField(queryset=Airport.objects.all(), widget=forms.TextInput)
 
 	class Meta:
@@ -45,8 +48,10 @@ class RouteForm(ModelForm):
 	class Meta:
 		model = Route
 		exclude = ('opbase', 'bases')
+
+#RBFormset = DeleteIfEmptyInlineFormSet(form=RouteBaseForm)
 		
-RouteBaseFormset = inlineformset_factory(Route, RouteBase, form=RouteBaseForm, extra=5, can_delete=False)
+RouteBaseFormset = inlineformset_factory(Route, RouteBase, form=RouteBaseForm, formset=DeleteIfEmptyInlineFormSet, extra=5, can_delete=True)
 	
 #####################################################################################################
 		

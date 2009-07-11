@@ -50,12 +50,12 @@ def edit_mins(request, pk, min_type):
 	#############################
 	
 	if min_type == "Hard":
-		mins_object = position.hard_mins
+		mins_object = get_object_or_None(Mins, hard=position)
 		if not mins_object:
 			mins_object = Mins()
 
 	else:
-		mins_object = position.pref_mins
+		mins_object = get_object_or_None(Mins, pref=position)
 		if not mins_object:				#if mins object hasnt been created yet, then create it!
 			mins_object = Mins()
 	

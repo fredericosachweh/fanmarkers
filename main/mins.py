@@ -5,16 +5,16 @@ def merge(*input):
 	return reduce(list.__add__, input, list())
     
 class CatClassMins(models.Model):
-	total		=	models.IntegerField(MINIMUMS_VERBOSE["total"], default=0)
-	night		=	models.IntegerField(MINIMUMS_VERBOSE["night"], default=0)
-	instrument	=	models.IntegerField(MINIMUMS_VERBOSE["instrument"], default=0)
-	dual_given	=	models.IntegerField(MINIMUMS_VERBOSE["dual_given"], default=0)
-	xc		=	models.IntegerField(MINIMUMS_VERBOSE["xc"], default=0)
-	pic		=	models.IntegerField(MINIMUMS_VERBOSE["pic"], default=0)
-	t_pic		=	models.IntegerField(MINIMUMS_VERBOSE["t_pic"], default=0)
-	jet_pic		=	models.IntegerField(MINIMUMS_VERBOSE["jet_pic"], default=0)
-	jet		=	models.IntegerField(MINIMUMS_VERBOSE["jet"], default=0)
-	turbine		=	models.IntegerField(MINIMUMS_VERBOSE["turbine"], default=0)
+	total		=	models.IntegerField(MINIMUMS_VERBOSE["total"], null=True, blank=True)
+	night		=	models.IntegerField(MINIMUMS_VERBOSE["night"], null=True, blank=True)
+	instrument	=	models.IntegerField(MINIMUMS_VERBOSE["instrument"], null=True, blank=True)
+	dual_given	=	models.IntegerField(MINIMUMS_VERBOSE["dual_given"], null=True, blank=True)
+	xc		=	models.IntegerField(MINIMUMS_VERBOSE["xc"], null=True, blank=True)
+	pic		=	models.IntegerField(MINIMUMS_VERBOSE["pic"], null=True, blank=True)
+	t_pic		=	models.IntegerField(MINIMUMS_VERBOSE["t_pic"], null=True, blank=True)
+	jet_pic		=	models.IntegerField(MINIMUMS_VERBOSE["jet_pic"], null=True, blank=True)
+	jet		=	models.IntegerField(MINIMUMS_VERBOSE["jet"], null=True, blank=True)
+	turbine		=	models.IntegerField(MINIMUMS_VERBOSE["turbine"], null=True, blank=True)
 	
 	cert_level	=	models.IntegerField(MINIMUMS_VERBOSE["cert_level"], choices=CERT_LEVEL, default=0)
 	instructor	=	models.BooleanField(MINIMUMS_VERBOSE["instructor"], default=False)
@@ -76,8 +76,8 @@ class Mins(models.Model):
 	
 	degree		=	models.IntegerField(MINIMUMS_VERBOSE["degree"], choices=DEGREE, default=0)
 	
-	years_exp	=	models.DecimalField(MINIMUMS_VERBOSE["years_exp"], max_digits=4, decimal_places=2, default=0)
-	years_company	=	models.DecimalField(MINIMUMS_VERBOSE["years_company"], max_digits=4, decimal_places=2, default=0)
+	years_exp	=	models.DecimalField(MINIMUMS_VERBOSE["years_exp"], max_digits=4, decimal_places=2, null=True, blank=True)
+	years_company	=	models.DecimalField(MINIMUMS_VERBOSE["years_company"], max_digits=4, decimal_places=2, null=True, blank=True)
 	
 	seniority	=	models.BooleanField(MINIMUMS_VERBOSE["seniority"], default=False)
 	rec		=	models.BooleanField(MINIMUMS_VERBOSE["rec"], default=False)
@@ -90,7 +90,7 @@ class Mins(models.Model):
 	tailwheel	=	models.BooleanField(MINIMUMS_VERBOSE["tailwheel"], default=False)
 	
 	type_rating	=	models.ForeignKey("Aircraft", verbose_name=MINIMUMS_VERBOSE["type_rating"], null=True, blank=True)
-	on_type		=	models.IntegerField(MINIMUMS_VERBOSE["on_type"], default=0)
+	on_type		=	models.IntegerField(MINIMUMS_VERBOSE["on_type"], null=True, blank=True)
 	
 	last_modified	=	models.DateTimeField(auto_now=True)
 	
