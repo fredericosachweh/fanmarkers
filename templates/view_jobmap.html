@@ -64,60 +64,7 @@
 
 {% block body %}	
 	<div id="container">
-		<table>
-			<tr>
-				<td><div id="map_canvas"></div></td>
-				<td>
-					<form action="." method="get">
-					<div id="sidebar">
-					Show:<br />	<input type="checkbox" id="c_bases" />Job bases<br />
-							<input type="checkbox" id="c_destinations" />Destination airports<br />
-							
-					<hr />
-							
-					Filter:		<select id="d_filter">
-								<option>Show All</option>
-								<option>Only Advertising</option>
-								<option>Only Hiring</option>
-								<option>Only Lay-off</option>
-								<option>Only no-status</option>
-							</select>
-														
-							<br />
-							
-					<hr />
-							
-					By Aircraft:	<select id="d_aircraft">
-								<option>All</option>
-							</select>
-							
-							<br />
-							
-					By Schedule:	<select id="d_schedule">
-								<option>All</option>
-								<option>On Call</option>
-								<option>Scheduled</option>
-							</select>
-							
-							<br />
-							
-					<hr />
-							
-					Only show jobs I'm qualified for: <input type="checkbox" /><br />
-							
-							<br />
-					
-					Search: <input type="text" /><br />
-					
-					<br />
-					
-					<input id="submit_sidebar" type="submit" value="Go" />
-				
-					</div>
-					</form>
-				</td>
-			</tr>
-		</table>
+		<div id="map_canvas"></div>
 	</div>
 	
 {% endblock %}
