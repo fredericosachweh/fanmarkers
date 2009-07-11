@@ -119,12 +119,12 @@ BUSINESS_TYPE	=	[	(1, "FBO-type flight school"),
 				(12, "Other")
 			]
 				
-CAT_CLASSES	=	[	(1, "Single-Engine Land"),
-				(2, "Single-Engine Tailwheel"),
-				(3, "Multi-Engine Land"),
-				(4, "Multi-Engine Tailwheel"), 
-				(5, "Single-Engine Seaplane "),
-				(6, "Multi-Engine Seaplane"),
+CAT_CLASSES	=	[	(1, "SEL"),
+				(2, "SEL Tailwheel"),
+				(3, "MEL"),
+				(4, "MEL Tailwheel"), 
+				(5, "SES"),
+				(6, "MES"),
 				(7, "Glider"),
 				(8, "Helicopter"),
 				(9, "Airplane Simulator"),
