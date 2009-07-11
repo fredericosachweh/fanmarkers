@@ -49,10 +49,10 @@
 
 	<div class="airport_positions">
 		<big>Companies with a base at this airport:</big>
-		<br /><br />
+		<br><br>
 
 		{% for company in company_base %}
-			<a href="{{ op.get_absolute_url }}" class="view">{{ company }}</a><br />
+			<a href="{{ company.get_absolute_url }}" class="view">{{ company }}</a><br>
 		{% empty %}
 			<span class="not_known">None</span>
 		{% endfor %}
@@ -60,10 +60,10 @@
 
 	<div class="airport_positions">
 		<big>Operations that fly to this airport:</big>
-		<br /><br />
+		<br><br>
 
 		{% for op in ops_fly %}
-			<a href="/company/{{ op.company.pk }}#op{{ op.pk }}" class="view">{{ op.company }} - {{ op.all_fleet }}</a><br />
+			<a href="{{ company.get_absolute_url }}" class="view">{{ op.company }} - {{ op.all_fleet }}</a><br>
 		{% empty %}
 			<span class="not_known">None</span>
 		{% endfor %}
