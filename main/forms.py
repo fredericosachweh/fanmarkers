@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 
 from models import *
 from base.models import *
+from mins import *
 
 from empty_formset import DeleteIfEmptyInlineFormSet, DeleteIfEmptyModelForm
 
@@ -123,13 +124,20 @@ PayscaleFormset = inlineformset_factory(Compensation, PayscaleYear, form=Payscal
 class CatClassMinsForm(ModelForm):
 	class Meta:
 		model = CatClassMins
-		#exclude = ('company',)
+		exclude = ('mins', 'id', )
+		
+class OnTypeMinsForm(ModelForm):
+	class Meta:
+		model = OnTypeMins
+		exclude = ('mins', 'id', )
 		
 class MinsForm(ModelForm):
 	class Meta:
 		model = Mins
-		exclude = ('any_mins','airplane_mins', 'se_mins', 'me_mins', 'sea_mins', 'mes_mins', 'sim_mins', 'heli_mins', 'glider_mins')
 		
+CatClassMinsFormset = inlineformset_factory(Mins, CatClassMins, form=CatClassMinsForm, extra=3, exclude=['mins', 'id'])
+OnTypeMinsFormset = inlineformset_factory(Mins, OnTypeMins, form=OnTypeMinsForm, extra=3, exclude=['mins', 'id'])
+	
 ######################################
 
 class ProfileForm(ModelForm):

@@ -14,6 +14,5 @@ function initialize()
 		map.addControl(new GSmallZoomControl3D());
 		map.addControl(new GHierarchicalMapTypeControl());
 		map.enableContinuousZoom();
-		map.enableScrollWheelZoom();
 	}
 }

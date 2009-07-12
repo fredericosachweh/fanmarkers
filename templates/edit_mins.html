@@ -1,6 +1,6 @@
 {% extends "base_form.html" %}
 
-{% block title %}Editing {{ position.company }} - {{ position }} {{ min_type }} Minimums{% endblock %}
+{% block title %}Editing {{ position.company }} - {{ position }} Minimums{% endblock %}
 
 {% block css %}
 {{ block.super }}
@@ -11,10 +11,18 @@
 	.highlighted		{font-weight: bold; color: darkred}
 	.plus 			{margin: 2px; margin-right: 5px; cursor: pointer}
 	
-	.mins_table			{border: 1px solid #DDDDDD; margin-left: auto; margin-right: auto}
-	.mins_table td			{padding: 2px}
-	.mins_table th			{text-align: right}
-	.mins_table tr:nth-child(odd)	{background: #F3F3F3}
+	.mins_table				{width: 100%; border: 1px solid #DDDDDD; font-size: x-small; border-collapse: collapse}
+	.mins_table input,
+	.mins_table select			{font-size: x-small}
+	.mins_table textarea			{margin: 5px; width: 90%; height: 6em}
+	.mins_table tbody td			{border: 1px solid #AAAAAA; padding: 2px; padding-top: 7px; padding-bottom: 7px; text-align: center}
+	.mins_table th				{background: white; text-align: right; padding: 3px}
+	.mins_table tr:nth-child(odd) td	{background: #F3F3F3}
+	.mins_table thead td			{background: white !important ; border: 1px solid #AAAAAA; text-align: center; padding: 2px}
+	
+	.type_rating				{max-width: 50%; margin-left: auto; margin-right: auto}
+	
+	.del_column		{background: pink}
 {% endblock %}
 
 {% block top_links%}<a class="edit" href="/edit{{position.get_absolute_url}}">Edit {{position}}</a>{% endblock %}
@@ -58,91 +66,162 @@
 	<h2>General Requirements:</h2>
 
 	<table class="mins_table">
-		{{general_mins}}
+		<thead>
+			<tr>
+				<th></th>
+				<td>Absolute</td>
+				<td>Preferred</td>
+			</tr>
+		</thead>
+	
+		<tbody>
+			<tr>
+				<th>{{mf.degree.label}}</th>
+				<td>{{mf.degree}}</td>
+				<td>{{mf.p_degree}}</td>
+			</tr>
+			
+			<tr>
+				<th>{{mf.mech_cert_level.label}}</th>
+				<td>{{mf.mech_cert_level}}</td>
+				<td>{{mf.p_mech_cert_level}}</td>
+			</tr>
+			
+			<tr>
+				<th>{{mf.part_135.label}}</th>
+				<td>{{mf.part_135}}</td>
+				<td>{{mf.p_part_135}}</td>
+			</tr>
+			
+			<tr>
+				<th>{{mf.years_exp.label}}</th>
+				<td>{{mf.years_exp}}</td>
+				<td>{{mf.p_years_exp}}</td>
+			</tr>
+			
+			<tr>
+				<th>{{mf.years_company.label}}</th>
+				<td>{{mf.years_company}}</td>
+				<td>{{mf.p_years_company}}</td>
+			</tr>
+			
+			<tr>
+				<th>{{mf.seniority.label}}</th>
+				<td>{{mf.seniority}}</td>
+				<td>{{mf.p_seniority}}</td>
+			</tr>
+			
+			<tr>
+				<th>{{mf.rec.label}}</th>
+				<td>{{mf.rec}}</td>
+				<td>{{mf.p_rec}}</td>
+			</tr>
+			
+			<tr>
+				<th>{{mf.inst_instructor.label}}</th>
+				<td>{{mf.inst_instructor}}</td>
+				<td>{{mf.p_inst_instructor}}</td>
+			</tr>
+			
+			<tr>
+				<th>{{mf.extra_info.label}}</th>
+				<td colspan="2">{{mf.extra_info}}</td>
+			</tr>
+		</tbody>
+		
 	</table>
 	
 	<hr>
 	
 	<h2>Flight Times:</h2>
+	<p>Top Row: Absolute Minimums<br>Bottom Row: Preferred Minimums</p>
+	<table class="mins_table">
+	{% for form in cat_class_formset.forms %}
+	{% if forloop.first %}
+	<thead>
+		<tr>
+			<td>{{form.min_type.label}}</td>
+			<td>{{form.total.label}}</td>
+			<td>{{form.pic.label}}</td>
+			<td>{{form.night.label}}</td>
+			<td>{{form.inst.label}}</td>
+			<td>{{form.xc.label}}</td>
+			<td>{{form.dual_given.label}}</td>
+			<td>{{form.cert_level.label}}</td>
+			<td>{{form.endorsed.label}}</td>
+			<td>{{form.instructor.label}}</td>
+			<td>{{form.atp_mins.label}}</td>
+			<td>{{form.inst_rating.label}}</td>
+			{% ifnotequal cat_class_formset.total_form_count 3 %}
+			<td>Delete?</td>
+			{% endifnotequal %}		
+		</tr>
+	</thead>
+	<tbody>
+		{% endif %}
+		<tr>
+			<td>{{form.min_type}}</td>
+			<td>{{form.total}}<br>{{form.p_total}}</td>
+			<td>{{form.pic}}<br>{{form.p_pic}}</td>
+			<td>{{form.night}}<br>{{form.p_night}}</td>
+			<td>{{form.inst}}<br>{{form.p_inst}}</td>
+			<td>{{form.xc}}<br>{{form.p_xc}}</td>
+			<td>{{form.dual_given}}<br>{{form.p_dual_given}}</td>
+			<td>{{form.cert_level}}<br>{{form.p_cert_level}}</td>
+			<td>{{form.endorsed}}<br>{{form.p_endorsed}}</td>
+			<td>{{form.instructor}}<br>{{form.p_instructor}}</td>
+			<td>{{form.atp_mins}}<br>{{form.p_atp_mins}}</td>
+			<td>{{form.inst_rating}}<br>{{form.p_inst_rating}}</td>
+			{% if form.instance.pk %}
+			<td class="del_column">{{form.DELETE}}</td>
+			{% else %}
+				{% ifnotequal cat_class_formset.total_form_count 3 %}
+				<td></td>
+				{% endifnotequal %}
+			{% endif %}
+			
+		
+		</tr>
+	{% endfor %}
+	</tbody>
+	</table>
 	
-	<div class="collapse" id="any_mins">
-		<fieldset>
-			<legend><img title="Click to expand" class="plus" id="expand_any" alt="+" src="" />Any Aircraft</legend>
-			<table class="mins_table" summary="Any Aircraft Minimums">
-				{{any_mins}}
-			</table>
-		</fieldset>
-	</div>
+	<h2>By Aircraft:</h2>
 	
-	<div class="collapse" id="airplane_mins">
-		<fieldset>
-			<legend><img title="Click to expand" class="plus" id="expand_airplane" alt="+" src="" />Fixed Wing</legend>
-			<table class="mins_table" summary="Fixed Wing Minimums">
-				{{airplane_mins}}
-			</table>
-		</fieldset>
-	</div>
-	
-	<div class="collapse" id="se_mins">
-		<fieldset>
-			<legend><img title="Click to expand" class="plus" id="expand_se" alt="+" src=""/>Single-Engine</legend>
-			<table class="mins_table" summary="Single-Engine Minimums">
-				{{se_mins}}
-			</table>
-		</fieldset>
-	</div>
-	
-	<div class="collapse" id="me_mins">
-		<fieldset>
-		<legend><img title="Click to expand" class="plus" id="expand_me" alt="+" src="" />Multi-Engine</legend>
-		<table class="mins_table" summary="Multi-Engine Minimums">
-			{{me_mins}}
-		</table>
-		</fieldset>
-	</div>
-	
-	<div class="collapse" id="sea_mins">
-		<fieldset>
-		<legend><img title="Click to expand" class="plus" id="expand_sea" alt="+" src="" />Seaplane</legend>
-		<table class="mins_table" summary="Seaplane Minimums">
-			{{sea_mins}}
-		</table>
-		</fieldset>
-	</div>
-	
-	<div class="collapse" id="mes_mins">
-		<fieldset>
-		<legend><img title="Click to expand" class="plus" id="expand_mes" alt="+" src="" />Multi-Engine Seaplane</legend>
-		<table class="mins_table" summary="Multi-Engine Seaplane Minimums">
-			{{mes_mins}}
-		</table>
-		</fieldset>
-	</div>
-	
-	<div class="collapse" id="glider_mins">
-		<fieldset>
-		<legend><img title="Click to expand" class="plus" id="expand_glider" alt="+" src="" />Glider</legend>
-		<table class="mins_table" summary="Glider Minimums">
-			{{glider_mins}}
-		</table>
-		</fieldset>
-	</div>
-	
-	<div class="collapse" id="heli_mins">
-		<fieldset>
-		<legend><img title="Click to expand" class="plus" id="expand_heli" alt="+" src="" />Helicopter</legend>
-		<table class="mins_table" summary="Helicopter Minimums">
-			{{heli_mins}}
-		</table>
-		</fieldset>
-	</div>
-	
-	<div class="collapse" id="sim_mins">
-		<fieldset>
-		<legend><img title="Click to expand" class="plus" id="expand_sim" alt="+" src="" />Simulator</legend>
-		<table class="mins_table" summary="Simulator Minimums">
-			{{sim_mins}}
-		</table>
-		</fieldset>
-	</div>
+	<table class="mins_table type_rating">
+	{% for form in on_type_formset.forms %}
+		{% if forloop.first %}
+		<thead>
+		<tr>
+			<td>{{form.aircraft_type.label}}</td>
+			<td>{{form.total.label}}</td>
+			<td>{{form.pic.label}}</td>
+			<td>{{form.type_rating.label}}</td>
+			{% ifnotequal on_type_formset.total_form_count 3 %}
+			<td>Delete?</td>
+			{% endifnotequal %}		
+		</tr>
+		</thead>
+		<tbody>
+		{% endif %}
+		
+		{###########}
+		
+		<tr>
+			<td>{{form.aircraft_type}}<br>{{form.p_aircraft_type}}</td>
+			<td>{{form.total}}<br>{{form.p_total}}</td>
+			<td>{{form.pic}}<br>{{form.p_pic}}</td>
+			<td>{{form.type_rating}}<br>{{form.p_type_rating}}</td>
+			{% if form.instance.pk %}
+			<td>{{form.DELETE}}</td>
+			{% else %}
+				{% ifnotequal on_type_formset.total_form_count 3 %}
+				<td></td>
+				{% endifnotequal %}	
+			{% endif %}		
+		</tr>
+		
+		{% endfor %}
+		</tbody>
+	</table>
 {% endblock %}

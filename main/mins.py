@@ -3,24 +3,56 @@ from constants import *
 
 def merge(*input):
 	return reduce(list.__add__, input, list())
+	
+class OnTypeMins(models.Model):
+	mins		=	models.ForeignKey("Mins")
+	aircraft_type	=	models.ForeignKey("Aircraft", verbose_name="Aircraft")	
+	
+	total		=	models.IntegerField(MINIMUMS_VERBOSE["total"], null=True, blank=True)
+	p_total		=	models.IntegerField(MINIMUMS_VERBOSE["total"], null=True, blank=True)
+	
+	pic		=	models.IntegerField(MINIMUMS_VERBOSE["pic"], null=True, blank=True)
+	p_pic		=	models.IntegerField(MINIMUMS_VERBOSE["pic"], null=True, blank=True)
+	
+	type_rating	=	models.IntegerField(MINIMUMS_VERBOSE["type_rating"], choices=TYPE_RATING, blank=True, default=False)
+	p_type_rating	=	models.IntegerField(MINIMUMS_VERBOSE["type_rating"], choices=TYPE_RATING, blank=True, default=False)
     
 class CatClassMins(models.Model):
-	total		=	models.IntegerField(MINIMUMS_VERBOSE["total"], null=True, blank=True)
-	night		=	models.IntegerField(MINIMUMS_VERBOSE["night"], null=True, blank=True)
-	instrument	=	models.IntegerField(MINIMUMS_VERBOSE["instrument"], null=True, blank=True)
-	dual_given	=	models.IntegerField(MINIMUMS_VERBOSE["dual_given"], null=True, blank=True)
-	xc		=	models.IntegerField(MINIMUMS_VERBOSE["xc"], null=True, blank=True)
-	pic		=	models.IntegerField(MINIMUMS_VERBOSE["pic"], null=True, blank=True)
-	t_pic		=	models.IntegerField(MINIMUMS_VERBOSE["t_pic"], null=True, blank=True)
-	jet_pic		=	models.IntegerField(MINIMUMS_VERBOSE["jet_pic"], null=True, blank=True)
-	jet		=	models.IntegerField(MINIMUMS_VERBOSE["jet"], null=True, blank=True)
-	turbine		=	models.IntegerField(MINIMUMS_VERBOSE["turbine"], null=True, blank=True)
+	mins		=	models.ForeignKey("Mins")
+	min_type	=	models.IntegerField("Category", choices=MINS_TYPE)	
 	
-	cert_level	=	models.IntegerField(MINIMUMS_VERBOSE["cert_level"], choices=CERT_LEVEL, default=0)
+	total		=	models.IntegerField(MINIMUMS_VERBOSE["total"], null=True, blank=True)
+	p_total		=	models.IntegerField(MINIMUMS_VERBOSE["total"], null=True, blank=True)
+	
+	pic		=	models.IntegerField(MINIMUMS_VERBOSE["pic"], null=True, blank=True)
+	p_pic		=	models.IntegerField(MINIMUMS_VERBOSE["pic"], null=True, blank=True)
+	
+	night		=	models.IntegerField(MINIMUMS_VERBOSE["night"], null=True, blank=True)
+	p_night		=	models.IntegerField(MINIMUMS_VERBOSE["night"], null=True, blank=True)
+	
+	inst		=	models.IntegerField(MINIMUMS_VERBOSE["inst"], null=True, blank=True)
+	p_inst		=	models.IntegerField(MINIMUMS_VERBOSE["inst"], null=True, blank=True)
+	
+	dual_given	=	models.IntegerField(MINIMUMS_VERBOSE["dual_given"], null=True, blank=True)
+	p_dual_given	=	models.IntegerField(MINIMUMS_VERBOSE["dual_given"], null=True, blank=True)
+	
+	xc		=	models.IntegerField(MINIMUMS_VERBOSE["xc"], null=True, blank=True)
+	p_xc		=	models.IntegerField(MINIMUMS_VERBOSE["xc"], null=True, blank=True)
+	
+	cert_level	=	models.IntegerField(MINIMUMS_VERBOSE["cert_level"], choices=CERT_LEVEL, null=True, blank=True)
+	p_cert_level	=	models.IntegerField(MINIMUMS_VERBOSE["cert_level"], choices=CERT_LEVEL, null=True, blank=True)
+	
+	endorsed	=	models.BooleanField(MINIMUMS_VERBOSE["endorsed"], default=False)
+	p_endorsed	=	models.BooleanField(MINIMUMS_VERBOSE["endorsed"], default=False)
+	
 	instructor	=	models.BooleanField(MINIMUMS_VERBOSE["instructor"], default=False)
-	instrument_instructor=	models.BooleanField(MINIMUMS_VERBOSE["instrument_instructor"], default=False)
+	p_instructor	=	models.BooleanField(MINIMUMS_VERBOSE["instructor"], default=False)
 	
 	atp_mins	=	models.BooleanField(MINIMUMS_VERBOSE["atp_mins"], default=False)
+	p_atp_mins	=	models.BooleanField(MINIMUMS_VERBOSE["atp_mins"], default=False)
+	
+	inst_rating	=	models.BooleanField(MINIMUMS_VERBOSE["inst_rating"], default=False)
+	p_inst_rating	=	models.BooleanField(MINIMUMS_VERBOSE["inst_rating"], default=False)
 	
 	#def __unicode__(self):
 		#ret = []
@@ -59,38 +91,31 @@ class CatClassMins(models.Model):
 	
 class Mins(models.Model):
 
-	any_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="any")
-	airplane_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="airplane")
-	
-	se_mins		=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="se")
-	me_mins		=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="me")
-	sea_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="sea")
-	mes_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="mes")
-	
-	heli_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="heli")
-	glider_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="glider")
-	
-	sim_mins	=	models.ForeignKey("CatClassMins", blank=True, null=True, related_name="sim")
-	
-	#############################################################
-	
 	degree		=	models.IntegerField(MINIMUMS_VERBOSE["degree"], choices=DEGREE, default=0)
+	p_degree	=	models.IntegerField(MINIMUMS_VERBOSE["degree"], choices=DEGREE, default=0)
 	
 	years_exp	=	models.DecimalField(MINIMUMS_VERBOSE["years_exp"], max_digits=4, decimal_places=2, null=True, blank=True)
+	p_years_exp	=	models.DecimalField(MINIMUMS_VERBOSE["years_exp"], max_digits=4, decimal_places=2, null=True, blank=True)
+	
 	years_company	=	models.DecimalField(MINIMUMS_VERBOSE["years_company"], max_digits=4, decimal_places=2, null=True, blank=True)
+	p_years_company	=	models.DecimalField(MINIMUMS_VERBOSE["years_company"], max_digits=4, decimal_places=2, null=True, blank=True)
 	
 	seniority	=	models.BooleanField(MINIMUMS_VERBOSE["seniority"], default=False)
+	p_seniority	=	models.BooleanField(MINIMUMS_VERBOSE["seniority"], default=False)
+	
 	rec		=	models.BooleanField(MINIMUMS_VERBOSE["rec"], default=False)
+	p_rec		=	models.BooleanField(MINIMUMS_VERBOSE["rec"], default=False)
 	
 	mech_cert_level	=	models.IntegerField(MINIMUMS_VERBOSE["mech_cert"], choices=MECH_CERT_LEVEL, default=0)
+	p_mech_cert_level=	models.IntegerField(MINIMUMS_VERBOSE["mech_cert"], choices=MECH_CERT_LEVEL, default=0)
 	
-	cert_agency	=	models.IntegerField(MINIMUMS_VERBOSE["cert_agency"], choices=CERT_AGENCY, default=0)
-	i135_mins	=	models.BooleanField(MINIMUMS_VERBOSE["i135"], default=False)
-	v135_mins	=	models.BooleanField(MINIMUMS_VERBOSE["v135"], default=False)
-	tailwheel	=	models.BooleanField(MINIMUMS_VERBOSE["tailwheel"], default=False)
+	part_135	=	models.IntegerField(MINIMUMS_VERBOSE["part_135"], choices=PART_135, blank=True)
+	p_part_135	=	models.IntegerField(MINIMUMS_VERBOSE["part_135"], choices=PART_135, blank=True)
 	
-	type_rating	=	models.ForeignKey("Aircraft", verbose_name=MINIMUMS_VERBOSE["type_rating"], null=True, blank=True)
-	on_type		=	models.IntegerField(MINIMUMS_VERBOSE["on_type"], null=True, blank=True)
+	inst_instructor=	models.BooleanField(MINIMUMS_VERBOSE["inst_instructor"], default=False)
+	p_inst_instructor=	models.BooleanField(MINIMUMS_VERBOSE["inst_instructor"], default=False)
+	
+	extra_info	=	models.TextField(blank=True)
 	
 	last_modified	=	models.DateTimeField(auto_now=True)
 	

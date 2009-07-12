@@ -84,7 +84,7 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 	
 		<thead>
 			<tr>
-				<td colspan="2">Bases & Routes <a title="Download KML file for viewing in Google Earth" class="kml_link" href="http://flightjobwiki.com/kml/position-{{position.pk}}.kml">kml</a></td>
+				<td colspan="2">Bases & Routes <a title="Download KML file for viewing in Google Earth" class="corner_link" href="http://flightjobwiki.com/kml/position-{{position.pk}}.kml">kml</a></td>
 			</tr>
 		</thead>
 		
@@ -245,12 +245,12 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 	
 		<thead>
 			<tr>
-				<td colspan="2">Hard Minimums</td>
+				<td colspan="2">Hard Minimums <a class="corner_link edit_link_ui" href="/edit/mins/hard/{{position.pk}}">(edit)</a></td>
 			</tr>
 		</thead>
 		
 		{% if position.hard_mins.has %}		
-		{{ position.hard_mins.as_table|safe }}
+			{{ position.hard_mins.as_table|safe }}
 		{% else %}
 		
 		<tr>
@@ -269,7 +269,7 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 	
 	<thead>
 		<tr>
-			<td colspan="2">Preferred Minimums</td>
+			<td colspan="2">Preferred Minimums <a class="corner_link edit_link_ui" href="/edit/mins/pref/{{position.pk}}">(edit)</a></td>
 		</tr>
 	</thead>
 		

@@ -43,7 +43,7 @@ def edit_operation(request, pk):
 @login_required()	
 @render_to('edit_mins.html')	
 def edit_mins(request, pk, min_type):
-	from forms import CatClassMinsForm, MinsForm
+	from forms import CatClassMinsForm, MinsForm, CatClassMinsFormset, OnTypeMinsFormset
 	
 	position = get_object_or_404(Position, pk=pk)
 	
@@ -61,53 +61,11 @@ def edit_mins(request, pk, min_type):
 	
 	#############################
 	
-	anyy =		mins_object.any_mins
-	airplane =	mins_object.airplane_mins
-	se =		mins_object.se_mins
-	me =		mins_object.me_mins
-	sea =		mins_object.sea_mins
-	mes =		mins_object.mes_mins
-	heli =		mins_object.heli_mins
-	glider =	mins_object.glider_mins
-	sim =		mins_object.sim_mins
+	mf = MinsForm(instance=mins_object)	
+	cat_class_formset = CatClassMinsFormset(instance=mins_object)
+	on_type_formset = OnTypeMinsFormset(instance=mins_object)
 	
-	if request.method == "POST":
-		general_mins = MinsForm(request.POST, instance=mins_object, prefix="gen")
-		
-		any_mins = CatClassMinsForm(request.POST, instance=anyy, prefix="any")
-		airplane_mins = CatClassMinsForm(request.POST, instance=airplane, prefix="airplane")
-		se_mins = CatClassMinsForm(request.POST, instance=se, prefix="se")
-		me_mins = CatClassMinsForm(request.POST, instance=me, prefix="me")
-		sea_mins = CatClassMinsForm(request.POST, instance=sea, prefix="sea")
-		mes_mins = CatClassMinsForm(request.POST, instance=mes, prefix="mes")
-		heli_mins = CatClassMinsForm(request.POST, instance=heli, prefix="heli")
-		glider_mins = CatClassMinsForm(request.POST, instance=glider, prefix="glider")
-		sim_mins = CatClassMinsForm(request.POST, instance=sim, prefix="sim")
-		
-		if not general_mins.errors and not any_mins.errors:
-			general_mins.save()
-			any_mins.save()
-			se_mins.save()
-			me_mins.save()
-			sea_mins.save()
-			mes_mins.save()
-			heli_mins.save()
-			glider_mins.save()
-			sim_mins.save()
-			
-			return HttpResponseRedirect( position.get_absolute_url() )
-	else:
-		any_mins = CatClassMinsForm(instance=anyy, prefix="any")
-		airplane_mins = CatClassMinsForm(instance=airplane, prefix="airplane")
-		se_mins = CatClassMinsForm(instance=se, prefix="se")
-		me_mins = CatClassMinsForm(instance=me, prefix="me")
-		sea_mins = CatClassMinsForm(instance=sea, prefix="sea")
-		mes_mins = CatClassMinsForm(instance=mes, prefix="mes")
-		heli_mins = CatClassMinsForm(instance=heli, prefix="heli")
-		glider_mins = CatClassMinsForm(instance=glider, prefix="glider")
-		sim_mins = CatClassMinsForm(instance=sim, prefix="sim")
-		
-		general_mins = MinsForm(instance=mins_object, prefix="gen")
+	#assert False
 	
 	return locals()
 	

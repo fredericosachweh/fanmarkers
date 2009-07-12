@@ -1,5 +1,6 @@
 from django.contrib.gis import admin
 from main.models import *
+from main.mins import *
 
 class PositionInline(admin.StackedInline):
 	model = Position
@@ -26,6 +27,15 @@ class RouteBaseInline(admin.TabularInline):
 	model = RouteBase
 	extra = 3
 	raw_id_fields = ('base',)
+		
+class CatClassInline(admin.TabularInline):
+	model = CatClassMins
+	extra = 3
+	
+class OnTypeInline(admin.TabularInline):
+	model = OnTypeMins
+	extra = 1
+	
 ######################################################################
 	
 class CompanyAdmin(admin.ModelAdmin):
@@ -59,6 +69,9 @@ class BaseAdmin(admin.GeoModelAdmin):
 class AircraftAdmin(admin.ModelAdmin):
 	list_display = ('type', 'manufacturer', 'model', 'extra', 'cat_class', 'engine_type',)
 	search_fields = ('type', 'model',)
+	
+class MinsAdmin(admin.ModelAdmin):
+	inlines = (CatClassInline, OnTypeInline)
 
 
 admin.site.register(Position,		PositionAdmin)
@@ -70,7 +83,8 @@ admin.site.register(OpBase,		OpBaseAdmin)
 admin.site.register(Operation, 		OperationAdmin)
 admin.site.register(Fleet,		)
 admin.site.register(Aircraft, 		AircraftAdmin)
-admin.site.register(Mins,		)
+admin.site.register(Mins,		MinsAdmin)
 admin.site.register(CatClassMins,	)
+admin.site.register(OnTypeMins,		)
 admin.site.register(Company, 		CompanyAdmin)
 admin.site.register(Status, 		StatusAdmin)
