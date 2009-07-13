@@ -2,27 +2,10 @@ from django.conf.urls.defaults import *
 from django.views.generic import list_detail, create_update
 from django.contrib import admin
 
-from main.models import *
-from main.forms import *
-from main.constants import *
-
-
+from main.models import Company
+from main.forms import CompanyForm, FleetForm
 
 admin.autodiscover()
-
-company_list_all = {
-		"queryset": Company.objects.all(),
-		"template_name": "list_company.html",
-		"template_object_name": "company",
-		"extra_context": {"types": BUSINESS_TYPE, "title": "All Companies"}
-		}
-		
-company_list_type = {
-		"queryset": Company.objects.all(),
-		"template_name": "list_company.html",
-		"template_object_name": "company",
-		"extra_context": {"types": BUSINESS_TYPE, "title": "All Companies"}
-		}
 
 company_view = {
 		"queryset": Company.objects.all(),
@@ -30,12 +13,6 @@ company_view = {
 		"template_object_name": "company",
 		}
 		
-position_view = {
-		"queryset": Position.objects.all(),
-		"template_name": "view_position.html",
-		"template_object_name": "position",
-		}
-
 urlpatterns = patterns('',
 
 	(r'^overlay/(?P<z>\d{1,2})_(?P<x>\d{1,5})_(?P<y>\d{1,5})_(?P<o>\S{1,5})/$', 'main.views.overlay'),
