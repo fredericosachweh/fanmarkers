@@ -47,32 +47,3 @@ def company(request):
 		searchform = CompanySearch()
 
 	return locals()
-	
-@render_to('list_aircraft-company.html')
-def aircraft(request):
-	from main.forms import AircraftSearch
-	
-	objects = Aircraft.objects.all()
-	
-	type="Aircraft"
-	
-	if request.GET:
-	
-		searchform = AircraftSearch(request.GET)
-		
-		if searchform.is_valid():
-
-			if int(searchform.cleaned_data["cat_class"]) >= 0:
-				objects = objects.filter(cat_class=searchform.cleaned_data["cat_class"])
-		
-			if int(searchform.cleaned_data["engine_type"]) >= 0:
-				objects = objects.filter(engine_type=searchform.cleaned_data["engine_type"])
-		 
-		 	if searchform.cleaned_data["search"]:
-				s = searchform.cleaned_data["search"]
-				objects = objects.filter( Q(manufacturer__icontains=s) | Q(type__icontains=s) | Q(model__icontains=s) | Q(extra__icontains=s) )
-				
-	else:
-		searchform = AircraftSearch()
-
-	return locals()

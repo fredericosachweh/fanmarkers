@@ -4,55 +4,61 @@ from constants import *
 def merge(*input):
 	return reduce(list.__add__, input, list())
 	
-class OnTypeMins(models.Model):
-	mins		=	models.ForeignKey("Mins")
-	aircraft_type	=	models.ForeignKey("Aircraft", verbose_name="Aircraft")	
+class MinsOnType(models.Model):
+	position	=	models.ForeignKey("main.Position")
+	aircraft_type	=	models.ForeignKey("aircraft.Aircraft", verbose_name="Aircraft", null=True, blank=True)	
 	
 	total		=	models.IntegerField(MINIMUMS_VERBOSE["total"], null=True, blank=True)
-	p_total		=	models.IntegerField(MINIMUMS_VERBOSE["total"], null=True, blank=True)
+	p_total		=	models.IntegerField(MINIMUMS_VERBOSE["total"] + " Preferred", null=True, blank=True)
 	
 	pic		=	models.IntegerField(MINIMUMS_VERBOSE["pic"], null=True, blank=True)
-	p_pic		=	models.IntegerField(MINIMUMS_VERBOSE["pic"], null=True, blank=True)
+	p_pic		=	models.IntegerField(MINIMUMS_VERBOSE["pic"] + " Preferred", null=True, blank=True)
 	
-	type_rating	=	models.IntegerField(MINIMUMS_VERBOSE["type_rating"], choices=TYPE_RATING, blank=True, default=False)
-	p_type_rating	=	models.IntegerField(MINIMUMS_VERBOSE["type_rating"], choices=TYPE_RATING, blank=True, default=False)
+	type_rating	=	models.IntegerField(MINIMUMS_VERBOSE["type_rating"], choices=TYPE_RATING, default=0)
+	p_type_rating	=	models.IntegerField(MINIMUMS_VERBOSE["type_rating"] + " Preferred", choices=TYPE_RATING, default=0)
+	
+	class Meta:
+		verbose_name_plural = "On Type Minimums"
     
-class CatClassMins(models.Model):
-	mins		=	models.ForeignKey("Mins")
-	min_type	=	models.IntegerField("Category", choices=MINS_TYPE)	
+class MinsCatClass(models.Model):
+	position	=	models.ForeignKey("main.Position")	
+	category	=	models.IntegerField("Category", choices=MINS_TYPE)	
 	
 	total		=	models.IntegerField(MINIMUMS_VERBOSE["total"], null=True, blank=True)
-	p_total		=	models.IntegerField(MINIMUMS_VERBOSE["total"], null=True, blank=True)
+	p_total		=	models.IntegerField(MINIMUMS_VERBOSE["total"] + " Preferred", null=True, blank=True)
 	
 	pic		=	models.IntegerField(MINIMUMS_VERBOSE["pic"], null=True, blank=True)
-	p_pic		=	models.IntegerField(MINIMUMS_VERBOSE["pic"], null=True, blank=True)
+	p_pic		=	models.IntegerField(MINIMUMS_VERBOSE["pic"] + " Preferred", null=True, blank=True)
 	
 	night		=	models.IntegerField(MINIMUMS_VERBOSE["night"], null=True, blank=True)
-	p_night		=	models.IntegerField(MINIMUMS_VERBOSE["night"], null=True, blank=True)
+	p_night		=	models.IntegerField(MINIMUMS_VERBOSE["night"] + " Preferred", null=True, blank=True)
 	
 	inst		=	models.IntegerField(MINIMUMS_VERBOSE["inst"], null=True, blank=True)
-	p_inst		=	models.IntegerField(MINIMUMS_VERBOSE["inst"], null=True, blank=True)
+	p_inst		=	models.IntegerField(MINIMUMS_VERBOSE["inst"] + " Preferred", null=True, blank=True)
 	
 	dual_given	=	models.IntegerField(MINIMUMS_VERBOSE["dual_given"], null=True, blank=True)
-	p_dual_given	=	models.IntegerField(MINIMUMS_VERBOSE["dual_given"], null=True, blank=True)
+	p_dual_given	=	models.IntegerField(MINIMUMS_VERBOSE["dual_given"] + " Preferred", null=True, blank=True)
 	
 	xc		=	models.IntegerField(MINIMUMS_VERBOSE["xc"], null=True, blank=True)
-	p_xc		=	models.IntegerField(MINIMUMS_VERBOSE["xc"], null=True, blank=True)
+	p_xc		=	models.IntegerField(MINIMUMS_VERBOSE["xc"] + " Preferred", null=True, blank=True)
 	
-	cert_level	=	models.IntegerField(MINIMUMS_VERBOSE["cert_level"], choices=CERT_LEVEL, null=True, blank=True)
-	p_cert_level	=	models.IntegerField(MINIMUMS_VERBOSE["cert_level"], choices=CERT_LEVEL, null=True, blank=True)
+	cert_level	=	models.IntegerField(MINIMUMS_VERBOSE["cert_level"], choices=CERT_LEVEL, default=0)
+	p_cert_level	=	models.IntegerField(MINIMUMS_VERBOSE["cert_level"] + " Preferred", choices=CERT_LEVEL, default=0)
 	
 	endorsed	=	models.BooleanField(MINIMUMS_VERBOSE["endorsed"], default=False)
-	p_endorsed	=	models.BooleanField(MINIMUMS_VERBOSE["endorsed"], default=False)
+	p_endorsed	=	models.BooleanField(MINIMUMS_VERBOSE["endorsed"] + " Preferred", default=False)
 	
 	instructor	=	models.BooleanField(MINIMUMS_VERBOSE["instructor"], default=False)
-	p_instructor	=	models.BooleanField(MINIMUMS_VERBOSE["instructor"], default=False)
+	p_instructor	=	models.BooleanField(MINIMUMS_VERBOSE["instructor"] + " Preferred", default=False)
 	
 	atp_mins	=	models.BooleanField(MINIMUMS_VERBOSE["atp_mins"], default=False)
-	p_atp_mins	=	models.BooleanField(MINIMUMS_VERBOSE["atp_mins"], default=False)
+	p_atp_mins	=	models.BooleanField(MINIMUMS_VERBOSE["atp_mins"] + " Preferred", default=False)
 	
 	inst_rating	=	models.BooleanField(MINIMUMS_VERBOSE["inst_rating"], default=False)
-	p_inst_rating	=	models.BooleanField(MINIMUMS_VERBOSE["inst_rating"], default=False)
+	p_inst_rating	=	models.BooleanField(MINIMUMS_VERBOSE["inst_rating"] + " Preferred", default=False)
+	
+	class Meta:
+		verbose_name_plural = "Category/Class Minimums"
 	
 	#def __unicode__(self):
 		#ret = []
@@ -89,31 +95,31 @@ class CatClassMins(models.Model):
 		
 	time_array = property(_time_array)
 	
-class Mins(models.Model):
+class MinsGen(models.Model):
 
 	degree		=	models.IntegerField(MINIMUMS_VERBOSE["degree"], choices=DEGREE, default=0)
-	p_degree	=	models.IntegerField(MINIMUMS_VERBOSE["degree"], choices=DEGREE, default=0)
+	p_degree	=	models.IntegerField(MINIMUMS_VERBOSE["degree"] + " Preferred", choices=DEGREE, default=0)
 	
 	years_exp	=	models.DecimalField(MINIMUMS_VERBOSE["years_exp"], max_digits=4, decimal_places=2, null=True, blank=True)
-	p_years_exp	=	models.DecimalField(MINIMUMS_VERBOSE["years_exp"], max_digits=4, decimal_places=2, null=True, blank=True)
+	p_years_exp	=	models.DecimalField(MINIMUMS_VERBOSE["years_exp"] + " Preferred", max_digits=4, decimal_places=2, null=True, blank=True)
 	
 	years_company	=	models.DecimalField(MINIMUMS_VERBOSE["years_company"], max_digits=4, decimal_places=2, null=True, blank=True)
-	p_years_company	=	models.DecimalField(MINIMUMS_VERBOSE["years_company"], max_digits=4, decimal_places=2, null=True, blank=True)
+	p_years_company	=	models.DecimalField(MINIMUMS_VERBOSE["years_company"] + " Preferred", max_digits=4, decimal_places=2, null=True, blank=True)
 	
 	seniority	=	models.BooleanField(MINIMUMS_VERBOSE["seniority"], default=False)
-	p_seniority	=	models.BooleanField(MINIMUMS_VERBOSE["seniority"], default=False)
+	p_seniority	=	models.BooleanField(MINIMUMS_VERBOSE["seniority"] + " Preferred", default=False)
 	
 	rec		=	models.BooleanField(MINIMUMS_VERBOSE["rec"], default=False)
-	p_rec		=	models.BooleanField(MINIMUMS_VERBOSE["rec"], default=False)
+	p_rec		=	models.BooleanField(MINIMUMS_VERBOSE["rec"] + " Preferred", default=False)
 	
 	mech_cert_level	=	models.IntegerField(MINIMUMS_VERBOSE["mech_cert"], choices=MECH_CERT_LEVEL, default=0)
-	p_mech_cert_level=	models.IntegerField(MINIMUMS_VERBOSE["mech_cert"], choices=MECH_CERT_LEVEL, default=0)
+	p_mech_cert_level=	models.IntegerField(MINIMUMS_VERBOSE["mech_cert"] + " Preferred", choices=MECH_CERT_LEVEL, default=0)
 	
-	part_135	=	models.IntegerField(MINIMUMS_VERBOSE["part_135"], choices=PART_135, blank=True)
-	p_part_135	=	models.IntegerField(MINIMUMS_VERBOSE["part_135"], choices=PART_135, blank=True)
+	part_135	=	models.IntegerField(MINIMUMS_VERBOSE["part_135"], choices=PART_135, default=0)
+	p_part_135	=	models.IntegerField(MINIMUMS_VERBOSE["part_135"] + " Preferred", choices=PART_135, default=0)
 	
 	inst_instructor=	models.BooleanField(MINIMUMS_VERBOSE["inst_instructor"], default=False)
-	p_inst_instructor=	models.BooleanField(MINIMUMS_VERBOSE["inst_instructor"], default=False)
+	p_inst_instructor=	models.BooleanField(MINIMUMS_VERBOSE["inst_instructor"] + " Preferred", default=False)
 	
 	extra_info	=	models.TextField(blank=True)
 	
@@ -122,7 +128,7 @@ class Mins(models.Model):
 	#############################################################
 	
 	class Meta:
-        	verbose_name_plural = "Mins"
+        	verbose_name_plural = "General Minimums"
 			
 	#def __unicode__(self):
 	#	pass

@@ -237,20 +237,20 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 		
 {##################################################}
 {##################################################}
-{############hard minimums#########################}
+{#################minimums#########################}
 {##################################################}
 
-	<div class="last_modified">Last modified:  <strong>{{position.hard_mins.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.hard_mins.last_modified|date:"(G:i.s T)"}}</div>
+	<div class="last_modified">Last modified:  <strong>{{position.mins.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.mins.last_modified|date:"(G:i.s T)"}}</div>
 	<table class="fancy_table mins" summary="Hard hiring minimums information">
 	
 		<thead>
 			<tr>
-				<td colspan="2">Hard Minimums <a class="corner_link edit_link_ui" href="/edit/mins/hard/{{position.pk}}">(edit)</a></td>
+				<td colspan="2">Minimums <a class="corner_link edit_link_ui" href="/mins/{{position.pk}}">(edit)</a></td>
 			</tr>
 		</thead>
 		
-		{% if position.hard_mins.has %}		
-			{{ position.hard_mins.as_table|safe }}
+		{% if position.mins.has %}		
+			{{ position.mins.as_table|safe }}
 		{% else %}
 		
 		<tr>
@@ -258,31 +258,6 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 		</tr>
 	
 		{% endif %}
-	</table>
-	
-{##################################################}
-{##################################################}
-{################pref minimums#####################}
-{##################################################}
-	<div class="last_modified">Last modified:  <strong>{{position.pref_mins.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{position.pref_mins.last_modified|date:"(G:i.s T)"}}</div>
-	<table class="fancy_table mins" summary="Preferred hiring minimums information">
-	
-	<thead>
-		<tr>
-			<td colspan="2">Preferred Minimums <a class="corner_link edit_link_ui" href="/edit/mins/pref/{{position.pk}}">(edit)</a></td>
-		</tr>
-	</thead>
-		
-	{% if position.pref_mins.has %}		
-			{{ position.pref_mins }}
-			</td>
-		</tr>
-	{% else %}
-		<tr>
-			<td class="not_known">Not known</td>
-		</tr>
-	
-	{% endif %}
 	</table>
 {##################################################}
 {% endblock %}

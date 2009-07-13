@@ -6,23 +6,8 @@ from django.contrib.auth.models import User
 
 from models import *
 from base.models import *
-from mins import *
 
 from empty_formset import DeleteIfEmptyInlineFormSet, DeleteIfEmptyModelForm
-
-from django.template import Context, loader
-
-
-class TemplatedForm(forms.Form):
-	def output_via_template(self):
-		"Helper function for fieldsting fields data from form."
-		bound_fields = [BoundField(self, field, name) for name, field in self.fields.items()]
-		c = Context(dict(form = self, bound_fields = bound_fields))
-		t = loader.get_template('mins.html')
-		return t.render(c)
-
-	def __str__(self):
-		return self.output_via_template()
 
 ############################################################################
 
@@ -120,25 +105,6 @@ class CompensationForm(ModelForm):
 PayscaleFormset = inlineformset_factory(Compensation, PayscaleYear, form=PayscaleForm, extra=5, )	
 		
 #####################################################################################################
-	
-class CatClassMinsForm(ModelForm):
-	class Meta:
-		model = CatClassMins
-		exclude = ('mins', 'id', )
-		
-class OnTypeMinsForm(ModelForm):
-	class Meta:
-		model = OnTypeMins
-		exclude = ('mins', 'id', )
-		
-class MinsForm(ModelForm):
-	class Meta:
-		model = Mins
-		
-CatClassMinsFormset = inlineformset_factory(Mins, CatClassMins, form=CatClassMinsForm, extra=3, exclude=['mins', 'id'])
-OnTypeMinsFormset = inlineformset_factory(Mins, OnTypeMins, form=OnTypeMinsForm, extra=3, exclude=['mins', 'id'])
-	
-######################################
 
 class ProfileForm(ModelForm):
 	class Meta:
@@ -152,19 +118,8 @@ class UserForm(ModelForm):
 		
 #####################################
 
-class AircraftForm(ModelForm):
-	class Meta:
-		model = Aircraft
-		exclude = ('watchers', )
-
 ##############################################################################
 		
-class AircraftSearch(forms.Form):
-	search		=	forms.CharField(max_length=100, required=False)
-	engine_type	=	forms.ChoiceField(choices=[(-1,"Any",),]+ENGINE_TYPE, label="Engine Type")
-	cat_class	=	forms.ChoiceField(choices=[(-1,"Any",),]+CAT_CLASSES, label="Category/Class")
-		
-
 class CompanySearch(forms.Form):
 	search		=	forms.CharField(max_length=100, required=False)
 	type		=	forms.ChoiceField(choices=[(-1,"Any",),]+BUSINESS_TYPE, label="Business Type")

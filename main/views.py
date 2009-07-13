@@ -3,7 +3,7 @@
 from django.contrib.auth.decorators import login_required
 from main.models import *
 
-from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 from django.shortcuts import get_object_or_404
@@ -37,45 +37,6 @@ def edit_operation(request, pk):
 	return {'operation': op, 'form': form, 'formset': formset, "type": "edit"}
 
 ###############################################################################
-	
-###############################################################################	
-
-@login_required()	
-@render_to('edit_mins.html')	
-def edit_mins(request, pk, min_type):
-	from forms import CatClassMinsForm, MinsForm, CatClassMinsFormset, OnTypeMinsFormset
-	
-	position = get_object_or_404(Position, pk=pk)
-	
-	#############################
-	
-	if min_type == "Hard":
-		mins_object = get_object_or_None(Mins, hard=position)
-		if not mins_object:
-			mins_object = Mins()
-
-	else:
-		mins_object = get_object_or_None(Mins, pref=position)
-		if not mins_object:				#if mins object hasnt been created yet, then create it!
-			mins_object = Mins()
-	
-	#############################
-	
-	mf = MinsForm(instance=mins_object)	
-	cat_class_formset = CatClassMinsFormset(instance=mins_object)
-	on_type_formset = OnTypeMinsFormset(instance=mins_object)
-	
-	#assert False
-	
-	return locals()
-	
-#############################################################################################################################
-#############################################################################################################################
-#############################################################################################################################
-
-
-	
-###############################################################################	
 
 @login_required()
 @render_to('new-edit_fleet.html')	

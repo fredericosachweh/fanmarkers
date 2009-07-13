@@ -31,7 +31,6 @@
 
 {% block top_links %}
 	{% ifequal type "edit" %}
-	<a href="{{ form.instance.get_absolute_url }}" class="view">View {{ form.instance }}</a><br />
 	<a href="/edit{{ form.instance.company.get_absolute_url }}" class="edit">Edit {{ form.instance.company }}</a>
 	{% else %}
 	<a href="/edit{{ form.instance.company.get_absolute_url }}" class="edit">Edit {{ form.instance.company }}</a>

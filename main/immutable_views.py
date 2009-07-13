@@ -30,27 +30,3 @@ def jobmap(request):
 	alaska_t = Position.objects.filter( operation__opbase__in=alaska_bases ).distinct().count()
 
 	return locals()
-
-###############################################################################	
-	
-@render_to('view_airport.html')
-def airport(request, pk):
-
-	airport = get_object_or_404(Airport, pk=pk)
-	
-	company_base = 	Company.objects.filter(operation__opbase__base=airport)					#ops where this airport is a base
-	ops_fly =	Operation.objects.filter(opbase__in=OpBase.objects.filter(route__in=Route.objects.filter(bases=airport)))	#ops where this airport is part of a route
-	
-	return locals()
-	
-###############################################################################
-	
-@render_to('view_aircraft.html')
-def aircraft(request, pk):
-
-	aircraft = get_object_or_404(Aircraft, pk=pk)
-	companies = Company.objects.filter(fleet__aircraft=aircraft)
-	
-	return locals()
-	
-

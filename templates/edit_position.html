@@ -143,16 +143,11 @@
 {########################################################################}
 
 	<h2>Hiring Minimums:</h2>
-	
-	<div class="form_holder">
-		<a href="/edit/mins/hard/{{position.pk}}" class="edit">Click here to edit <strong>hard minimums</strong></a>
-		<br />
-		<a href="/edit/mins/pref/{{position.pk}}" class="edit">Click here to edit <strong>preferred minimums</strong></a>
-	</div>
+		<a href="/mins/{{position.pk}}" class="edit">Click here to edit this position's hiring minimums</a>
 	
 {###########################################################}
 	{% if position.operation_set %}
-		<h2>Bases and Routes:</h2>
+	<h2>Bases and Routes:</h2>
 		<a href="/edit/operation/{% for op in position.operation_set.all %}{{op.pk}}{% endfor %}" class="edit">click here to edit this position's Operation</a><br>
 	{% endif %}
 {% endblock %}

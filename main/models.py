@@ -1,45 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 from constants import *
-from mins import Mins, CatClassMins
 from base.models import Airport
 from django.db.models import Q
 
 ###############################################################################################################################
-
-class Aircraft(models.Model):
-	manufacturer	=	models.CharField(max_length=32, help_text="e.g: Cessna, Beechcraft")
-	type		=	models.CharField(max_length=32, help_text="e.g: C-172, BE-76")
-	model		=	models.CharField(max_length=64, help_text="e.g: Skyhawk, Duchess", blank=True)
-	extra		=	models.CharField(max_length=32, help_text="e.g: RG, on floats", blank=True)
-	engine_type	=	models.IntegerField("Engine Type", choices=ENGINE_TYPE, default=0)
-	cat_class	=	models.IntegerField("Category/Class", choices=CAT_CLASSES, default=1)
-	watchers	=	models.ManyToManyField(User, blank=True, )
 	
-	class Meta:	
-		ordering = ["manufacturer", "type"]
-		
-	def get_absolute_url(self):
-		return "/aircraft/%i/" % self.pk
-
-		
-	def __unicode__(self):
-	
-
-		if self.extra:
-			model = " " + self.model + " " + self.extra
-
-		elif self.model:
-			model = " " + self.model
-
-		else:
-			model = ""
-			
-			
-		return u'%s (%s%s)' % (self.type, self.manufacturer, model, )
-
-###############################################################################################################################
-		
 class PayscaleYear(models.Model):
 	compensation	=	models.ForeignKey("Compensation", )
 	year		=	models.IntegerField()
@@ -113,7 +79,7 @@ class RouteBase(models.Model):
 	
 class Fleet(models.Model):
 	company		=	models.ForeignKey("Company", )
-	aircraft	=	models.ForeignKey("Aircraft")
+	aircraft	=	models.ForeignKey("aircraft.Aircraft")
 	size		=	models.IntegerField("Fleet Size", default=1)
 	description	=	models.TextField(blank=True)
 
@@ -153,8 +119,8 @@ class Position(models.Model):
 	job_domain	=	models.IntegerField(choices=JOB_DOMAIN)
 	schedule_type	=	models.IntegerField(choices=SCHEDULE_TYPE)
 	
-	hard_mins	=	models.ForeignKey(Mins, related_name="hard", blank=True, null=True)
-	pref_mins	=	models.ForeignKey(Mins, related_name="pref", blank=True, null=True)
+	gen_mins	=	models.ForeignKey("mins.MinsGen", blank=True, null=True)
+
 	last_modified	=	models.DateTimeField(auto_now=True)
 	watchers	=	models.ManyToManyField(User, blank=True, )
 		

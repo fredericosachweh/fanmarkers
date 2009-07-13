@@ -6,6 +6,8 @@ from main.models import *
 from main.forms import *
 from main.constants import *
 
+
+
 admin.autodiscover()
 
 company_list_all = {
@@ -54,19 +56,16 @@ urlpatterns = patterns('',
 	
 	##########################################################################################################################################
 	
-	(r'^airport/(?P<pk>\S{1,7})/$',					"jobmap.main.views.airport"),
-	
-		
-	(r'^aircraft/(?P<pk>\d{1,5})/$',				"jobmap.main.views.aircraft"),
-	(r'^new/aircraft/$',						create_update.create_object, {"form_class": AircraftForm, "template_name": "new_aircraft.html"}),
-	(r'^edit/aircraft/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": AircraftForm, "template_name": "edit_aircraft.html"}),
+	(r'^airport/',							include("base.urls")),
+	(r'^aircraft/',							include("aircraft.urls")),
+	(r'^mins/',							include("mins.urls")),
 	
 	(r'^position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.view_position"),
 	(r'^new/position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_position"),
 	(r'^edit/position/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_position"),
 	
 	(r'^company/(?P<object_id>\d{1,4})/$',				list_detail.object_detail, company_view),
-	(r'^new/company/$',						create_update.create_object, {"form_class": CompanyForm, "template_name": "new_company.html"}),
+	(r'^company/new/$',						create_update.create_object, {"form_class": CompanyForm, "template_name": "new_company.html"}),
 	(r'^edit/company/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": CompanyForm, "template_name": "edit_company.html"}),
 	
 	###########################################################################################################################################
@@ -80,9 +79,6 @@ urlpatterns = patterns('',
 	(r'^edit/fleet/(?P<object_id>\d{1,4})/$',			create_update.update_object, {"form_class": FleetForm, "template_name": "new-edit_fleet.html", "extra_context": {"type": "edit"}}),
 	(r'^new/fleet/(?P<pk>\d{1,4})/$',				"jobmap.main.views.new_fleet"),
 	
-	(r'^edit/mins/hard/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Hard"}),
-	(r'^edit/mins/pref/(?P<pk>\d{1,4})/$',				"jobmap.main.views.edit_mins", {"min_type": "Preferred"}),
-	
 	###########################################################################################################################################
 	
 	(r'^kml/position-(?P<position>\d{1,4}).kml$',			"jobmap.main.views.kml"),
@@ -93,11 +89,9 @@ urlpatterns = patterns('',
 	
 	(r'^company/list/$',						"jobmap.main.list_views.company"),
 	(r'^position/list/$',						"jobmap.main.list_views.position"),
-	(r'^aircraft/list/$',						"jobmap.main.list_views.aircraft"),
 	
 )
 
 urlpatterns += patterns('django.contrib.auth',
-#	(r'^accounts/login/$','views.login', {'template_name': 'admin/login.html'}),
 	(r'^accounts/logout/$','views.logout', {"template_name": "view_jobmap.html"}),
 )

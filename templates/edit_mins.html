@@ -14,53 +14,19 @@
 	.mins_table				{width: 100%; border: 1px solid #DDDDDD; font-size: x-small; border-collapse: collapse}
 	.mins_table input,
 	.mins_table select			{font-size: x-small}
+	.mins_table tr:nth-child(odd) td	{background: #F3F3F3}
 	.mins_table textarea			{margin: 5px; width: 90%; height: 6em}
 	.mins_table tbody td			{border: 1px solid #AAAAAA; padding: 2px; padding-top: 7px; padding-bottom: 7px; text-align: center}
 	.mins_table th				{background: white; text-align: right; padding: 3px}
-	.mins_table tr:nth-child(odd) td	{background: #F3F3F3}
+	
 	.mins_table thead td			{background: white !important ; border: 1px solid #AAAAAA; text-align: center; padding: 2px}
 	
 	.type_rating				{max-width: 50%; margin-left: auto; margin-right: auto}
 	
-	.del_column		{background: pink}
+	.del_column input	{color: pink !important}
 {% endblock %}
 
 {% block top_links%}<a class="edit" href="/edit{{position.get_absolute_url}}">Edit {{position}}</a>{% endblock %}
-
-{% block javascript %}
-	<script type="text/javascript">
-		$(document).ready(function() {
-			var plus_path = '{{ MEDIA_URL }}/icons/plus.png';
-			var minus_path = '{{ MEDIA_URL }}/icons/minus.png';
-			$(".plus").attr("src", plus_path);
-			
-			$("input[type='text'][value!='']")
-				.closest("table").show().siblings("legend").addClass("highlighted")
-				.find("img").attr("src", minus_path);
-
-			$("option:selected[value!=0]")
-				.closest("table").show().siblings("legend").addClass("highlighted")
-				.find("img").attr("src", minus_path);
-			
-		
-			$(".plus").click(function(){
-				$(this).parent().siblings().toggle();	//toggle table visibility
-				
-				if($(this).attr('src') == plus_path){
-					$(this).attr('src', minus_path);
-					$(this).attr('alt', "-");
-				}
-				else{
-					$(this).attr('src', plus_path);
-					$(this).attr('alt', "+");
-				}
-			});
-			
-			
-		});
-	
-	</script>
-{% endblock %}
 
 {% block form %}	
 	<h2>General Requirements:</h2>
@@ -140,7 +106,10 @@
 	{% if forloop.first %}
 	<thead>
 		<tr>
-			<td>{{form.min_type.label}}</td>
+			<td colspan="12">{{ cat_class_formset.errors}}</td>
+		</tr>
+		<tr>
+			<td>{{cat_class_formset.management_form}}{{form.category.label}}</td>
 			<td>{{form.total.label}}</td>
 			<td>{{form.pic.label}}</td>
 			<td>{{form.night.label}}</td>
@@ -160,7 +129,7 @@
 	<tbody>
 		{% endif %}
 		<tr>
-			<td>{{form.min_type}}</td>
+			<td>{{form.category}}{{form.id}}</td>
 			<td>{{form.total}}<br>{{form.p_total}}</td>
 			<td>{{form.pic}}<br>{{form.p_pic}}</td>
 			<td>{{form.night}}<br>{{form.p_night}}</td>
@@ -193,7 +162,10 @@
 		{% if forloop.first %}
 		<thead>
 		<tr>
-			<td>{{form.aircraft_type.label}}</td>
+			<td colspan="4">{{ on_type_formset.errors}}</td>
+		</tr>
+		<tr>
+			<td>{{on_type_formset.management_form}}{{form.aircraft_type.label}}</td>
 			<td>{{form.total.label}}</td>
 			<td>{{form.pic.label}}</td>
 			<td>{{form.type_rating.label}}</td>
@@ -208,7 +180,7 @@
 		{###########}
 		
 		<tr>
-			<td>{{form.aircraft_type}}<br>{{form.p_aircraft_type}}</td>
+			<td>{{form.aircraft_type}}{{form.id}}<br>{{form.p_aircraft_type}}</td>
 			<td>{{form.total}}<br>{{form.p_total}}</td>
 			<td>{{form.pic}}<br>{{form.p_pic}}</td>
 			<td>{{form.type_rating}}<br>{{form.p_type_rating}}</td>

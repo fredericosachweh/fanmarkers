@@ -86,16 +86,6 @@ def edit_position(request, pk):
 	if not compensation:
 		compensation = Compensation(position=position)
 		
-	pref_mins = position.pref_mins
-	if not pref_mins:
-		pref_mins = Mins()
-		
-	hard_mins = position.hard_mins
-	if not hard_mins:
-		hard_mins = Mins()
-		
-	#assert False
-	
 	#######################################################################
 		
 	if request.method == "POST":
