@@ -1,8 +1,11 @@
 from django.db import models
 from django.contrib.auth.models import User
 from constants import *
+
 from base.models import Airport
 from aircraft.models import Aircraft
+from mins.models import GenMins
+
 from django.db.models import Q
 
 ###############################################################################################################################
@@ -120,7 +123,7 @@ class Position(models.Model):
 	job_domain	=	models.IntegerField(choices=JOB_DOMAIN)
 	schedule_type	=	models.IntegerField(choices=SCHEDULE_TYPE)
 	
-	gen_mins	=	models.ForeignKey("mins.MinsGen", blank=True, null=True)
+	gen_mins	=	models.ForeignKey(GenMins, blank=True, null=True)
 
 	last_modified	=	models.DateTimeField(auto_now=True)
 	watchers	=	models.ManyToManyField(User, blank=True, )
