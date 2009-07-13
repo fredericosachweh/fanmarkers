@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from constants import *
 from base.models import Airport
+from aircraft.models import Aircraft
 from django.db.models import Q
 
 ###############################################################################################################################
@@ -79,7 +80,7 @@ class RouteBase(models.Model):
 	
 class Fleet(models.Model):
 	company		=	models.ForeignKey("Company", )
-	aircraft	=	models.ForeignKey("aircraft.Aircraft")
+	aircraft	=	models.ForeignKey(Aircraft)
 	size		=	models.IntegerField("Fleet Size", default=1)
 	description	=	models.TextField(blank=True)
 
