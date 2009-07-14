@@ -5,11 +5,15 @@ from django.forms.models import inlineformset_factory
 from django.contrib.auth.models import User
 
 from models import *
-from base.models import *
-
-from empty_formset import DeleteIfEmptyInlineFormSet, DeleteIfEmptyModelForm
+#from constants import *
+from airport.models import Airport
 
 ############################################################################
+
+class PositionForm(ModelForm):
+	class Meta:
+		model = Position
+		exclude = ('watchers','hard_mins', 'pref_mins', 'company', 'advertising')
 
 class CompanyForm(ModelForm):
 	class Meta:
@@ -20,26 +24,6 @@ class FleetForm(ModelForm):
 	class Meta:
 		model = Fleet
 		exclude = ('watchers', 'company')
-		
-#####################################################################################################
-		
-class RouteBaseForm(DeleteIfEmptyModelForm): ###DeleteIfEmptyModelForm
-	base = forms.ModelChoiceField(queryset=Airport.objects.all(), widget=forms.TextInput)
-
-	class Meta:
-		model = RouteBase
-		#exclude = ('sequence', )
-		
-class RouteForm(ModelForm):
-	class Meta:
-		model = Route
-		exclude = ('opbase', 'bases')
-
-#RBFormset = DeleteIfEmptyInlineFormSet(form=RouteBaseForm)
-		
-RouteBaseFormset = inlineformset_factory(Route, RouteBase, form=RouteBaseForm, formset=DeleteIfEmptyInlineFormSet, extra=5, can_delete=True)
-	
-#####################################################################################################
 		
 class OperationForm(ModelForm):
 	positions = forms.ModelMultipleChoiceField(
@@ -75,8 +59,7 @@ class OpBaseForm(ModelForm):
 		
 OpBaseFormset = inlineformset_factory(Operation, OpBase, form=OpBaseForm, extra=3, )		
 
-#####################################################################################################
-
+############################################################################
 			
 class StatusForm(ModelForm):
 	not_bases =    forms.ModelMultipleChoiceField(queryset=Airport.objects.all(), widget=forms.HiddenInput, required=False)
@@ -87,37 +70,7 @@ class StatusForm(ModelForm):
 	class Meta:
 		model = Status
 
-class PositionForm(ModelForm):
-	class Meta:
-		model = Position
-		exclude = ('watchers','hard_mins', 'pref_mins', 'company', 'advertising')
-		
-class PayscaleForm(ModelForm):
-	class Meta:
-		model = PayscaleYear
-		
-		
-class CompensationForm(ModelForm):
-	class Meta:
-		model = Compensation
-		exclude = ('position',)
-		
-PayscaleFormset = inlineformset_factory(Compensation, PayscaleYear, form=PayscaleForm, extra=5, )	
-		
-#####################################################################################################
-
-class ProfileForm(ModelForm):
-	class Meta:
-		model = Profile
-		exclude = ('user', )
-		
-class UserForm(ModelForm):
-	class Meta:
-		model = User
-		fields = ('username', )
-		
-#####################################
-
+##############################################################################
 ##############################################################################
 		
 class CompanySearch(forms.Form):

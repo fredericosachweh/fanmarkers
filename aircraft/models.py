@@ -1,7 +1,7 @@
-from django.db import models
-from models import *
-from constants import *
 from django.contrib.auth.models import User
+from django.db import models
+from constants import *
+
 
 class Aircraft(models.Model):
 	manufacturer	=	models.CharField(max_length=32, help_text="e.g: Cessna, Beechcraft")

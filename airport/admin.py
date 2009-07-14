@@ -5,4 +5,4 @@ class AirportAdmin(admin.GeoModelAdmin):
 	list_display = ('identifier', 'name', 'country', 'region', 'municipality',)
 	search_fields = ('identifier', 'name', 'municipality',)
 
-admin.site.register(Airport, 		AirportAdmin)
+admin.site.register(Airport, AirportAdmin)

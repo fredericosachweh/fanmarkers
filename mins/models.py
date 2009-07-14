@@ -1,11 +1,12 @@
 from django.db import models
 from constants import *
+from company_tree.models import Position
 
 def merge(*input):
 	return reduce(list.__add__, input, list())
 	
 class MinsOnType(models.Model):
-	position	=	models.ForeignKey("main.Position")
+	position	=	models.ForeignKey(Position)
 	aircraft_type	=	models.ForeignKey("aircraft.Aircraft", verbose_name="Aircraft", null=True, blank=True)	
 	
 	total		=	models.IntegerField(MINIMUMS_VERBOSE["total"], null=True, blank=True)
@@ -21,7 +22,7 @@ class MinsOnType(models.Model):
 		verbose_name_plural = "On Type Minimums"
     
 class MinsCatClass(models.Model):
-	position	=	models.ForeignKey("main.Position")	
+	position	=	models.ForeignKey(Position)	
 	category	=	models.IntegerField("Category", choices=MINS_TYPE)	
 	
 	total		=	models.IntegerField(MINIMUMS_VERBOSE["total"], null=True, blank=True)
@@ -96,7 +97,7 @@ class MinsCatClass(models.Model):
 	time_array = property(_time_array)
 	
 class MinsGen(models.Model):
-
+	position	=	models.ForeignKey(Position)
 	degree		=	models.IntegerField(MINIMUMS_VERBOSE["degree"], choices=DEGREE, default=0)
 	p_degree	=	models.IntegerField(MINIMUMS_VERBOSE["degree"] + " Preferred", choices=DEGREE, default=0)
 	

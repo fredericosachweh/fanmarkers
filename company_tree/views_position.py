@@ -1,15 +1,20 @@
 from django.contrib.auth.decorators import login_required
-from main.models import *
-
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
-from django.shortcuts import get_object_or_404
+
+from models import *
+from forms import *
+
+from compensation.models import *
+from compensation.forms import *
 
 ########################################################################
 
 @render_to('view_position.html')	
-def view_position(request, pk):
+def view(request, pk):
 	position = get_object_or_404(Position, pk=pk)
 	opbases = position.operation_set.get().opbase_set.all()
 	
@@ -44,8 +49,7 @@ def view_position(request, pk):
 
 @login_required()
 @render_to('new_position.html')	
-def new_position(request, pk):
-	from forms import PositionForm
+def new(request, pk):
 
 	company = get_object_or_404(Company, pk=pk)
 
@@ -65,8 +69,7 @@ def new_position(request, pk):
 	
 #@login_required()
 @render_to('edit_position.html')		
-def edit_position(request, pk):
-	from forms import StatusForm, PositionForm, CompensationForm, PayscaleFormset
+def edit(request, pk):
 	
 	position = get_object_or_404(Position, pk=pk)
 	operation = get_object_or_None(Operation, positions=position)
@@ -153,6 +156,13 @@ def edit_position(request, pk):
 		"position": position,
 		"pos_form": pos_form,
 		"last_modified": status.last_modified}
+		
+@render_to('list_position.html')
+def make_list(request):
+
+	positions = Position.objects.all()
+	
+	return locals()
 
 ###################################################################	
 ###################################################################

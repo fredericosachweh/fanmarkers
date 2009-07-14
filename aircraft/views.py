@@ -1,9 +1,10 @@
-from models import *
 from annoying.decorators import render_to
 from django.shortcuts import get_object_or_404
-from forms import AircraftSearch
 
-from main.models import Company
+
+from company_tree.models import Company
+from models import Aircraft
+from forms import AircraftSearch
 	
 @render_to('view_aircraft.html')
 def aircraft(request, pk):

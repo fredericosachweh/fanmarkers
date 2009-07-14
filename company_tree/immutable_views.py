@@ -1,12 +1,15 @@
 from django.contrib.auth.decorators import login_required
-from main.models import *
+from django.db.models import Q
+from django.shortcuts import get_object_or_404
 
 from annoying.decorators import render_to
-from django.shortcuts import get_object_or_404
+
+from models import *
+
+
 
 @render_to('view_jobmap.html')
 def jobmap(request):
-	from django.db.models import Q
 	
 	usa_bases = OpBase.objects.filter(base__country__exact="US")
 	alaska_bases = usa_bases.filter(base__region__name__exact="AK")

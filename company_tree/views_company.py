@@ -1,29 +1,11 @@
-# coding: UTF-8
-
-from main.models import *
-from main.constants import *
-
-from django.http import HttpResponse
 from annoying.decorators import render_to
-from annoying.functions import get_object_or_None
-from django.shortcuts import get_object_or_404
+from models import Company
+from forms import CompanySearch
 
-########################################################
-
-
-@render_to('list_position.html')
-def position(request):
-
-	positions = Position.objects.all()
-	
-	return locals()
-	
 @render_to('list_aircraft-company.html')
-def company(request):
+def make_list(request):
 
 	type="Company"
-
-	from main.forms import CompanySearch
 	
 	objects = Company.objects.all()
 	

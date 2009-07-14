@@ -1,10 +1,6 @@
 from django.contrib import admin
 from models import *
 
-class PositionInline(admin.StackedInline):
-	model = Position
-	extra = 1
-	
 class FleetInline(admin.TabularInline):
 	model = Fleet
 	extra = 3
@@ -26,6 +22,16 @@ class RouteBaseInline(admin.TabularInline):
 	model = RouteBase
 	extra = 3
 	raw_id_fields = ('base',)
+	
+class PositionAdmin(admin.ModelAdmin):	
+	pass
+	#inlines = (PayScaleInline, )
+	
+class PositionInline(admin.StackedInline):
+	model = Position
+	extra = 1
+	
+admin.site.register(Position,		PositionAdmin)
 		
 ######################################################################
 	
@@ -49,13 +55,6 @@ class StatusAdmin(admin.ModelAdmin):
 	raw_id_fields = ('assign_bases','choice_bases','layoff_bases','not_bases', )
 	#inlines = (StatusBaseInline, )
 
-class PositionAdmin(admin.ModelAdmin):	
-	pass
-	#inlines = (PayScaleInline, )
-	
-
-	
-admin.site.register(Position,		PositionAdmin)
 admin.site.register(Compensation,	CompAdmin)
 admin.site.register(Route, 		RouteAdmin)
 admin.site.register(RouteBase, 		)

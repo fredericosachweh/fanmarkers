@@ -1,89 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import User
-from constants import *
-
-from base.models import Airport
-from aircraft.models import Aircraft
-from mins.models import GenMins
-
 from django.db.models import Q
 
-###############################################################################################################################
-	
-class PayscaleYear(models.Model):
-	compensation	=	models.ForeignKey("Compensation", )
-	year		=	models.IntegerField()
-	amount		=	models.FloatField()
-	salary_unit	=	models.IntegerField(choices=SALARY_TYPE)
-	
-	def __unicode__(self):
-		return u"%s (%s)" % (self.compensation.position, self.year)
-		
-###############################################################################################################################
-		
-class Compensation(models.Model):
-	position	=	models.ForeignKey("Position", )
-	
-	benefits	=	models.TextField(blank=True)
-	perdiem		=	models.TextField("Per Diem", blank=True)
-	
-	training_pay	=	models.IntegerField(choices=PAY_TYPE, default=0)
-	training_contract=	models.BooleanField(default=False)
+from constants import *
 
-	extra_info	=	models.TextField(blank=True)
-	last_modified	=	models.DateTimeField(auto_now=True)
-	
-	def __unicode__(self):
-		return "comp: %s" % self.position
-		
 ###############################################################################################################################
-		
-class Route(models.Model):
-	bases		=	models.ManyToManyField(Airport, through="RouteBase", blank=True)
-	description	=	models.TextField(blank=True)
-	opbase		=	models.ForeignKey("OpBase", blank=True)
-	
-	def __unicode__(self):
-		ret = []
-		for rb in self.real_route():
-			ret.append(rb.base.identifier)
-			
-		return "-".join(ret)
-		
-	def json(self):
-		ret = []
-		for base in self.bases.all():
-			ret.append('[' + str(base.location.y) + ', ' + str(base.location.x) + ']')
-		
-		return '[' + ",".join(ret) + ']'
-		
-	def real_route(self):
-		
-		base = RouteBase(base=self.opbase.base)
-		
-		points = RouteBase.objects.filter(route__pk=self.pk)
-	
-		return [base] + list(points) + [base]
-		
-		
-###############################################################################################################################
-
-class RouteBase(models.Model):
-	base		=	models.ForeignKey(Airport)
-	route		=	models.ForeignKey("Route")
-	sequence	=	models.IntegerField(blank=True)
-	
-	class Meta:
-		ordering = ['sequence']
-
-	def __unicode__(self):
-		return u"%s" % (self.base,)
-		
-###############################################################################################################################		
 	
 class Fleet(models.Model):
 	company		=	models.ForeignKey("Company", )
-	aircraft	=	models.ForeignKey(Aircraft)
+	aircraft	=	models.ForeignKey("aircraft.Aircraft")
 	size		=	models.IntegerField("Fleet Size", default=1)
 	description	=	models.TextField(blank=True)
 
@@ -114,48 +39,15 @@ class Company(models.Model):
 		return u"%s" % (self.name)
 	
 ###############################################################################################################################
-        	
-class Position(models.Model):
-	company		=	models.ForeignKey("Company", )
-	name		=	models.CharField("Position Name", max_length=32, blank=True)
-	description	=	models.TextField(blank=True)
-	
-	job_domain	=	models.IntegerField(choices=JOB_DOMAIN)
-	schedule_type	=	models.IntegerField(choices=SCHEDULE_TYPE)
-	
-	gen_mins	=	models.ForeignKey(GenMins, blank=True, null=True)
-
-	last_modified	=	models.DateTimeField(auto_now=True)
-	watchers	=	models.ManyToManyField(User, blank=True, )
-		
-	class Meta:	
-		ordering = ["job_domain"]		#so captain shows up first when displayed on the page
-		
-	def get_absolute_url(self):
-		return "/position/%i/" % self.pk
-		
-	def __unicode__(self):
-		return u"%s" % (self.name,)
-
-	def opbases(self):
-		try:
-			return self.operation_set.all()[0].opbase_set.all()
-		except:
-			return None
-
-###############################################################################################################################
 
 class Operation(models.Model):
 	company		=	models.ForeignKey("Company",)
 	fleet		=	models.ManyToManyField("Fleet", blank=True, null=True)
-	bases		=	models.ManyToManyField(Airport, through="OpBase", blank=True)
+	bases		=	models.ManyToManyField("airport.Airport", through="OpBase", blank=True)
 	positions	=	models.ManyToManyField("Position", blank=True)
 	flight_hours	=	models.FloatField("Typical Flight Hours", help_text="(per month)", blank=True, null=True)
 	extra_info	=	models.TextField("Extra Info", blank=True)
 	last_modified	=	models.DateTimeField(auto_now=True)
-	
-	def get_absolute_url(self):
-		return "/company/%s/#op%s" % (self.company.pk, self.pk)
 	
 	def __unicode__(self):
 		return u"%s - %s" % (self.company, self.all_fleet)
@@ -183,7 +75,7 @@ class Operation(models.Model):
 
 class OpBase(models.Model):
 	operation	=	models.ForeignKey("Operation", )
-	base		=	models.ForeignKey(Airport)
+	base		=	models.ForeignKey("airport.Airport", )
 	info		=	models.TextField("Extra Info", blank=True)
 	
 	hiring_status	=	"unknown"
@@ -226,6 +118,34 @@ class OpBase(models.Model):
 
 ###############################################################################################################################
 
+class Position(models.Model):
+	company		=	models.ForeignKey("Company", )
+	name		=	models.CharField("Position Name", max_length=32, blank=True)
+	description	=	models.TextField(blank=True)
+	
+	job_domain	=	models.IntegerField(choices=JOB_DOMAIN)
+	schedule_type	=	models.IntegerField(choices=SCHEDULE_TYPE)
+
+	last_modified	=	models.DateTimeField(auto_now=True)
+	watchers	=	models.ManyToManyField(User, blank=True, )
+		
+	class Meta:	
+		ordering = ["job_domain"]		#so captain shows up first when displayed on the page
+		
+	def get_absolute_url(self):
+		return "/position/%i/" % self.pk
+		
+	def __unicode__(self):
+		return u"%s" % (self.name,)
+
+	def opbases(self):
+		try:
+			return self.operation_set.all()[0].opbase_set.all()
+		except:
+			return None
+			
+###############################################################################################################################
+
 class HiringManager(models.Manager):
 	def get_query_set(self):
 		return super(HiringManager, self).get_query_set().filter( Q(assign_bases__isnull=False) | Q(choice_bases__isnull=False) ).distinct()
@@ -242,10 +162,10 @@ class Status(models.Model):
 	reference	=	models.TextField(blank=True, null=True)
 	last_modified	=	models.DateTimeField(auto_now=True)
 	
-	not_bases	=	models.ManyToManyField(OpBase, related_name="not", blank=True)
-	assign_bases	=	models.ManyToManyField(OpBase, related_name="assign", blank=True)
-	choice_bases	=	models.ManyToManyField(OpBase, related_name="choice", blank=True)
-	layoff_bases	=	models.ManyToManyField(OpBase, related_name="layoff", blank=True)
+	not_bases	=	models.ManyToManyField("OpBase", related_name="not", blank=True)
+	assign_bases	=	models.ManyToManyField("OpBase", related_name="assign", blank=True)
+	choice_bases	=	models.ManyToManyField("OpBase", related_name="choice", blank=True)
+	layoff_bases	=	models.ManyToManyField("OpBase", related_name="layoff", blank=True)
 	
 	advertising	=	models.BooleanField(default=False)
 	ad_start	=	models.DateTimeField(blank=True, null=True)
@@ -257,21 +177,3 @@ class Status(models.Model):
 	
 	def __unicode__(self):
 		return str(self.position) + " - " + str(self.last_modified)
-	
-###############################################################################################################################
-
-class Profile(models.Model):
-	user		=	models.ForeignKey(User, primary_key=True)
-					
-	dob		=	models.DateField("Date of Birth", blank=True, default="1900-01-01")
-	#resume		=	models.FileField(upload_to="resume/")
-
-
-
-
-
-
-
-
-
-

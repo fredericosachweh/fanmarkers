@@ -1,6 +1,6 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
-from main.constants import AIRPORT_TYPE
+from constants import AIRPORT_TYPE
 from django.db.models import Q
 
 class BaseManager(models.GeoManager):
@@ -22,6 +22,8 @@ class RouteManager(models.GeoManager):
 class RelevantManager(models.GeoManager):
 	def get_query_set(self):				#is an opbase, or a routebase
 		return super(RelevantManager, self).get_query_set().filter( Q(routebase__isnull=False) | Q(opbase__isnull=False) ).distinct()
+		
+##############################################################
 
 class Airport(models.Model):
 	identifier	=	models.CharField(max_length=8, primary_key=True)
