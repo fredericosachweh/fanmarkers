@@ -25,7 +25,7 @@ def edit_operation(request, pk):
 			form.save()
 			formset.save()
 	
-			return HttpResponseRedirect( op.get_absolute_url() )
+			return HttpResponseRedirect( op.company.get_edit_url() )
 	else:
 		form    = OperationForm(instance=op)
 		formset = OpBaseFormset(instance=op)
@@ -33,6 +33,33 @@ def edit_operation(request, pk):
 
 	return {'operation': op, 'form': form, 'formset': formset, "type": "edit"}
 
+###############################################################################
+
+@login_required()
+@render_to('new-edit_operation.html')       
+def new_operation(request, pk):
+        from forms import OperationForm, OpBaseFormset
+
+        company = get_object_or_404(Company, pk=pk)
+
+        if request.method == "POST":
+                op = Operation(company=company)
+
+                form = OperationForm(request.POST, instance=op)
+                if form.is_valid():
+                        op = form.save()
+
+                        formset = OpBaseFormset(request.POST, instance=op)
+                        if formset.is_valid():
+                                formset.save()
+
+                                return HttpResponseRedirect(company.get_edit_url() )
+        else:
+                form = OperationForm(instance=Operation(company=company))
+                formset = OpBaseFormset()
+
+        return {'company': company, 'form': form, "formset": formset}
+        
 ###############################################################################
 
 @login_required()

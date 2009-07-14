@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models import Q
+from django.db.models import Q, permalink
+
 
 from constants import *
 
@@ -11,6 +12,10 @@ class Fleet(models.Model):
 	aircraft	=	models.ForeignKey("aircraft.Aircraft")
 	size		=	models.IntegerField("Fleet Size", default=1)
 	description	=	models.TextField(blank=True)
+	
+	@permalink
+	def get_edit_url(self):
+		return ('edit-fleet', str(self.pk) )
 
 	def __unicode__(self):
 		return u"%s" % (self.aircraft, )
@@ -32,8 +37,14 @@ class Company(models.Model):
 	class Meta:
 		verbose_name_plural = "Companies"
 		
+	@permalink
 	def get_absolute_url(self):
-		return "/company/%i/" % self.pk 
+		return ('view-company', str(self.pk) )
+		
+	@permalink
+	def get_edit_url(self):
+		return ('edit-company', str(self.pk) )
+
 		
 	def __unicode__(self):
 		return u"%s" % (self.name)
@@ -51,6 +62,10 @@ class Operation(models.Model):
 	
 	def __unicode__(self):
 		return u"%s - %s" % (self.company, self.all_fleet)
+		
+	@permalink
+	def get_edit_url(self):
+		return ('edit-operation', str(self.pk) )
 		
 	def _all_fleet(self):
 		ret = []
@@ -132,8 +147,13 @@ class Position(models.Model):
 	class Meta:	
 		ordering = ["job_domain"]		#so captain shows up first when displayed on the page
 		
+	@permalink
 	def get_absolute_url(self):
-		return "/position/%i/" % self.pk
+		return ('view-position', str(self.pk) )
+		
+	@permalink
+	def get_edit_url(self):
+		return ('edit-position', str(self.pk) )
 		
 	def __unicode__(self):
 		return u"%s" % (self.name,)

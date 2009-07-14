@@ -1,6 +1,12 @@
 {% extends "base_form.html" %}
 
-{% block title %}Add New Aircraft{% endblock %}
+{% block title %}{% if form.instance.pk %}Edit{% else %}Add New{% endif %} Aircraft{% endblock %}
+
+{% block top_links %}
+	{% if form.instance.pk %}
+	<a href="{{ form.instance.get_absolute_url }}" class="view">View {{form.instance}}</a>
+	{% endif %}
+{% endblock %}
 
 {% block form%}
 <table class="form_table">

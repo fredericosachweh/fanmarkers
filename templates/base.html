@@ -97,19 +97,19 @@
 			<div id="top_bar">
 				<ul>
 					<li>
-						<a href="/jobmap/">Map</a>
+						<a href="{% url jobmap %}">Map</a>
 					</li>
 				
 					<li>
-						<a href="/company/">Companies</a>
+						<a href="{% url list-company %}">Companies</a>
 					</li>
 					
 					<li>
-						<a href="/position/">Positions</a>
+						<a href="{% url list-position %}">Positions</a>
 					</li>
 					
 					<li>
-						<a href="/aircraft/">Aircraft</a>
+						<a href="{% url list-aircraft %}">Aircraft</a>
 					</li>
 
 				{% if user.is_authenticated %}

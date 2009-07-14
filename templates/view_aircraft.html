@@ -51,7 +51,7 @@
 			<td>
 				<ul>
 				{% for company in companies %}
-					<li><a href="{{company.get_absolute_url}}">{{company}}</a></li>
+					<li><a href="{{ company.get_absolute_url }}">{{company}}</a></li>
 				{% empty %}
 					<span class="not_known">None</span>
 				{% endfor %}

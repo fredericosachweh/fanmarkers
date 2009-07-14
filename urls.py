@@ -23,14 +23,14 @@ urlpatterns = patterns('',
 	
 	(r'^site-media/(?P<path>.*)$',			'django.views.static.serve', {'document_root': '/home/chris/Websites/jobmap/media', 'show_indexes': True}),
 	
-	(r'^profile/',					"company_tree.views.profile"),
+	#(r'^profile/',					"company_tree.views.profile"),
 	
-	(r'^jobmap/',					"company_tree.immutable_views.jobmap"),
+	url(r'^jobmap/',				"company_tree.immutable_views.jobmap", name="jobmap"),
 	('^$',						"company_tree.immutable_views.jobmap"),
 	
 	##########################################################################################################################################
 	
-	(r'^airport/',					include("base.urls")),
+	(r'^airport/',					include("airport.urls")),
 	(r'^aircraft/',					include("aircraft.urls")),
 	(r'^mins/',					include("mins.urls")),
 	(r'^company/',					include("company_tree.urls_company")),
@@ -38,20 +38,20 @@ urlpatterns = patterns('',
 	
 	###########################################################################################################################################
 	
-	(r'^operation/edit/(?P<pk>\d{1,4})/$',		"company_tree.views.edit_operation"),
-	(r'^operation/new/(?P<pk>\d{1,4})/$',		"company_tree.views.new_operation"),
+	url(r'^operation/edit/(?P<pk>\d{1,4})/$',	"company_tree.views.edit_operation", name="edit-operation"),
+	url(r'^operation/new/(?P<pk>\d{1,4})/$',	"company_tree.views.new_operation", name="new-operation"),
 	
-	(r'^route/edit/(?P<pk>\d{1,4})/$',		"company_tree.views.handle_route", {"type": "edit"}),
-	(r'^route/new/(?P<pk>\d{1,4})/$',		"company_tree.views.handle_route", {"type": "new"}),
+	#(r'^route/edit/(?P<pk>\d{1,4})/$',		"route.views.handle_route", {"type": "edit"}),
+	#(r'^route/new/(?P<pk>\d{1,4})/$',		"route.views.handle_route", {"type": "new"}),
 
-	(r'^fleet/edit/(?P<object_id>\d{1,4})/$',	create_update.update_object, {"form_class": FleetForm, "template_name": "new-edit_fleet.html", "extra_context": {"type": "edit"}}),
-	(r'^fleet/new/(?P<pk>\d{1,4})/$',		"company_tree.views.new_fleet"),
+	url(r'^fleet/edit/(?P<object_id>\d{1,4})/$',	create_update.update_object, {"form_class": FleetForm, "template_name": "new-edit_fleet.html", "extra_context": {"type": "edit"}}, name="edit-fleet"),
+	url(r'^fleet/new/(?P<pk>\d{1,4})/$',		"company_tree.views.new_fleet", name="new-fleet"),
 	
 	###########################################################################################################################################
 	
-	(r'^kml/position-(?P<position>\d{1,4}).kml$',	"company_tree.views.kml"),
-	(r'^kml/company-(?P<company>\d{1,4}).kml$',	"company_tree.views.kml"),
-	(r'^kml/airport-(?P<airport>[A-Z]{1,5}).kml$',	"company_tree.views.kml"),
+	#(r'^kml/position-(?P<position>\d{1,4}).kml$',	"company_tree.views_map.kml"),
+	#(r'^kml/company-(?P<company>\d{1,4}).kml$',	"company_tree.views_map.kml"),
+	#(r'^kml/airport-(?P<airport>[A-Z]{1,5}).kml$',	"company_tree.views_map.kml"),
 	
 	###########################################################################################################################################
 )

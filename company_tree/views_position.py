@@ -16,10 +16,17 @@ from compensation.forms import *
 @render_to('view_position.html')	
 def view(request, pk):
 	position = get_object_or_404(Position, pk=pk)
-	opbases = position.operation_set.get().opbase_set.all()
 	
-	fleets = position.operation_set.get().fleet.all()
+	try:
+		opbases = position.operation_set.all()[:1].opbase_set.all()
+	except AttributeError:
+		opbases = []
 	
+	try:
+		fleets = position.operation_set.all()[:1].fleet.all()
+	except AttributeError:
+		fleets = []
+		
 	compensation = get_object_or_None(Compensation, position=position)
 	if compensation:
 		payscales = compensation.payscaleyear_set.all()

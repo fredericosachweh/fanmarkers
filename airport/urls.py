@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
 
-urlpatterns = patterns('base',
-	(r'^(?P<pk>\S{1,7})/$',		"views.airport"),
+urlpatterns = patterns('airport',
+	url(r'^(?P<pk>\S{1,7})/$',		"views.airport", name="view-airport"),
 )

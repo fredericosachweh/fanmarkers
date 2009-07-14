@@ -13,8 +13,8 @@ company_view = {
 
 
 urlpatterns = patterns('',
-	(r'^$',					"company_tree.views_company.make_list"),
-	(r'^(?P<object_id>\d{1,4})/$',		list_detail.object_detail, company_view),
-	(r'^new/$',				create_update.create_object, {"form_class": CompanyForm, "template_name": "new_company.html"}),
-	(r'^edit/(?P<object_id>\d{1,4})/$',	create_update.update_object, {"form_class": CompanyForm, "template_name": "edit_company.html"}),
+	url(r'^$',					"company_tree.views_company.make_list", name="list-company"),
+	url(r'^(?P<object_id>\d{1,4})/$',		list_detail.object_detail, company_view, name="view-company"),
+	url(r'^new/$',					create_update.create_object, {"form_class": CompanyForm, "template_name": "new_company.html"}, name="new-company"),
+	url(r'^edit/(?P<object_id>\d{1,4})/$',		create_update.update_object, {"form_class": CompanyForm, "template_name": "edit_company.html"}, name="edit-company"),
 )

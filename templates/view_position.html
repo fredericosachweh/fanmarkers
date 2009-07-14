@@ -3,7 +3,7 @@
 
 {% block title %}{{position.company.name}} - {{position.name}}{% endblock %}
 
-{% block edit_top %}"/edit{{ position.get_absolute_url }}"{% endblock %}
+{% block edit_top %}"{{ position.get_edit_url }}"{% endblock %}
 
 {% block css %}
 {{ block.super }}
@@ -245,7 +245,7 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 	
 		<thead>
 			<tr>
-				<td colspan="2">Minimums <a class="corner_link edit_link_ui" href="/mins/{{position.pk}}">(edit)</a></td>
+				<td colspan="2">Minimums <a class="corner_link edit_link_ui" href="{{ position.mins.get_edit_url }}">(edit)</a></td>
 			</tr>
 		</thead>
 		

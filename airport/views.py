@@ -2,10 +2,13 @@ from models import *
 from annoying.decorators import render_to
 from django.shortcuts import get_object_or_404
 
-from main.models import Operation, Company, OpBase, Route
+from company_tree.models import Operation, Company, OpBase
+from route.models import Route
 
 @render_to('view_airport.html')
 def airport(request, pk):
+
+	pk = pk.upper()
 
 	airport = get_object_or_404(Airport, pk=pk)
 	

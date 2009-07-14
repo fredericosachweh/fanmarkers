@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
+from django.db.models import permalink
 from django.db import models
 from constants import *
+#from forms import AircraftForm
 
 
 class Aircraft(models.Model):
@@ -15,9 +17,16 @@ class Aircraft(models.Model):
 	class Meta:	
 		ordering = ["manufacturer", "type"]
 		
+	@permalink
 	def get_absolute_url(self):
-		return "/aircraft/%i/" % self.pk
-
+		return ('view-aircraft', str(self.pk) )
+		
+	@permalink
+	def get_edit_url(self):
+		return ('edit-aircraft', {"form_class": "AircraftForm", "template_name": "edit_aircraft.html", "object_id": str(self.pk) })
+		
+	def get_link_ident(self):
+		return self.pk
 		
 	def __unicode__(self):
 	

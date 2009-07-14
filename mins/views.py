@@ -1,12 +1,10 @@
 from django.contrib.auth.decorators import login_required
-
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 from django.shortcuts import get_object_or_404
-
 from django.http import HttpResponseRedirect
 
-from main.models import Position
+from company_tree.models import Position
 from models import *
 
 ##########################################################################################################

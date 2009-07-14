@@ -16,7 +16,7 @@
 {% endblock %}
 
 {% block top_links %}	
-	<a href="/edit/operation/{{opbase.operation.pk}}" class="edit">Edit {{ opbase.operation }}</a>
+	<a href="{{ opbase.operation.get_edit_url }}" class="edit">Edit {{ opbase.operation }}</a>
 {% endblock %}	
 	
 {% block form%}
