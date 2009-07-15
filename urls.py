@@ -5,7 +5,13 @@ from django.contrib import admin
 from company_tree.models import Company
 from company_tree.forms import CompanyForm, FleetForm
 
+###############################################
+from django.db.models.loading import cache as model_cache
+if not model_cache.loaded:
+	model_cache.get_models()
 admin.autodiscover()
+##############################################
+
 
 urlpatterns = patterns('',
 
