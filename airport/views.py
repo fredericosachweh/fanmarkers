@@ -16,3 +16,14 @@ def airport(request, pk):
 	ops_fly =	Operation.objects.filter(opbase__in=OpBase.objects.filter(route__in=Route.objects.filter(bases=airport)))	#ops where this airport is part of a route
 	
 	return locals()
+	
+def export(request):
+	from django.template.loader import get_template
+	from django.http import HttpResponse
+	from django.template import Context
+	
+	out = []
+	airports = Airport.objects.all()
+	
+	text = get_template('export_airport.html').render(Context(locals() ))
+	return HttpResponse(text, mimetype="text/plain")	

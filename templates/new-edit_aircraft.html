@@ -10,7 +10,7 @@
 
 {% block form%}
 <table class="form_table">
-	{% for field in form%}
+	{% for field in form %}
 	<tr>
 		<th>{{field.label_tag}}:</th>
 		
@@ -18,7 +18,6 @@
 			<br><span class="help_text">{{field.help_text}}</span>
 		</td>
 	</tr>
-	
 	{% endfor %}
 </table>
 {% endblock %}

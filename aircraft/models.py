@@ -23,14 +23,12 @@ class Aircraft(models.Model):
 		
 	@permalink
 	def get_edit_url(self):
-		return ('edit-aircraft', {"form_class": "AircraftForm", "template_name": "edit_aircraft.html", "object_id": str(self.pk) })
+		return ('edit-aircraft', (), {"object_id": str(self.pk) })
 		
 	def get_link_ident(self):
 		return self.pk
 		
 	def __unicode__(self):
-	
-
 		if self.extra:
 			model = " " + self.model + " " + self.extra
 

@@ -74,7 +74,7 @@ def new_fleet(request, pk):
 	
 		if form.is_valid():
 			form.save()
-			return HttpResponseRedirect( "/edit" + company.get_absolute_url() )
+			return HttpResponseRedirect( company.get_edit_url() )
 	else:
 		form = FleetForm()
 		
