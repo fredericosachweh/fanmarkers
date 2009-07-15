@@ -9,7 +9,7 @@ from django.contrib import admin
 #admin.autodiscover()
 ##############################################
 
-from company_tree.models import Company
+from company_tree.models import *
 from company_tree.forms import CompanyForm, FleetForm
 
 urlpatterns = patterns('',
