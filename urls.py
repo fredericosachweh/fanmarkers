@@ -9,9 +9,6 @@ from django.contrib import admin
 #admin.autodiscover()
 ##############################################
 
-from company_tree.models import *
-from company_tree.forms import CompanyForm, FleetForm
-
 urlpatterns = patterns('',
 
 	(r'^overlay/(?P<z>\d{1,2})_(?P<x>\d{1,5})_(?P<y>\d{1,5})_(?P<o>\S{1,5})/$',
@@ -40,6 +37,7 @@ urlpatterns = patterns('',
 	(r'^mins/',					include("mins.urls")),
 	(r'^company/',					include("company_tree.urls_company")),
 	(r'^position/',					include("company_tree.urls_position")),
+	(r'^fleet/',					include("company_tree.urls_fleet")),
 	
 	###########################################################################################################################################
 	
@@ -49,8 +47,7 @@ urlpatterns = patterns('',
 	#(r'^route/edit/(?P<pk>\d{1,4})/$',		"route.views.handle_route", {"type": "edit"}),
 	#(r'^route/new/(?P<pk>\d{1,4})/$',		"route.views.handle_route", {"type": "new"}),
 
-	url(r'^fleet/edit/(?P<object_id>\d{1,4})/$',	create_update.update_object, {"form_class": FleetForm, "template_name": "new-edit_fleet.html", "extra_context": {"type": "edit"}}, name="edit-fleet"),
-	url(r'^fleet/new/(?P<pk>\d{1,4})/$',		"company_tree.views.new_fleet", name="new-fleet"),
+	
 	
 	###########################################################################################################################################
 	
