@@ -2,9 +2,6 @@ from django.conf.urls.defaults import *
 from django.views.generic import list_detail, create_update
 from django.contrib import admin
 
-from company_tree.models import Company
-from company_tree.forms import CompanyForm, FleetForm
-
 ###############################################
 #from django.db.models.loading import cache as model_cache
 #if not model_cache.loaded:
@@ -12,6 +9,8 @@ from company_tree.forms import CompanyForm, FleetForm
 #admin.autodiscover()
 ##############################################
 
+from company_tree.models import Company
+from company_tree.forms import CompanyForm, FleetForm
 
 urlpatterns = patterns('',
 
