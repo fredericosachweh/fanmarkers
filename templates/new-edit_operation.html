@@ -31,9 +31,9 @@
 
 {% block top_links %}
 	{% ifequal type "edit" %}
-	<a href="/edit{{ form.instance.company.get_absolute_url }}" class="edit">Edit {{ form.instance.company }}</a>
+	<a href="{{ form.instance.company.get_edit_url }}" class="edit">Edit {{ form.instance.company }}</a>
 	{% else %}
-	<a href="/edit{{ form.instance.company.get_absolute_url }}" class="edit">Edit {{ form.instance.company }}</a>
+	<a href="{{ form.instance.company.get_edit_url }}" class="edit">Edit {{ form.instance.company }}</a>
 	{% endifequal %}
 {% endblock %}
 

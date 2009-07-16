@@ -158,6 +158,7 @@ def edit(request, pk):
 		"opbases": opbases,
 		"status_form": status_form,
 		"position": position,
+		"operation": operation,
 		"pos_form": pos_form,
 		"last_modified": status.last_modified}
 		

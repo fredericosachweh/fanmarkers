@@ -133,7 +133,7 @@
 						<td>
 							<ul>
 							{% for position in operation.positions.all %}
-							<li><a href="{{position.get_absolute_url}}" class="view">{{position}}</a></li>
+							<li><a href="{{ position.get_absolute_url }}" class="view">{{position}}</a></li>
 							{% endfor %}
 							</ul>
 						</td>
@@ -144,7 +144,7 @@
 						<td>
 							<ul>
 							{% for fleet in operation.fleet.all %}
-							<li><a href="{{fleet.aircraft.get_absolute_url}}" class="immutable">{{fleet}}</a></li>
+							<li><a href="{{ fleet.aircraft.get_absolute_url }}" class="immutable">{{fleet}}</a></li>
 							{% endfor %}
 							</ul>
 						</td>
@@ -156,7 +156,7 @@
 						<td>
 							<ul>
 							{% for base in operation.bases.all %}
-							<li><a href="{{base.get_absolute_url}}" class="immutable">{{base}}</a></li>
+							<li><a href="{{ base.get_absolute_url }}" class="immutable">{{base}}</a></li>
 							{% endfor %}
 							</ul>
 						</td>

@@ -50,7 +50,7 @@ class Airport(models.Model):
 		
 	@permalink
 	def get_absolute_url(self):
-		return ('view-airport', str(self.pk) )
+		return ('view-airport',(), {"pk": self.pk}, )
 		
 	def __unicode__(self):
 		return u"%s - %s" % (self.identifier, self.location_summary())

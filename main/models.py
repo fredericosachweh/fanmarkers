@@ -89,6 +89,10 @@ class Fleet(models.Model):
 
 	def __unicode__(self):
 		return u"%s" % (self.aircraft, )
+		
+	@permalink
+	def get_edit_url(self):
+		return ('edit-fleet', str(self.pk) )
 
 ###############################################################################################################################
 
