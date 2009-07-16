@@ -17,10 +17,10 @@ urlpatterns = patterns('',
 	
 	(r'^site-media/(?P<path>.*)$',					'django.views.static.serve', {'document_root': '/home/chris/Websites/jobmap/media', 'show_indexes': True}),
 	
-	(r'^profile/',							"jobmap.main.views.profile"),
+	(r'^profile/',							"main.views.profile"),
 	
-	url(r'^jobmap/',						"jobmap.main.views.jobmap", name="jobmap"),
-	('^$',								"jobmap.main.views.jobmap"),
+	url(r'^jobmap/',						"main.views.jobmap", name="jobmap"),
+	('^$',								"main.views.jobmap"),
 	
 	##########################################################################################################################################
 	
