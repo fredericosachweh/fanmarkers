@@ -6,21 +6,20 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
 
-	(r'^overlay/(?P<z>\d{1,2})_(?P<x>\d{1,5})_(?P<y>\d{1,5})_(?P<o>\S{1,5})/$', 'main.views.overlay'),
-	(r'^map_click/(?P<z>\d{1,2})_(?P<lat>\-?\d+\.\d*)_(?P<lng>\-?\d+\.\d*)/$',		'main.views.map_click'),
+	(r'^overlay/(?P<z>\d{1,2})_(?P<x>\d{1,5})_(?P<y>\d{1,5})_(?P<o>\S{1,5})/$', 		'main.views_map.overlay'),
+	(r'^map_click/(?P<z>\d{1,2})_(?P<lat>\-?\d+\.\d*)_(?P<lng>\-?\d+\.\d*)/$',		'main.views_map.click'),
+	url(r'^jobmap/',									"main.views_map.jobmap", name="jobmap"),
+	url('^$',										"main.views_map.jobmap", name="root"),
 	
-	(r'^admin/doc/',						include('django.contrib.admindocs.urls')),
-	(r'^comments/',							include('django.contrib.comments.urls')),
-	(r'^admin/(.*)',						admin.site.root),
-	(r'^openid/',							include('django_openid_auth.urls')),
+	(r'^admin/doc/',				include('django.contrib.admindocs.urls')),
+	(r'^comments/',					include('django.contrib.comments.urls')),
+	(r'^admin/(.*)',				admin.site.root),
+	(r'^openid/',					include('django_openid_auth.urls')),
 	
 	
-	(r'^site-media/(?P<path>.*)$',					'django.views.static.serve', {'document_root': '/home/chris/Websites/jobmap/media', 'show_indexes': True}),
+	(r'^site-media/(?P<path>.*)$',			'django.views.static.serve', {'document_root': '/home/chris/Websites/jobmap/media', 'show_indexes': True}),
 	
-	(r'^profile/',							"main.views.profile"),
-	
-	url(r'^jobmap/',						"main.views_map.jobmap", name="jobmap"),
-	url('^$',							"main.views_map.jobmap", name="root"),
+	(r'^profile/',					"main.views.profile"),
 	
 	##########################################################################################################################################
 	
@@ -34,15 +33,9 @@ urlpatterns = patterns('',
 	
 	###########################################################################################################################################
 	
-	#(r'^kml/position-(?P<position>\d{1,4}).kml$',			"jobmap.main.views.kml"),
-	#(r'^kml/company-(?P<company>\d{1,4}).kml$',			"jobmap.main.views.kml"),
-	#(r'^kml/airport-(?P<airport>[A-Z]{1,5}).kml$',			"jobmap.main.views.kml"),
-	
-	###########################################################################################################################################
-	
-	#(r'^company/list/$',						"jobmap.main.list_views.company"),
-	#(r'^position/list/$',						"jobmap.main.list_views.position"),
-	#(r'^aircraft/list/$',						"jobmap.main.list_views.aircraft"),
+	(r'^kml/position-(?P<position>\d{1,4}).kml$',	"main.views_map.kml"),
+	(r'^kml/company-(?P<company>\d{1,4}).kml$',	"main.views_map.kml"),
+	(r'^kml/airport-(?P<airport>[A-Z]{1,5}).kml$',	"main.views_map.kml"),
 	
 )
 
