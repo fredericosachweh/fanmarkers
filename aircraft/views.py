@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from annoying.decorators import render_to
 from django.shortcuts import get_object_or_404
+from django.views.generic.create_update import update_object, create_object
 
 from main.models import Company
 
@@ -19,18 +20,11 @@ def view(request, pk):
 	
 @render_to('new-edit_aircraft.html')
 def edit(request, pk):
-	aircraft = get_object_or_404(Aircraft, pk=pk)
-	
-	form = AircraftForm(instance=aircraft)
-	
-	return locals()
+	return update_object(request, object_id=pk, form_class=AircraftForm, template_name="new-edit_aircraft.html")
 	
 @render_to('new-edit_aircraft.html')
 def new(request):
-
-	form = AircraftForm()
-	
-	return locals()
+	return create_object(request, form_class=AircraftForm, template_name="new-edit_aircraft.html")
 	
 @render_to('list_aircraft-company.html')
 def make_list(request):	

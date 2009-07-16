@@ -1,0 +1,3 @@
+INSERT INTO airports (`lat`, `long`, `airport_name`, `city`, `sector`, `identifier`, `entry_method`, `location_type`) VALUES
+{% for airport in airports %}('{{airport.location.y}}','{{airport.location.x}}','{{airport.name}}','{{airport.municipality}}',{% ifequal airport.country "United States" %}'{{airport.region}}',{% else %}'{{airport.region}}',{% endifequal %}'{{airport.identifier}}','H', 'A'),
+{% endfor %}
