@@ -35,7 +35,7 @@ urlpatterns = patterns('',
 	
 	(r'^kml/position-(?P<position>\d{1,4}).kml$',	"main.views_map.kml"),
 	(r'^kml/company-(?P<company>\d{1,4}).kml$',	"main.views_map.kml"),
-	(r'^kml/airport-(?P<airport>[A-Z]{1,5}).kml$',	"main.views_map.kml"),
+	(r'^kml/airport-(?P<airport>\S{1,7}).kml$',	"main.views_map.kml"),
 	
 )
 
