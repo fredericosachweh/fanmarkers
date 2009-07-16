@@ -1,7 +1,7 @@
 from django.contrib.gis.db import models
 from django.contrib.auth.models import User
 from constants import AIRPORT_TYPE
-from django.db.models import Q
+from django.db.models import Q, permalink
 
 class BaseManager(models.GeoManager):
 	def get_query_set(self):				#all airports which are an opbase
@@ -48,8 +48,9 @@ class Airport(models.Model):
 		ordering = ["identifier", "country"]
 		verbose_name_plural = "Airports"
 		
+	@permalink
 	def get_absolute_url(self):
-		return "/airport/%s/" % (self.identifier, )
+		return ('view-airport', str(self.pk) )
 		
 	def __unicode__(self):
 		return u"%s - %s" % (self.identifier, self.location_summary())

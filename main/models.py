@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, permalink
 from django.contrib.auth.models import User
 
 from constants import *
@@ -107,8 +107,13 @@ class Company(models.Model):
 	class Meta:
 		verbose_name_plural = "Companies"
 		
+	@permalink
 	def get_absolute_url(self):
-		return "/company/%i/" % self.pk 
+		return ('view-company', str(self.pk) )
+		
+	@permalink
+	def get_edit_url(self):
+		return ('edit-company', str(self.pk) )
 		
 	def __unicode__(self):
 		return u"%s" % (self.name)
@@ -131,8 +136,13 @@ class Position(models.Model):
 	class Meta:	
 		ordering = ["job_domain"]		#so captain shows up first when displayed on the page
 		
+	@permalink
 	def get_absolute_url(self):
-		return "/position/%i/" % self.pk
+		return ('view-position', str(self.pk) )
+		
+	@permalink
+	def get_edit_url(self):
+		return ('edit-position', str(self.pk) )
 		
 	def __unicode__(self):
 		return u"%s" % (self.name,)
@@ -154,8 +164,9 @@ class Operation(models.Model):
 	extra_info	=	models.TextField("Extra Info", blank=True)
 	last_modified	=	models.DateTimeField(auto_now=True)
 	
-	def get_absolute_url(self):
-		return "/company/%s/#op%s" % (self.company.pk, self.pk)
+	@permalink
+	def get_edit_url(self):
+		return ('edit-operation', str(self.pk) )
 	
 	def __unicode__(self):
 		return u"%s - %s" % (self.company, self.all_fleet)

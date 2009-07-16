@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import permalink
 from django.contrib.auth.models import User
 from constants import *
 
@@ -14,8 +15,13 @@ class Aircraft(models.Model):
 	class Meta:	
 		ordering = ["manufacturer", "type"]
 		
+	@permalink
 	def get_absolute_url(self):
-		return "/aircraft/%i/" % self.pk
+		return ('view-aircraft', str(self.pk) )
+		
+	@permalink
+	def get_edit_url(self):
+		return ('edit-aircraft', str(self.pk) )
 
 		
 	def __unicode__(self):

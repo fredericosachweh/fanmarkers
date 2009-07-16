@@ -18,18 +18,15 @@ def view(request, pk):
 	
 	return locals()
 	
-@render_to('new-edit_aircraft.html')
 def edit(request, pk):
 	return update_object(request, object_id=pk, form_class=AircraftForm, template_name="new-edit_aircraft.html")
 	
-@render_to('new-edit_aircraft.html')
 def new(request):
 	return create_object(request, form_class=AircraftForm, template_name="new-edit_aircraft.html")
 	
 @render_to('list_aircraft-company.html')
 def make_list(request):	
 	objects = Aircraft.objects.all()
-	
 	type="Aircraft"
 	
 	if request.GET:
