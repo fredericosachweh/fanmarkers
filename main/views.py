@@ -13,33 +13,6 @@ from main.position_views import *
 
 ###############################################################################
 
-@login_required()
-@render_to('new-edit_operation.html')		
-def edit_operation(request, pk):
-	from forms import OpBaseFormset, OperationForm
-
-	op = get_object_or_404(Operation, pk=pk)
-
-	if request.method == "POST":
-		form    = OperationForm(request.POST, instance=op)
-		formset = OpBaseFormset(request.POST, instance=op)
-
-		if formset.is_valid() and form.is_valid():
-			form.save()
-			formset.save()
-	
-			return HttpResponseRedirect( op.get_absolute_url() )
-	else:
-		form    = OperationForm(instance=op)
-		formset = OpBaseFormset(instance=op)
-
-
-	return {'operation': op, 'form': form, 'formset': formset, "type": "edit"}
-
-###############################################################################
-	
-###############################################################################	
-
 @login_required()	
 @render_to('edit_mins.html')	
 def edit_mins(request, pk, min_type):
@@ -72,10 +45,6 @@ def edit_mins(request, pk, min_type):
 #############################################################################################################################
 #############################################################################################################################
 #############################################################################################################################
-
-
-	
-###############################################################################	
 
 @login_required()
 @render_to('new-edit_fleet.html')	
@@ -146,33 +115,6 @@ def handle_route(request, type, pk):
 		
 	return {"type": type, "opbase": opbase, "routeform": routeform, "formset": formset}
 	
-@login_required()
-@render_to('new-edit_operation.html')       
-def new_operation(request, pk):
-	from forms import OperationForm, OpBaseFormset
-	from django.forms.models import inlineformset_factory
-
-	company = get_object_or_404(Company, pk=pk)
-
-	if request.method == "POST":
-		op = Operation(company=company)
-
-		form = OperationForm(request.POST, instance=op)
-		if form.is_valid():
-			op = form.save()
-
-			formset = OpBaseFormset(request.POST, instance=op)
-			if formset.is_valid():
-				formset.save()
-
-				return HttpResponseRedirect( "/edit" + company.get_absolute_url() )
-	else:
-		form = OperationForm(instance=Operation(company=company))
-		formset = OpBaseFormset()
-
-	return {'company': company, 'form': form, "formset": formset}
-
-
 #############################################################################################################################
 
 @login_required()

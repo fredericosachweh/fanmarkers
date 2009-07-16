@@ -29,7 +29,8 @@ urlpatterns = patterns('',
 	(r'^mins/',					include("main.urls_mins")),
 	(r'^company/',					include("main.urls_company")),
 	(r'^position/',					include("main.urls_position")),
-	#(r'^fleet/',					include("main.urls_fleet")),
+	(r'^fleet/',					include("main.urls_fleet")),
+	(r'^operation/',				include("main.urls_operation")),
 	
 	###########################################################################################################################################
 	
