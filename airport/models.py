@@ -22,8 +22,6 @@ class RouteManager(models.GeoManager):
 class RelevantManager(models.GeoManager):
 	def get_query_set(self):				#is an opbase, or a routebase
 		return super(RelevantManager, self).get_query_set().filter( Q(routebase__isnull=False) | Q(opbase__isnull=False) ).distinct()
-		
-##############################################################
 
 class Airport(models.Model):
 	identifier	=	models.CharField(max_length=8, primary_key=True)

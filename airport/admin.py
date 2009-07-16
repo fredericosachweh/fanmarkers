@@ -1,5 +1,5 @@
 from django.contrib.gis import admin
-from models import *
+from models import Airport
 
 class AirportAdmin(admin.GeoModelAdmin):
 	list_display = ('identifier', 'name', 'country', 'region', 'municipality',)

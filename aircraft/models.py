@@ -1,9 +1,6 @@
-from django.contrib.auth.models import User
-from django.db.models import permalink
 from django.db import models
+from django.contrib.auth.models import User
 from constants import *
-#from forms import AircraftForm
-
 
 class Aircraft(models.Model):
 	manufacturer	=	models.CharField(max_length=32, help_text="e.g: Cessna, Beechcraft")
@@ -17,18 +14,13 @@ class Aircraft(models.Model):
 	class Meta:	
 		ordering = ["manufacturer", "type"]
 		
-	@permalink
 	def get_absolute_url(self):
-		return ('view-aircraft', str(self.pk) )
-		
-	@permalink
-	def get_edit_url(self):
-		return ('edit-aircraft', (), {"object_id": str(self.pk) })
-		
-	def get_link_ident(self):
-		return self.pk
+		return "/aircraft/%i/" % self.pk
+
 		
 	def __unicode__(self):
+	
+
 		if self.extra:
 			model = " " + self.model + " " + self.extra
 

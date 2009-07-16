@@ -1,23 +1,41 @@
+from django.contrib.auth.decorators import login_required
 from annoying.decorators import render_to
 from django.shortcuts import get_object_or_404
 
+from main.models import Company
 
-from company_tree.models import Company
+from forms import AircraftForm, AircraftSearch
 from models import Aircraft
-from forms import AircraftSearch
-	
+
+################################
+
 @render_to('view_aircraft.html')
-def aircraft(request, pk):
+def view(request, pk):
 
 	aircraft = get_object_or_404(Aircraft, pk=pk)
 	companies = Company.objects.filter(fleet__aircraft=aircraft)
 	
 	return locals()
 	
-@render_to('list_aircraft-company.html')
-def make_list(request):
+@render_to('new-edit_aircraft.html')
+def edit(request, pk):
+	aircraft = get_object_or_404(Aircraft, pk=pk)
+	
+	form = AircraftForm(instance=aircraft)
+	
+	return locals()
+	
+@render_to('new-edit_aircraft.html')
+def new(request):
 
+	form = AircraftForm()
+	
+	return locals()
+	
+@render_to('list_aircraft-company.html')
+def make_list(request):	
 	objects = Aircraft.objects.all()
+	
 	type="Aircraft"
 	
 	if request.GET:
@@ -40,18 +58,3 @@ def make_list(request):
 		searchform = AircraftSearch()
 
 	return locals()
-	
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-
