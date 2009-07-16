@@ -19,8 +19,8 @@ urlpatterns = patterns('',
 	
 	(r'^profile/',							"main.views.profile"),
 	
-	url(r'^jobmap/',						"main.views.jobmap", name="jobmap"),
-	('^$',								"main.views.jobmap"),
+	url(r'^jobmap/',						"main.views_map.jobmap", name="jobmap"),
+	url('^$',							"main.views_map.jobmap", name="root"),
 	
 	##########################################################################################################################################
 	
