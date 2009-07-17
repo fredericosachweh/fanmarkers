@@ -93,10 +93,11 @@ def kml(request, position=None, company=None, airport=None):
 	from django.template.loader import get_template
 	from django.http import HttpResponse
 	from django.template import Context
+	from route.models import Route
 	
 	if position:
 		position = get_object_or_404(Position, pk=position)
-		routes = Route.objects.filter(opbase__operation__positions=position)
+		routes = Route.objects.filter(home__operation__positions=position)
 		bases = Airport.objects.filter(opbase__operation__positions=position).distinct()
 		
 		routebases = Airport.objects.filter(routebase__route__in=routes).exclude(opbase__operation__positions=position).distinct()
@@ -105,7 +106,7 @@ def kml(request, position=None, company=None, airport=None):
 	
 	if company:
 		company = get_object_or_404(Company, pk=company)
-		routes = Route.objects.filter(opbase__operation__company=company)
+		routes = Route.objects.filter(home__operation__company=company)
 		bases = Airport.objects.filter(opbase__operation__company=company).distinct()
 		
 		routebases = Airport.objects.filter(routebase__route__in=routes).exclude(opbase__operation__company=company).distinct()
@@ -113,12 +114,12 @@ def kml(request, position=None, company=None, airport=None):
 		title = str(company)
 		
 	if airport:
-		bases = get_object_or_404(Airport, pk=airport)
+		base = get_object_or_404(Airport, pk=airport)
 		
 				
-		title = str(airport)  + " - " + str(bases.name)
+		title = str(airport)  + " - " + str(base.name)
 		
-		bases = [bases]
+		bases = [base]		#make it a list so it can be iterated in the template
 		
 	kml = get_template('base.kml').render(Context(locals() ))
 
