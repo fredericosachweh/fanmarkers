@@ -8,7 +8,7 @@ from models import *
 from airport.models import Airport
 from mins import *
 
-from empty_formset import DeleteIfEmptyInlineFormSet, DeleteIfEmptyModelForm
+
 
 from django.template import Context, loader
 
@@ -36,25 +36,7 @@ class FleetForm(ModelForm):
 		model = Fleet
 		exclude = ('watchers', 'company')
 		
-#####################################################################################################
-		
-class RouteBaseForm(DeleteIfEmptyModelForm): ###DeleteIfEmptyModelForm
-	base = forms.ModelChoiceField(queryset=Airport.objects.all(), widget=forms.TextInput)
-
-	class Meta:
-		model = RouteBase
-		#exclude = ('sequence', )
-		
-class RouteForm(ModelForm):
-	class Meta:
-		model = Route
-		exclude = ('opbase', 'bases')
-
-#RBFormset = DeleteIfEmptyInlineFormSet(form=RouteBaseForm)
-		
-RouteBaseFormset = inlineformset_factory(Route, RouteBase, form=RouteBaseForm, formset=DeleteIfEmptyInlineFormSet, extra=5, can_delete=True)
-	
-#####################################################################################################
+####################################################################################################
 		
 class OperationForm(ModelForm):
 	positions = forms.ModelMultipleChoiceField(

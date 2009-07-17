@@ -10,7 +10,7 @@ json = {
 		"base":		"{% spaceless %}
 				 {% for position in bases %}
 					<div class='popup_small_div'>
-						<span class='popup_position'><a class='view' href='{{ operation.company.get_absolute_url }}'>{{position.company }}</a> - <a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span><br>
+						<span class='popup_position'><a class='view' href='{{ position.company.get_absolute_url }}'>{{ position.company }}</a> - <a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span><br>
 						<span class='popup_fleet'>{{position.operation_set.all.0.all_fleet}}</span><br>
 					</div>
 					{% empty %}
@@ -22,8 +22,8 @@ json = {
 				 {% for position in routes %}
 				 
 					<div class='popup_small_div'>
-						<span class='popup_position'><a class='view' href='{{ operation.company.get_absolute_url }}'>{{position.company }}</a> - <a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span><br>
-						<span class='popup_fleet'>{{position.operation_set.all.0.all_fleet}}</span><br>
+						<span class='popup_position'><a class='view' href='{{ position.company.get_absolute_url }}'>{{ position.company }}</a> - <a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span><br>
+						<span class='popup_fleet'>{{ position.operation_set.all.0.all_fleet }}</span><br>
 					</div>
 					{% empty %}
 					<div class='popup_not_known not_known'>None</div>

@@ -67,53 +67,7 @@ def new_fleet(request, pk):
 	
 ###############################################################################	
 
-@login_required()
-@render_to('new-edit_route.html')
-def handle_route(request, type, pk):
-	from forms import RouteBaseFormset, RouteForm
 
-	if type=="new":
-		opbase = get_object_or_404(OpBase, pk=pk)
-		route = Route(opbase=opbase)
-	elif type=="edit":
-		route = get_object_or_404(Route, pk=pk)
-		opbase = route.opbase
-		
-	if request.method == "POST":	
-		newPOST = request.POST.copy()
-		
-		#assert False
-		
-		i=1
-		for index in range(0, int(request.POST["routebase_set-TOTAL_FORMS"])-1):
-			if request.POST["routebase_set-" + str(index) + "-base"]:
-				newPOST["routebase_set-" + str(index) + "-sequence"]=i
-				i += 1
-			else:
-				newPOST["routebase_set-" + str(index) + "-sequence"] = ""
-				
-		#assert False
-		
-		########################################################
-		formset = RouteBaseFormset(newPOST, instance=route)
-		routeform = RouteForm(request.POST, instance=route)		#only contains the description
-		
-		if routeform.is_valid() and formset.is_valid():
-			route = routeform.save()
-			formset = RouteBaseFormset(newPOST, instance=route)
-			formset.save()
-						
-			return HttpResponseRedirect( "/edit/operation/" + str(opbase.operation.pk) )
-	
-	else:
-		if type=="new":
-			formset = RouteBaseFormset()
-			routeform = RouteForm(instance=route)
-		elif type=="edit":	
-			formset = RouteBaseFormset(instance=route)
-			routeform = RouteForm(instance=route)
-		
-	return {"type": type, "opbase": opbase, "routeform": routeform, "formset": formset}
 	
 #############################################################################################################################
 

@@ -81,10 +81,10 @@
 						<td>
 							<ul>
 							{% for route in form.instance.route_set.all %}
-							<li><a href="/edit/route/{{route.pk}}" class="edit">{{route}}</a></li>
+							<li><a href="{{ route.get_edit_url }}" class="edit">{{route}}</a></li>
 							{% endfor %}
 
-							<li><a href="/new/route/{{form.instance.pk}}" class="new">Add route</a></li>
+							<li><a href="{% url new-route form.instance.pk %}" class="new">Add route</a></li>
 							</ul>
 						</td>
 					</tr>
