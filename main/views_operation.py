@@ -23,7 +23,7 @@ def edit(request, pk):
 			form.save()
 			formset.save()
 	
-			return HttpResponseRedirect( operation.get_absolute_url() )
+			return HttpResponseRedirect( operation.company.get_edit_url() )
 	else:
 		form    = OperationForm(instance=operation)
 		formset = OpBaseFormset(instance=operation)
