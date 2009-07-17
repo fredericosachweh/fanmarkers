@@ -20,7 +20,11 @@
 		<input type="submit">
 	</form>
 	</div>
+	{% load pagination_tags %}
 	
+	{% autopaginate objects 4 %}
+
+	<div class="pagnate">{% paginate %}</div>
 	<ul>
 	{% for object in objects %}
 		<li><a class="view" href="{{ object.get_absolute_url }}">{{object}}</li>

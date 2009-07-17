@@ -11,5 +11,5 @@ class AircraftForm(ModelForm):
 
 class AircraftSearch(forms.Form):
 	search		=	forms.CharField(max_length=100, required=False)
-	engine_type	=	forms.ChoiceField(choices=[(-1,"Any",),]+ENGINE_TYPE, label="Engine Type")
-	cat_class	=	forms.ChoiceField(choices=[(-1,"Any",),]+CAT_CLASSES, label="Category/Class")
+	engine_type	=	forms.ChoiceField(choices=[(-1,"Any",),]+ENGINE_TYPE, label="Engine Type", required=False)
+	cat_class	=	forms.ChoiceField(choices=[(-1,"Any",),]+CAT_CLASSES, label="Category/Class", required=False)
