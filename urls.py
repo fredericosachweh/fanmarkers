@@ -26,8 +26,6 @@ urlpatterns = patterns('',
 	(r'^airport/',					include("airport.urls")),
 	(r'^aircraft/',					include("aircraft.urls")),
 	(r'^route/',					include("route.urls")),
-	#url(r'dd', 'main.views_map.jobmap', name="edit-route"),
-	#url(r'dd', 'main.views_map.jobmap', name="new-route"),
 	
 	(r'^mins/',					include("main.urls_mins")),
 	(r'^company/',					include("main.urls_company")),

@@ -83,8 +83,8 @@ def click(request, lat, lng, z):
 	
 	airport = Airport.relevant.distance(point).order_by('distance')[0]
 	
-	bases = Position.objects.filter(operation__opbase__in=OpBase.objects.filter(base=airport)).select_related()
-	routes = Position.objects.filter(operation__opbase__in=OpBase.objects.filter(route__in=Route.objects.filter(bases=airport))).select_related()
+	bases = Position.objects.filter(operation__opbase__base=airport).select_related()
+	routes = Position.objects.filter(operation__opbase__route__bases=airport).select_related()
 	
 	return locals()
 	
