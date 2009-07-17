@@ -1,22 +1,26 @@
 {% load comments %}
 <form action="{% comment_form_target %}" method="post">
-	<table>
 	
+	{% for field in form %}
 		{% if field.is_hidden %}
 			{{ field }}
-		{% else %}
-		
-			<tr
-			{% if field.errors %} class="error"{% endif %}
-			{% ifequal field.name "honeypot" %} style="display:none;"{% endifequal %}>
-			{% if field.errors %}{{ field.errors }}{% endif %}
-		
-				<th>{{ field.label_tag }}</th> <td>{{ field }}</td>
-			</tr>
 		{% endif %}
-  </table>
-  <p class="submit">
-    <input type="submit" name="post" class="submit-post" value="Post" %}" />
-    <input type="submit" name="preview" class="submit-preview" value="Preview" %}" />
-  </p>
+	{% endfor %}
+	
+	<div style="margin-bottom: 10px">
+	{% if not user.is_authenticated %}{{ form.name.label_tag }}:<br>{{ form.name }}{% endif %} Post Anonymously? <input name="anon" type="checkbox" />
+	</div>	
+	
+	<div>
+	{{ form.comment.label_tag }}:<br>{{ form.comment }}
+	</div>
+		
+	<div style="display:none;">
+		<label for="id_honeypot">If you enter anything in this field your comment will be treated as spam</label>
+		<input type="text" name="honeypot" id="id_honeypot" />
+	</div>
+
+	<div class="submit">
+		<input type="submit" name="post" class="submit-post" value="Post" %}" />
+	</div>
 </form>

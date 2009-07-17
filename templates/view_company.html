@@ -1,7 +1,8 @@
 {% extends "base_view.html" %}
+{% load comments %}
 
 {% block edit_top %}"{{ company.get_edit_url }}"{% endblock %}
-{%block title%}{{company.name}}{% endblock %}
+{% block title %}{{company.name}}{% endblock %}
 
 {% block css %}
 {{ block.super }}
@@ -42,136 +43,141 @@
 	
 {% block main_content %}
 <table class="fancy_table" summary="Bases">
-	
-		<thead>
-			<tr>
-				<td colspan="2">Overview Map<a title="Download KML file for viewing in Google Earth" class="kml_link" href="http://flightjobwiki.com/kml/company-{{company.pk}}.kml">kml</a></td>
-			</tr>
-		</thead>
-		
+
+	<thead>
 		<tr>
-			<td>
-				<div id="map_canvas"></div>
-			</td>
-		
+			<td colspan="2">Overview Map<a title="Download KML file for viewing in Google Earth" class="corner_link" href="http://flightjobwiki.com/kml/company-{{company.pk}}.kml">kml</a></td>
 		</tr>
+	</thead>
+	
+	<tr>
+		<td>
+			<div id="map_canvas"></div>
+		</td>
+	
+	</tr>
 </table>
 
 
-
-
-
-
-
-
 <div class="last_modified">Last modified:  <strong>{{company.last_modified|date:"F d, Y"|default:"Never"}}</strong> {{company.last_modified|date:"(G:i.s T)"}}</div>	
-	<table class="fancy_table" summary="Position general information">
-		<thead>
-			<tr>
-				<td colspan="2">Company Information</td>
-			</tr>
-		</thead>
-		
+<table class="fancy_table" summary="Position general information">
+	<thead>
 		<tr>
-			<th>Business Domain:</th>  <td>{{company.get_type_display|default:'<span class="not_known">Not Known</span>'}} </td>
+			<td colspan="2">Company Information</td>
 		</tr>
-		
-		<tr>
-			<th>Description:</th>  <td>{{ company.description|default:'<span class="not_known">Not Known</span>'}}</td>
-		</tr>
-		
-		<tr>
-			<th>Contact Info:</th>  <td>{{company.contact_info|default:'<span class="not_known">Not Known</span>'}}</td>
-		</tr>
-		
-		<tr>
-			<th>Website:</th>  <td>{% if company.website %}<a href="{{company.website}}" class="external">{{company.website}}</a> <img src="http://en.wikipedia.org/skins-1.5/monobook/external.png" />{% else %}<span class="not_known">Not Known</span>{% endif %} </td>
-		</tr>
-		
-		<tr>
-			<th>Call Sign:</th>  <td>{{company.call_sign|default:'<span class="not_known">Not Known</span>'}}</td>
-		</tr>
-		
-		<tr>
-			<th>Union:</th>  <td>{{company.union|default:'<span class="not_known">Not Known</span>'}}</td>
-		</tr>
-		
-		<tr>
-			<th>Jumpseat Privileges:</th>  <td>	{% ifequal company.jumpseat 0 %}
-									<span class="not_known">Not Known</span>
-								{% else %}
-									{{ company.get_jumpseat_display }}
-								{% endifequal %}
-							</td>
-		</tr>
-		
-			
-		
-		{#<tr>#}
-		{#	<th>Number of people watching this company:</th>#}
-		{#	<td>{{watchers|default:"0"}} {% if not already_watching %}<a class="watch" href="/watch/position/{{ company.pk }}">(Watch this company)</a>{%else%}<a href="/unwatch/position/{{ position.pk }}">(Unwatch this company)</a>{% endif %}</td>#}
-		{#</tr>#}
-	</table>
+	</thead>
 	
+	<tr>
+		<th>Business Domain:</th>  <td>{{company.get_type_display|default:'<span class="not_known">Not Known</span>'}} </td>
+	</tr>
+	
+	<tr>
+		<th>Description:</th>  <td>{{ company.description|default:'<span class="not_known">Not Known</span>'}}</td>
+	</tr>
+	
+	<tr>
+		<th>Contact Info:</th>  <td>{{company.contact_info|default:'<span class="not_known">Not Known</span>'}}</td>
+	</tr>
+	
+	<tr>
+		<th>Website:</th>  <td>{% if company.website %}<a href="{{company.website}}" class="external">{{company.website}}</a> <img src="http://en.wikipedia.org/skins-1.5/monobook/external.png" />{% else %}<span class="not_known">Not Known</span>{% endif %} </td>
+	</tr>
+	
+	<tr>
+		<th>Call Sign:</th>  <td>{{company.call_sign|default:'<span class="not_known">Not Known</span>'}}</td>
+	</tr>
+	
+	<tr>
+		<th>Union:</th>  <td>{{company.union|default:'<span class="not_known">Not Known</span>'}}</td>
+	</tr>
+	
+	<tr>
+		<th>Jumpseat Privileges:</th>  <td>	{% ifequal company.jumpseat 0 %}
+								<span class="not_known">Not Known</span>
+							{% else %}
+								{{ company.get_jumpseat_display }}
+							{% endifequal %}
+						</td>
+	</tr>
+	
+		
+	
+	{#<tr>#}
+	{#	<th>Number of people watching this company:</th>#}
+	{#	<td>{{watchers|default:"0"}} {% if not already_watching %}<a class="watch" href="/watch/position/{{ company.pk }}">(Watch this company)</a>{%else%}<a href="/unwatch/position/{{ position.pk }}">(Unwatch this company)</a>{% endif %}</td>#}
+	{#</tr>#}
+</table>
+
 <div class="last_modified">&nbsp;</div>	
-	<table class="fancy_table single" summary="Position general information">
-		<thead>
-			<tr>
-				<td colspan="2">Operations</td>
-			</tr>
-		</thead>
+<table class="fancy_table single" summary="Position general information">
+	<thead>
 		<tr>
-		<td>	
-		
-		{#######################################}
-		
-		{% for operation in company.operation_set.all %}
-			<div style="margin: 3px; padding: 10px;">
-				<table class="optable">
-					<tr>
-						<th>Positions:</th>
-						<td>
-							<ul>
-							{% for position in operation.positions.all %}
-							<li><a href="{{ position.get_absolute_url }}" class="view">{{position}}</a></li>
-							{% endfor %}
-							</ul>
-						</td>
-					</tr>
-					
-					<tr>
-						<th>Aircraft:</th>
-						<td>
-							<ul>
-							{% for fleet in operation.fleet.all %}
-							<li><a href="{{ fleet.aircraft.get_absolute_url }}" class="immutable">{{fleet}}</a></li>
-							{% endfor %}
-							</ul>
-						</td>
-					</tr>
-					
-					
-					<tr>
-						<th>Bases:</th>
-						<td>
-							<ul>
-							{% for base in operation.bases.all %}
-							<li><a href="{{ base.get_absolute_url }}" class="immutable">{{base}}</a></li>
-							{% endfor %}
-							</ul>
-						</td>
-					</tr>
-				</table>
-				
-			</div>
-		{% if not forloop.last %}<hr />{% endif %}
-		{% empty %}
-			<div style="text-align: center"><span class="not_known">None</span></div>
-		{% endfor %}
-		
-		{#######################################}
-		
-		</td>
+			<td colspan="2">Operations</td>
 		</tr>
-	</table>
+	</thead>
+	<tr>
+	<td>	
+	
+	{#######################################}
+	
+	{% for operation in company.operation_set.all %}
+		<div style="margin: 3px; padding: 10px;">
+			<table class="optable">
+				<tr>
+					<th>Positions:</th>
+					<td>
+						<ul>
+						{% for position in operation.positions.all %}
+						<li><a href="{{ position.get_absolute_url }}" class="view">{{position}}</a></li>
+						{% endfor %}
+						</ul>
+					</td>
+				</tr>
+				
+				<tr>
+					<th>Aircraft:</th>
+					<td>
+						<ul>
+						{% for fleet in operation.fleet.all %}
+						<li><a href="{{ fleet.aircraft.get_absolute_url }}" class="immutable">{{fleet}}</a></li>
+						{% endfor %}
+						</ul>
+					</td>
+				</tr>
+				
+				
+				<tr>
+					<th>Bases:</th>
+					<td>
+						<ul>
+						{% for base in operation.bases.all %}
+						<li><a href="{{ base.get_absolute_url }}" class="immutable">{{base}}</a></li>
+						{% endfor %}
+						</ul>
+					</td>
+				</tr>
+			</table>
+			
+		</div>
+	{% if not forloop.last %}<hr />{% endif %}
+	{% empty %}
+		<div style="text-align: center"><span class="not_known">None</span></div>
+	{% endfor %}
+	
+	{#######################################}
+	
+	</td>
+	</tr>
+</table>
+
+{% get_comment_list for company as comment_list %}
+
+{% include "comments_table.html"%}
+
+<table class="fancy_table">
+	<tr>
+		<td><div class="comments_form_div">{% render_comment_form for company %}</div></td>
+	</tr>
+</table>
+
 {% endblock %}

@@ -1,5 +1,6 @@
 {% extends "base_view.html" %}
 {% load humanize %}
+{% load comments %}
 
 {% block title %}{{position.company.name}} - {{position.name}}{% endblock %}
 
@@ -260,4 +261,17 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 		{% endif %}
 	</table>
 {##################################################}
+{##################################################}
+{#################comments#########################}
+{##################################################}
+
+{% get_comment_list for position as comment_list %}
+
+{% include "comments_table.html"%}
+
+<table class="fancy_table">
+	<tr>
+		<td><div class="comments_form_div">{% render_comment_form for position %}</div></td>
+	</tr>
+</table>
 {% endblock %}

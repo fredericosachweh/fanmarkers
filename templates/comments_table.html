@@ -1,0 +1,46 @@
+<div class="last_modified">&nbsp;</div>	
+<table class="fancy_table" summary="Position general information">
+	<thead>
+		<tr>
+			<td colspan="2">User Comments</td>
+		</tr>
+	</thead>
+	
+	{% for comment in comment_list %}
+	<tr>
+		<td>	<div class="time_box">{{ comment.submit_date|date:"F d, Y" }} {{ comment.submit_date|date:"(G:i.s T)" }}</div>
+			<div class="comment_div">{{comment.comment}}</div>
+			
+			<div style="float: right">-
+				{% if comment.user %}
+					<strong>{{ comment.user }}</strong>
+				{% else %}
+					{% if comment.user_name %}
+						{{ comment.user_name }}
+					{% else %}
+						<span class="not_known">Anonymous</span>
+					{% endif %}
+				{% endif %}
+				
+				{% ifequal user comment.user %}
+					<a title="Delete this comment" href="{% url delete-comment comment.pk %}">X</a>
+				{% else %}
+					{% if user.is_superuser %}
+						<a title="Delete this comment" href="{% url delete-comment comment.pk %}">X</a>
+						
+					{% else %}
+						<a title="Flag this comment" href="{% url comments-flag comment.pk %}"><u>/!\</u></a>
+					{% endif %}
+					
+				{% endifequal %}
+			</div>
+		</td> 
+	</tr>
+	{% empty %}
+	
+	<tr>
+		<td class="not_known">No comments yet</td>
+	</tr>
+	
+	{% endfor %}
+</table>

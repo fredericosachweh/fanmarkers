@@ -12,7 +12,7 @@ urlpatterns = patterns('',
 	url('^$',										"main.views_map.jobmap", name="root"),
 	
 	(r'^admin/doc/',				include('django.contrib.admindocs.urls')),
-	(r'^comments/',					include('django.contrib.comments.urls')),
+	(r'^comments/',					include('mod_comments.urls')),
 	(r'^admin/(.*)',				admin.site.root),
 	(r'^openid/',					include('django_openid_auth.urls')),
 	
@@ -36,9 +36,9 @@ urlpatterns = patterns('',
 	
 	###########################################################################################################################################
 	
-	(r'^kml/position-(?P<position>\d{1,4}).kml$',	"main.views_map.kml"),
-	(r'^kml/company-(?P<company>\d{1,4}).kml$',	"main.views_map.kml"),
-	(r'^kml/airport-(?P<airport>\S{1,7}).kml$',	"main.views_map.kml"),
+	(r'^kml/position-(?P<position>\d+).kml$',	"main.views_map.kml"),
+	(r'^kml/company-(?P<company>\d+).kml$',	"main.views_map.kml"),
+	(r'^kml/airport-(?P<airport>\S+).kml$',	"main.views_map.kml"),
 	
 )
 
