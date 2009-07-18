@@ -7,6 +7,7 @@ from mins import Mins, CatClassMins
 
 from aircraft.models import Aircraft
 from airport.models import Airport
+#from comment.models import Comment
 
 ###############################################################################################################################
 		
@@ -64,7 +65,7 @@ class Company(models.Model):
 	contact_info	=	models.TextField(blank=True)
 	watchers	=	models.ManyToManyField(User, blank=True, )
 	last_modified	=	models.DateTimeField(auto_now=True)
-	
+
 	class Meta:
 		verbose_name_plural = "Companies"
 		

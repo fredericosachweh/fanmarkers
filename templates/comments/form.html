@@ -1,14 +1,18 @@
 {% load comments %}
-<form action="{% comment_form_target %}" method="post">
+<form action="{% comment_form_target %}" method="post" id="comment_form">
 	
 	{% for field in form %}
 		{% if field.is_hidden %}
 			{{ field }}
 		{% endif %}
 	{% endfor %}
+
+	<input id="email" type="hidden" name="email" value="username@example.com"/>
 	
 	<div style="margin-bottom: 10px">
-	{% if not user.is_authenticated %}{{ form.name.label_tag }}:<br>{{ form.name }}{% endif %} Post Anonymously? <input name="anon" type="checkbox" />
+		{% if not user.is_authenticated %}{{ form.name.label_tag }}:<br>{{ form.name }}{% endif %}
+		
+		<label for="anon">Post Anonymously?</label> <input id="anon" name="anon" type="checkbox" />
 	</div>	
 	
 	<div>
@@ -21,6 +25,6 @@
 	</div>
 
 	<div class="submit">
-		<input type="submit" name="post" class="submit-post" value="Post" %}" />
+		<input type="submit" name="post" class="submit-post" value="Post" />
 	</div>
 </form>

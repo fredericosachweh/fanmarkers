@@ -11,17 +11,18 @@
 		<td>	<div class="time_box">{{ comment.submit_date|date:"F d, Y" }} {{ comment.submit_date|date:"(G:i.s T)" }}</div>
 			<div class="comment_div">{{comment.comment}}</div>
 			
-			<div style="float: right">-
+			<div style="float: right">
+			{% ifequal comment.user_email "anonymous@example.com" %}
+				-<span class="not_known">Anonymous</span>
+			{% else %}
 				{% if comment.user %}
-					<strong>{{ comment.user }}</strong>
+					-<strong>{{ comment.user }}</strong>
 				{% else %}
-					{% if comment.user_name %}
-						{{ comment.user_name }}
-					{% else %}
-						<span class="not_known">Anonymous</span>
-					{% endif %}
+					-{{ comment.user_name }}
 				{% endif %}
+			{% endifequal %}
 				
+			{% if user.is_authenticated %}
 				{% ifequal user comment.user %}
 					<a title="Delete this comment" href="{% url delete-comment comment.pk %}">X</a>
 				{% else %}
@@ -33,6 +34,7 @@
 					{% endif %}
 					
 				{% endifequal %}
+			{% endif %}
 			</div>
 		</td> 
 	</tr>

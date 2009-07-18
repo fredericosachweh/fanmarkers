@@ -1,6 +1,7 @@
 {% extends "base_view.html" %}
 {% load comments %}
 
+
 {% block edit_top %}"{{ company.get_edit_url }}"{% endblock %}
 {% block title %}{{company.name}}{% endblock %}
 
@@ -21,8 +22,6 @@
 
 	$(document).ready(function() {
 		
-		initialize();
-		
 		var kml = new GGeoXml('{{ SITE_URL }}/kml/company-{{company.pk}}.kml', function(){
 		
 			if (kml.loadedCorrectly())
@@ -35,6 +34,7 @@
 				map.setZoom(6)
 		});
 		
+		initialize();
 	});
 	
 	window.onunload = GUnload;
@@ -169,7 +169,6 @@
 	</td>
 	</tr>
 </table>
-
 {% get_comment_list for company as comment_list %}
 
 {% include "comments_table.html"%}
@@ -179,5 +178,6 @@
 		<td><div class="comments_form_div">{% render_comment_form for company %}</div></td>
 	</tr>
 </table>
+
 
 {% endblock %}

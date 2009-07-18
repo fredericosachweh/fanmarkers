@@ -1,7 +1,29 @@
 {% extends "base.html" %}
 {% load humanize %}
 
-{% block javascript %}{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+
+	$(document).ready(function() {
+
+		$('#comment_form').submit( function() {
+			if( $('#anon').is(':checked') ){
+				$('#email').val('anonymous@example.com');
+				$('#id_name').val("anonymous");
+			}
+		});
+
+		$('#anon').click( function() {
+			
+			if( $('#anon').is(':checked') )
+				$('#id_name').attr('disabled', 'disabled');
+			else
+				$('#id_name').attr('disabled', '');
+		});
+	});
+</script>
+
+{% endblock %}
 
 {% block css %}
 {{ block.super }}

@@ -40,6 +40,7 @@
 {% endblock %}
 
 {% block javascript %}
+{{block.super}}
 
 <script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/small_map.js"></script>
@@ -50,7 +51,6 @@
 
 	$(document).ready(function() {
 		
-		initialize();
 		
 		var kml = new GGeoXml('{{ SITE_URL }}/kml/position-{{position.pk}}.kml', function(){
 		
@@ -62,7 +62,10 @@
 			
 			if (map.getZoom() > 6)
 				map.setZoom(6)
-		});
+			});
+
+
+		initialize();
 		
 	});
 	
