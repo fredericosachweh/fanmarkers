@@ -50,7 +50,7 @@ class Fleet(models.Model):
 
     @permalink
     def get_edit_url(self):
-        return ('edit-fleet', str(self.pk) )
+        return ('edit-fleet', [str(self.pk)] )
 
 ###############################################################################################################################
 
@@ -71,11 +71,11 @@ class Company(models.Model):
 
     @permalink
     def get_absolute_url(self):
-        return ('view-company', str(self.pk) )
+        return ('view-company', [str(self.pk)] )
 
     @permalink
     def get_edit_url(self):
-        return ('edit-company', str(self.pk) )
+        return ('edit-company', [str(self.pk)] )
 
     def __unicode__(self):
         return u"%s" % (self.name)
@@ -100,15 +100,15 @@ class Position(models.Model):
 
     @permalink
     def get_absolute_url(self):
-        return ('view-position', str(self.pk) )
+        return ('view-position', [str(self.pk)] )
 
     @permalink
     def get_edit_url(self):
-        return ('edit-position', str(self.pk) )
+        return ('edit-position', [str(self.pk)] )
 
     @permalink
     def get_edit_mins_url(self):
-        return ('edit-mins', str(self.pk) )
+        return ('edit-mins', [str(self.pk)] )
 
 
     def __unicode__(self):
@@ -133,7 +133,7 @@ class Operation(models.Model):
 
     @permalink
     def get_edit_url(self):
-        return ('edit-operation', str(self.pk) )
+        return ('edit-operation', [str(self.pk)] )
 
     def __unicode__(self):
         return u"%s - %s" % (self.company, self.all_fleet)

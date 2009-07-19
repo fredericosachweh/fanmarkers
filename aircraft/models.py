@@ -17,11 +17,11 @@ class Aircraft(models.Model):
 
     @permalink
     def get_absolute_url(self):
-        return ('view-aircraft', str(self.pk) )
+        return ('view-aircraft', [str(self.pk)] )
 
     @permalink
     def get_edit_url(self):
-        return ('edit-aircraft', str(self.pk) )
+        return ('edit-aircraft', [str(self.pk)] )
 
 
     def __unicode__(self):
