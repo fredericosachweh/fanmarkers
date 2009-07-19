@@ -87,7 +87,7 @@ class StatusForm(ModelForm):
 class PositionForm(ModelForm):
     class Meta:
         model = Position
-        exclude = ('watchers','hard_mins', 'pref_mins', 'company', 'advertising')
+        exclude = ('watchers', 'mins', 'company')
 
 class PayscaleForm(ModelForm):
     class Meta:
