@@ -27,16 +27,26 @@
 	.b_choice		{background: #5db856; border: 1px solid green}
 	.b_layoff		{background: #c88181; border: 1px solid darkred}
 	
-	.subheading_box		{font-size: x-small; width: 100%; text-align: right}
+	.subheading_box			{font-size: x-small; width: 100%; text-align: right}
 	
-	.position_mins		{margin-top: 1em; border-collapse: collapse}
-	.position_mins td	{border: 0px solid black; padding-right: 1em}
+	.position_mins			{margin-top: 1em; border-collapse: collapse}
+	.position_mins td		{border: 0px solid black; padding-right: 1em}
+
+	.mins th				{width: 315px}
+	.mins td				{width: 630px}
 	
-	.base_hide		{display: none}
-	.bases			{}
-	
-	.mins ul		{margin: 0px; padding-left: 1.5em}
-	ul			{margin-top: 0}
+	.pref_mins,
+	.hard_mins				{width: 305px; margin-right: auto; margin-left: auto; border-collapse: collapse; margin-bottom: 10px}
+
+	.pref_mins				{float: right;}
+	.hard_mins				{float: left;}
+
+	table th[colspan='2']	{text-align: center; font-weight: bold; }
+
+	.pref_mins td			{background: #DFDFDF; width: 50%; }
+	.hard_mins td			{background: #8cc2c3; width: 50%; }
+	.hard_mins th			{background: #a3e3e4}
+
 {% endblock %}
 
 {% block javascript %}
@@ -207,9 +217,6 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 						{% endifequal %}
 						</td>
 		</tr>
-		<tr>
-			<th>Flight Hours per month:</th>  <td>{{compensation.flight_hours|default:"<span class='not_known'>Not Known</span>"}} </td>
-		</tr>
 		
 		{% if compensation.extra_info %}
 		<tr>
@@ -249,11 +256,11 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 	
 		<thead>
 			<tr>
-				<td colspan="2">Minimums <a class="corner_link edit_link_ui" href="{{ position.mins.get_edit_url }}">(edit)</a></td>
+				<td colspan="2">Minimums <a class="corner_link edit_link_ui" href="{{ position.get_edit_mins_url }}">(edit)</a></td>
 			</tr>
 		</thead>
 		
-		{% if position.mins.has %}		
+		{% if 1 %}		
 			{{ position.mins.as_table|safe }}
 		{% else %}
 		

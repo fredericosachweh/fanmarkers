@@ -10,7 +10,7 @@ class DeleteIfEmptyModelForm(ModelForm):
     blank or all-whitespace.
     """
     def full_clean(self):
-        self._errors = ErrorDict()	#added
+        self._errors = ErrorDict()      #added
         if not self.is_bound:
             return
         if not self.is_empty():

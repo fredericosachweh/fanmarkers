@@ -11,9 +11,9 @@
 	.highlighted		{font-weight: bold; color: darkred}
 	.plus 			{margin: 2px; margin-right: 5px; cursor: pointer}
 	
-	.mins_table				{width: 100%; border: 1px solid #DDDDDD; font-size: x-small; border-collapse: collapse}
+	.mins_table				{width: 100%; border: 1px solid #DDDDDD; border-collapse: collapse}
 	.mins_table input,
-	.mins_table select			{font-size: x-small}
+	.mins_table select			{font-size: small}
 	.mins_table tr:nth-child(odd) td	{background: #F3F3F3}
 	.mins_table textarea			{margin: 5px; width: 90%; height: 6em}
 	.mins_table tbody td			{border: 1px solid #AAAAAA; padding: 2px; padding-top: 7px; padding-bottom: 7px; text-align: center}
@@ -84,12 +84,6 @@
 			</tr>
 			
 			<tr>
-				<th>{{mf.inst_instructor.label}}</th>
-				<td>{{mf.inst_instructor}}</td>
-				<td>{{mf.p_inst_instructor}}</td>
-			</tr>
-			
-			<tr>
 				<th>{{mf.extra_info.label}}</th>
 				<td colspan="2">{{mf.extra_info}}</td>
 			</tr>
@@ -106,21 +100,18 @@
 	{% if forloop.first %}
 	<thead>
 		<tr>
-			<td colspan="12">{{ cat_class_formset.errors}}</td>
+			<td colspan="9">{{ cat_class_formset.errors}}</td>
 		</tr>
 		<tr>
 			<td>{{cat_class_formset.management_form}}{{form.category.label}}</td>
 			<td>{{form.total.label}}</td>
 			<td>{{form.pic.label}}</td>
 			<td>{{form.night.label}}</td>
-			<td>{{form.inst.label}}</td>
 			<td>{{form.xc.label}}</td>
 			<td>{{form.dual_given.label}}</td>
 			<td>{{form.cert_level.label}}</td>
-			<td>{{form.endorsed.label}}</td>
 			<td>{{form.instructor.label}}</td>
 			<td>{{form.atp_mins.label}}</td>
-			<td>{{form.inst_rating.label}}</td>
 			{% ifnotequal cat_class_formset.total_form_count 3 %}
 			<td>Delete?</td>
 			{% endifnotequal %}		
@@ -133,14 +124,11 @@
 			<td>{{form.total}}<br>{{form.p_total}}</td>
 			<td>{{form.pic}}<br>{{form.p_pic}}</td>
 			<td>{{form.night}}<br>{{form.p_night}}</td>
-			<td>{{form.inst}}<br>{{form.p_inst}}</td>
 			<td>{{form.xc}}<br>{{form.p_xc}}</td>
 			<td>{{form.dual_given}}<br>{{form.p_dual_given}}</td>
 			<td>{{form.cert_level}}<br>{{form.p_cert_level}}</td>
-			<td>{{form.endorsed}}<br>{{form.p_endorsed}}</td>
 			<td>{{form.instructor}}<br>{{form.p_instructor}}</td>
 			<td>{{form.atp_mins}}<br>{{form.p_atp_mins}}</td>
-			<td>{{form.inst_rating}}<br>{{form.p_inst_rating}}</td>
 			{% if form.instance.pk %}
 			<td class="del_column">{{form.DELETE}}</td>
 			{% else %}
@@ -169,7 +157,7 @@
 			<td>{{form.total.label}}</td>
 			<td>{{form.pic.label}}</td>
 			<td>{{form.type_rating.label}}</td>
-			{% ifnotequal on_type_formset.total_form_count 3 %}
+			{% ifnotequal on_type_formset.total_form_count 1 %}
 			<td>Delete?</td>
 			{% endifnotequal %}		
 		</tr>
@@ -187,7 +175,7 @@
 			{% if form.instance.pk %}
 			<td>{{form.DELETE}}</td>
 			{% else %}
-				{% ifnotequal on_type_formset.total_form_count 3 %}
+				{% ifnotequal on_type_formset.total_form_count 1 %}
 				<td></td>
 				{% endifnotequal %}	
 			{% endif %}		

@@ -16,15 +16,15 @@ def view(request, pk):
     aircraft = get_object_or_404(Aircraft, pk=pk)
     companies = Company.objects.filter(fleet__aircraft=aircraft)
     return locals()
-        
+
 def edit(request, pk):
     return update_object(request, object_id=pk, form_class=AircraftForm, template_name="new-edit_aircraft.html")
-        
+
 def new(request):
     return create_object(request, form_class=AircraftForm, template_name="new-edit_aircraft.html")
-        
+
 @render_to('list_aircraft-company.html')
-def make_list(request): 
+def make_list(request):
     objects = Aircraft.objects.all()
     type="Aircraft"
     if request.GET.get("search",""):
@@ -40,5 +40,5 @@ def make_list(request):
                     s = searchform.cleaned_data["search"]
                     objects = objects.filter( Q(manufacturer__icontains=s) | Q(type__icontains=s) | Q(model__icontains=s) | Q(extra__icontains=s) )
     else:
-            searchform = AircraftSearch()
+        searchform = AircraftSearch()
     return locals()

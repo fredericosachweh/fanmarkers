@@ -5,7 +5,7 @@
 {########################################################################}
 
 {% block top_links %}
-<a href="/edit{{ company.get_absolute_url }}" class="edit_link">Edit {{ company.name }}</a>
+<a href="{{ company.get_edit_url }}" class="edit_link">Edit {{ company.name }}</a>
 {% endblock %}
 
 {########################################################################}
