@@ -26,7 +26,7 @@
 	.del_column input	{color: pink !important}
 {% endblock %}
 
-{% block top_links%}<a class="edit" href="/edit{{position.get_absolute_url}}">Edit {{position}}</a>{% endblock %}
+{% block top_links%}<a class="edit" href="{{position.get_edit_url}}">Edit {{position}}</a>{% endblock %}
 
 {% block form %}	
 	<h2>General Requirements:</h2>
@@ -35,7 +35,7 @@
 		<thead>
 			<tr>
 				<th></th>
-				<td>Absolute</td>
+				<td>Essential</td>
 				<td>Preferred</td>
 			</tr>
 		</thead>
@@ -94,7 +94,7 @@
 	<hr>
 	
 	<h2>Flight Times:</h2>
-	<p>Top Row: Absolute Minimums<br>Bottom Row: Preferred Minimums</p>
+	<p>Top Row: Essential Minimums<br>Bottom Row: Preferred Minimums</p>
 	<table class="mins_table">
 	{% for form in cat_class_formset.forms %}
 	{% if forloop.first %}

@@ -87,8 +87,8 @@ class Position(models.Model):
     name            =       models.CharField("Position Name", max_length=32, blank=True)
     description     =       models.TextField(blank=True)
 
-    job_domain      =       models.IntegerField(choices=JOB_DOMAIN)
-    schedule_type   =       models.IntegerField(choices=SCHEDULE_TYPE)
+    job_domain      =       models.IntegerField(choices=JOB_DOMAIN, default=0)
+    schedule_type   =       models.IntegerField(choices=SCHEDULE_TYPE, default=0)
 
     mins            =       models.ForeignKey(Mins, blank=True, null=True)
 

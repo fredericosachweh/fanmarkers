@@ -27,18 +27,20 @@ def new(request):
 def make_list(request):
     objects = Aircraft.objects.all()
     type="Aircraft"
-    if request.GET.get("search",""):
+    if request.GET.get("cat_class", False):
         searchform = AircraftSearch(request.GET)
-        if searchform.is_valid():
-            if int(searchform.cleaned_data["cat_class"]) >= 0:
-                assert False
-                objects = objects.filter(cat_class=searchform.cleaned_data["cat_class"])
-                if int(searchform.cleaned_data["engine_type"]) >= 0:
-                    assert False
-                    objects = objects.filter(engine_type=searchform.cleaned_data["engine_type"])
-                if searchform.cleaned_data["search"]:
-                    s = searchform.cleaned_data["search"]
-                    objects = objects.filter( Q(manufacturer__icontains=s) | Q(type__icontains=s) | Q(model__icontains=s) | Q(extra__icontains=s) )
+        searchform.is_valid()
+
+        if int(searchform.cleaned_data["cat_class"]) >= 0:
+            objects = objects.filter(cat_class=searchform.cleaned_data["cat_class"])
+
+        if int(searchform.cleaned_data["engine_type"]) >= 0:
+            objects = objects.filter(engine_type=searchform.cleaned_data["engine_type"])
+
+        if searchform.cleaned_data["search"]:
+            s = searchform.cleaned_data["search"]
+            objects = objects.filter( Q(manufacturer__icontains=s) | Q(type__icontains=s) | Q(model__icontains=s) | Q(extra__icontains=s) )
+
     else:
         searchform = AircraftSearch()
     return locals()

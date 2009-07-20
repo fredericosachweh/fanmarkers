@@ -36,16 +36,16 @@
 	.mins td				{width: 630px}
 	
 	.pref_mins,
-	.hard_mins				{width: 305px; margin-right: auto; margin-left: auto; border-collapse: collapse; margin-bottom: 10px}
+	.hard_mins				{width: 305px; margin-right: auto; margin-left: auto; border-collapse: collapse; }
 
 	.pref_mins				{float: right;}
 	.hard_mins				{float: left;}
 
 	table th[colspan='2']	{text-align: center; font-weight: bold; }
 
-	.pref_mins td			{background: #DFDFDF; width: 50%; }
-	.hard_mins td			{background: #8cc2c3; width: 50%; }
-	.hard_mins th			{background: #a3e3e4}
+	.pref_mins td			{background: #DFDFDF; width: 50%;}
+	.hard_mins td			{background: #8cc2c3;  width: 50%; border: 1px solid #555555  }
+	.hard_mins th			{background: #a3e3e4; width: 50%; border: 1px solid #555555 }
 
 {% endblock %}
 
@@ -260,7 +260,7 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 			</tr>
 		</thead>
 		
-		{% if 1 %}		
+		{% if position.mins.has %}		
 			{{ position.mins.as_table|safe }}
 		{% else %}
 		

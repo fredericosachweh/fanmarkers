@@ -146,8 +146,64 @@ class Mins(models.Model):
     class Meta:
         verbose_name_plural = "Minimums"
 
+    def has(self):
+        return bool(self._pref() or self._hard())       #returns true if there are any non-zero minimums
+
+    def _pref_general(self):
+        out = []
+
+        tuple = (
+                 (MINIMUMS_VERBOSE["years_exp"],      self.p_years_exp),
+                 (MINIMUMS_VERBOSE["years_company"],  self.p_years_company),
+                 (MINIMUMS_VERBOSE["mech_cert"],      self.get_p_mech_cert_level_display()),
+                 (MINIMUMS_VERBOSE["rec"],            self.p_rec),
+                 (MINIMUMS_VERBOSE["seniority"],      self.p_seniority),
+                )
+        
+        for title,value in tuple:
+            if value > 0 and str(value) != "False" and str(value) != "None":
+                out.append( (title,value) )
+
+        if self.p_part_135 > 0:
+            out.append( ("Part 135 " + self.get_p_part_135_display() + " Minimums", "True", ) )
+
+        if self.p_degree > 0:
+            out.append( (MINIMUMS_VERBOSE["degree"], self.get_p_degree_display(),) )
+
+        return out
+
+
+    def _hard_general(self):
+        out = []
+
+        tuple = (
+                 (MINIMUMS_VERBOSE["years_exp"],      self.years_exp),
+                 (MINIMUMS_VERBOSE["years_company"],  self.years_company),
+                 (MINIMUMS_VERBOSE["mech_cert"],      self.get_mech_cert_level_display()),
+                 (MINIMUMS_VERBOSE["rec"],            self.rec),
+                 (MINIMUMS_VERBOSE["seniority"],      self.seniority),
+                )
+        
+        for title,value in tuple:
+            if value > 0 and str(value) != "False" and str(value) != "None":
+                out.append( (title,value) )
+
+        if self.part_135 > 0:
+            out.append( ("Part 135 " + self.get_part_135_display() + " Minimums", "True", ) )
+
+        if self.degree > 0:
+            out.append( (MINIMUMS_VERBOSE["degree"], self.get_degree_display(),) )
+
+        return out
+
+
     def _hard(self):
         out = {}
+
+        hard_general = self._hard_general()
+
+        if hard_general:
+            out["General"] = hard_general
 
         for catclass in self.minscatclass_set.all():
             cc = catclass._hard()
@@ -163,6 +219,11 @@ class Mins(models.Model):
 
     def _pref(self):
         out = {}
+
+        pref_general = self._pref_general()
+
+        if pref_general:
+            out["General"] = pref_general
 
         for catclass in self.minscatclass_set.all():
             cc = catclass._pref()
@@ -184,13 +245,13 @@ class Mins(models.Model):
         rows = []
         data = ""
 
-        for cat in hard.items():          # each min category, eg: "Fixed Wing"
+        for cat in hard.items() + pref.items():          # each min category, eg: "Fixed Wing"
             cat = cat[0]
-            if hard.get(cat, None):
+            if hard.get(cat, None) or pref.get(cat, None):
                 heading = "<th>" + cat + ":</th>"
 
                 if hard.get(cat, None):
-                    data += "<table class='hard_mins'><tr><th colspan='2'>Hard</th></tr>"
+                    data += "<table class='hard_mins'><tr><th colspan='2'>Essential</th></tr>"
 
                     for min_item in hard[cat]:              # each hard item, such as Total and cert level
                         title = min_item[0]
@@ -204,7 +265,6 @@ class Mins(models.Model):
 
                 if pref.get(cat, None):
                     data += "<table class='pref_mins'><tr><th colspan='2'>Preferred</th></tr>"
-
 
                     for min_item in pref[cat]:              # each pref item, such as Total and cert level
                         title = min_item[0]

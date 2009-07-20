@@ -28,9 +28,14 @@ def edit(request, pk):
     #############################
 
     if request.POST:
+
         mf = MinsForm(request.POST, instance=mins)
-        cat_class_formset = MinsCatClassFormset(request.POST, instance=position, prefix="cat_class")
-        on_type_formset = MinsOnTypeFormset(request.POST, instance=position, prefix="on_type")
+
+        if new and mf.is_valid():
+             mins = mf.save()
+            
+        cat_class_formset = MinsCatClassFormset(request.POST, instance=mins, prefix="cat_class")
+        on_type_formset = MinsOnTypeFormset(request.POST, instance=mins, prefix="on_type")
 
         if mf.is_valid() and cat_class_formset.is_valid() and on_type_formset.is_valid():
 
@@ -47,7 +52,7 @@ def edit(request, pk):
 
     else:
         mf = MinsForm(instance=mins)
-        cat_class_formset = MinsCatClassFormset(instance=position, prefix="cat_class")
-        on_type_formset = MinsOnTypeFormset(instance=position, prefix="on_type")
+        cat_class_formset = MinsCatClassFormset(instance=mins, prefix="cat_class")
+        on_type_formset = MinsOnTypeFormset(instance=mins, prefix="on_type")
 
     return locals()
