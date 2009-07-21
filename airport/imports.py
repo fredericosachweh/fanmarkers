@@ -1,11 +1,18 @@
 import csv, re
 from django.contrib.gis.geos import Point
-from base.models import Airport, Region, Country
+from models import Airport, Region, Country
 from psycopg2 import IntegrityError
 
 
-def ia():
-    file = csv.reader(open('/home/chris/Desktop/airports.csv'), "excel")
+def ia():   #import airport
+    """
+id	 "ident"	type	name	latitude_deg	longitude_deg	elevation_ft	continent	iso_country	iso_region	municipality	scheduled_service	gps_code	iata_code	local_code	home_link	wikipedia_link	keywords
+    """
+
+    f = open('/home/chris/Desktop/airports.csv', 'rb')
+    reader = csv.reader(f, "excel")
+    titles = reader.next()
+    reader = csv.DictReader(f, titles)
 
     count=0
     count2=0
@@ -21,33 +28,30 @@ def ia():
                     'small_airport': 1,
             }
 
-    for line in file:
+    for line in reader:
 
         throw_out = False
         count += 1
         ##########################
 
-        lat = line[4]
-        lng = line[5]
+        lat = line["latitude_deg"]
+        lng = line["longitude_deg"]
 
-        elev = line[6]
+        elev = line["elevation_ft"]
 
         if elev == "":
             elev=None
 
-        type = line[2]
+        type = line["type"]
 
-        ident = line[1].upper()
-        name = line[3]
+        ident = line[' "ident"'].upper()
+        name = line["name"]
 
-        country = line[8].upper()
-        city = line[10]
-        region = line[9].upper()
+        country = line["iso_country"].upper()
+        city = line["municipality"]
+        region = line["iso_region"].upper()
 
         ##########################
-
-        if ident == " \"IDENT\"":
-            throw_out = True
 
         if ident[:2].upper() == "X-":           ## throw out all closed airports with "X" identifiers
             throw_out = True
@@ -79,45 +83,60 @@ def ia():
     print "success:    " + str(count2)
     print "thrown out: " + str(count_to)
 
-def ir():
-    file = csv.reader(open('/home/chris/Desktop/regions.csv'), "excel")
+######################################################################################
+
+def ir():   #import region
+    """
+    id	code	local_code	name	continent	iso_country	wikipedia_link	keywords
+    """
+
+    f = open('/home/chris/Desktop/regions.csv', 'rb')
+    reader = csv.reader(f, "excel")
+    titles = reader.next()
+    reader = csv.DictReader(f, titles)
+    count=0
+
+    for line in reader:
+        count += 1
+
+        code = line["code"].upper()
+        name = line["name"]
+        country = line["iso_country"].upper()
+
+        try:
+            Region.objects.get_or_create(name=name, code=code, country=country, )
+        except:
+            print code
+
+    print "total lines: " + str(count)
+
+######################################################################################
+
+def ic():   #import country
+    """
+    id	code	name	continent	wikipedia_link	keywords
+    """
+
+    f = open('/home/chris/Desktop/countries.csv', 'rb')
+    reader = csv.reader(f, "excel")
+    titles = reader.next()
+    reader = csv.DictReader(f, titles)
 
     count=0
 
-    for line in file:
+    for line in reader:
 
         count += 1
 
         ##########################
 
-        code = line[1].upper()
-        name = line[2]
-        country = line[4].upper()
+        code = line["code"].upper()
+        name = line["name"]
+        continent = line["continent"].upper()
 
-        if code != "CODE":
-            try:
-                Region.objects.get_or_create(name=name, code=code, country=country)
-            except:
-                print code
-    print str(count)
+        try:
+            Country.objects.get_or_create(name=name, code=code, continent=continent)
+        except:
+            print "error: " + code
 
-def ic():
-    file = csv.reader(open('/home/chris/Desktop/countries.csv'), "excel")
-
-    count=0
-
-    for line in file:
-
-        count += 1
-
-        ##########################
-
-        code = line[0].upper()
-        name = line[1]
-
-        if code != "CODE":
-            try:
-                Country.objects.get_or_create(name=name, code=code)
-            except:
-                print code
-    print str(count)
+    print "lines: " + str(count)

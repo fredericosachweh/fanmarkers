@@ -12,26 +12,28 @@ from models import *
 def jobmap(request):
     from django.db.models import Q
 
-    usa_bases = OpBase.objects.filter(base__country__exact="US")
-    alaska_bases = usa_bases.filter(base__region__name__exact="AK")
-    russia_bases = OpBase.objects.filter(base__country__exact="RU")
-    india_bases = OpBase.objects.filter(base__country__exact="IN")
-    canada_bases = OpBase.objects.filter(base__country__exact="CA")
+    india =       ['IN','LK']
+    aus =         ['AU','NZ','NC','VU','FJ','AS','TO','TV','TK','WF','CK','NU','PF']
+    middle_east = ['AE','AM','AF','BH','IR','IQ','IL','JO','KW','LB','YE','SY','OM','QA','PK']
+    east_europe = ['TR','GR','HU','MD','PL','BY','SK','CZ','RO','HR','BA','AL','MK','ME','CY','SI','LT','LV','EE']
 
-    usa_h = Status.objects.filter(   Q(assign_bases__in=usa_bases) | Q(choice_bases__in=usa_bases)    ).distinct().count()
-    usa_t = Position.objects.filter( operation__opbase__in=usa_bases ).distinct().count()
 
-    canada_h = Status.objects.filter(   Q(assign_bases__in=canada_bases) | Q(choice_bases__in=canada_bases)    ).distinct().count()
-    canada_t = Position.objects.filter( operation__opbase__in=canada_bases ).distinct().count()
+    africa_h = Status.objects.filter(  Q(assign_bases__base__country__continent='AF') | Q(choice_bases__base__country__continent='AF') ).count()
+    africa_t = Position.objects.filter(  operation__opbase__base__country__continent='AF' ).count()
 
-    india_h = Status.objects.filter(   Q(assign_bases__in=india_bases) | Q(choice_bases__in=india_bases)    ).distinct().count()
-    india_t = Position.objects.filter( operation__opbase__in=india_bases ).distinct().count()
+    usa_h = Status.objects.filter(  Q(assign_bases__base__country__code='US') | Q(choice_bases__base__country__code='US') ).count()
+    usa_t = Position.objects.filter(  operation__opbase__base__country__code='US').count()
 
-    russia_h = Status.objects.filter(   Q(assign_bases__in=russia_bases) | Q(choice_bases__in=russia_bases)    ).distinct().count()
-    russia_t = Position.objects.filter( operation__opbase__in=russia_bases ).distinct().count()
+    alaska_h = Status.objects.filter(  Q(assign_bases__base__region__code='US-AK') | Q(choice_bases__base__region__code='US-AK') )
+    alaska_t = Position.objects.filter(  operation__opbase__base__region__code='US-AK').count()
 
-    alaska_h = Status.objects.filter(   Q(assign_bases__in=alaska_bases) | Q(choice_bases__in=alaska_bases)    ).distinct().count()
-    alaska_t = Position.objects.filter( operation__opbase__in=alaska_bases ).distinct().count()
+    india_h = Status.objects.filter(  Q(assign_bases__base__country__code='IN') | Q(choice_bases__base__country__code='IN') )
+    india_t = Position.objects.filter(  operation__opbase__base__country__code='IN').count()
+
+    australia_h = Status.objects.filter(  Q(assign_bases__base__country__code='IN') | Q(choice_bases__base__country__code='IN') )
+    australia_t = Position.objects.filter(  operation__opbase__base__country__code__in=['AU', 'NZ']).count()
+
+
 
     return locals()
 

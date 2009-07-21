@@ -78,6 +78,8 @@ class Region(models.Model):
 class Country(models.Model):
     name = models.CharField(max_length=48)
     code = models.CharField(max_length=2, primary_key=True)
+    continent = models.CharField(max_length=2)
+
 
     def __unicode__(self):
         return self.name
