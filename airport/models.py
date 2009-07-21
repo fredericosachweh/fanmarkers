@@ -62,7 +62,7 @@ class Airport(models.Model):
         ret = []
 
         for item in (self.municipality, self.region.name, self.country.name, ):
-            if item and item != "United States":
+            if item and item != "United States" and item != "(unassigned)":
                 ret.append(item)
 
         return ", ".join(ret)

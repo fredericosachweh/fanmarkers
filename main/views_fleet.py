@@ -8,15 +8,15 @@ from models import Company, Fleet
 from forms import FleetForm
 
 def edit(request, pk):
-    company = get_object_or_404(Company, pk=pk)
+    company = get_object_or_404(Company, fleet=pk)
 
     return update_object(request,
-            object_id=pk,
-            form_class=FleetForm,
-            template_name='new-edit_fleet.html',
-            login_required=True,
-            extra_context={"company": company, "type": "edit"},
-            post_save_redirect=company.get_edit_url(),
+        object_id=pk,
+        form_class=FleetForm,
+        template_name='new-edit_fleet.html',
+        login_required=True,
+        extra_context={"company": company, "type": "edit"},
+        post_save_redirect=company.get_edit_url(),
     )
 
 @login_required()
