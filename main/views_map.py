@@ -5,17 +5,23 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 
 from airport.models import Airport
-#from route.models import Route
 from models import *
 
 @render_to('view_jobmap.html')
 def jobmap(request):
     from django.db.models import Q
 
-    india =       ['IN','LK']
-    aus =         ['AU','NZ','NC','VU','FJ','AS','TO','TV','TK','WF','CK','NU','PF']
-    middle_east = ['AE','AM','AF','BH','IR','IQ','IL','JO','KW','LB','YE','SY','OM','QA','PK']
-    east_europe = ['TR','GR','HU','MD','PL','BY','SK','CZ','RO','HR','BA','AL','MK','ME','CY','SI','LT','LV','EE']
+    INDIA =       ['IN','LK']
+    AUSTRALIA =   ['AU','NZ','NC','VU','FJ','AS','TO','TV','TK','WF','CK','NU','PF']
+    M_EAST =      ['AE','AM','AF','BH','IR','IQ','IL','JO','KW','LB','YE','SY','OM','QA','PK']
+    E_EUROPE =    ['TR','GR','HU','MD','PL','BY','SK','CZ','RO','HR','BA','AL','MK','ME','CY','SI','LT','LV','EE']
+    INDONESIA =   ['ID','PG','SG','MY','PH']
+    SCANDANAVIA = ['IS','NO','SE','FI']
+    CHINA =       ['KP','KR','MN','HK','MO']
+    EUROPE =      ['FR','UK','IT','DK','DE','IE', 'PT','ES','LU','AD','VA','SM','IM','','']
+    RUSSIA =      ['RU','','',]
+    CARRIBEAN =   ['AG','AI','AN','AW','BB','BL','BM','BS','CU','DM','DO','GD','GP','HT','JM','KN','KY','LC','MF','MQ','MS','PM','PR','TC','TT','VC','VG','VI']
+    AMERICAS =    ['MX','SV','PA','NI','HN','BZ','GT','CR']
 
 
     africa_h = Status.objects.filter(  Q(assign_bases__base__country__continent='AF') | Q(choice_bases__base__country__continent='AF') ).count()
@@ -27,13 +33,40 @@ def jobmap(request):
     alaska_h = Status.objects.filter(  Q(assign_bases__base__region__code='US-AK') | Q(choice_bases__base__region__code='US-AK') )
     alaska_t = Position.objects.filter(  operation__opbase__base__region__code='US-AK').count()
 
-    india_h = Status.objects.filter(  Q(assign_bases__base__country__code='IN') | Q(choice_bases__base__country__code='IN') )
-    india_t = Position.objects.filter(  operation__opbase__base__country__code='IN').count()
+    india_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=INDIA) | Q(choice_bases__base__country__code__in=INDIA) )
+    india_t = Position.objects.filter(  operation__opbase__base__country__code__in=INDIA).count()
 
-    australia_h = Status.objects.filter(  Q(assign_bases__base__country__code='IN') | Q(choice_bases__base__country__code='IN') )
-    australia_t = Position.objects.filter(  operation__opbase__base__country__code__in=['AU', 'NZ']).count()
+    australia_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=AUSTRALIA) | Q(choice_bases__base__country__code__in=AUSTRALIA) )
+    australia_t = Position.objects.filter(  operation__opbase__base__country__code__in=AUSTRALIA).count()
 
+    indonesia_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=INDONESIA) | Q(choice_bases__base__country__code__in=INDONESIA) )
+    indonesia_t = Position.objects.filter(  operation__opbase__base__country__code__in=INDONESIA).count()
 
+    russia_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=RUSSIA) | Q(choice_bases__base__country__code__in=RUSSIA) )
+    russia_t = Position.objects.filter(  operation__opbase__base__country__code__in=RUSSIA).count()
+
+    e_europe_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=E_EUROPE) | Q(choice_bases__base__country__code__in=E_EUROPE) )
+    e_europe_t = Position.objects.filter(  operation__opbase__base__country__code__in=E_EUROPE).count()
+
+    scandanavia_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=SCANDANAVIA) | Q(choice_bases__base__country__code__in=SCANDANAVIA) );scandanavia_t = Position.objects.filter(  operation__opbase__base__country__code__in=SCANDANAVIA).count()
+
+    canada_h = Status.objects.filter(  Q(assign_bases__base__country__code='CA') | Q(choice_bases__base__country__code='CA') )
+    canada_t = Position.objects.filter(  operation__opbase__base__country__code='CA').count()
+
+    americas_h = Status.objects.filter(  Q(assign_bases__base__country__continent='SA') | Q(choice_bases__base__country__continent='SA') )
+    americas_t = Position.objects.filter(  operation__opbase__base__country__continent='SA').count()
+
+    carribean_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=CARRIBEAN) | Q(choice_bases__base__country__code__in=CARRIBEAN) )
+    carribean_t = Position.objects.filter(  operation__opbase__base__country__code__in=CARRIBEAN).count()
+
+    china_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=CHINA) | Q(choice_bases__base__country__code__in=CHINA) )
+    china_t = Position.objects.filter(  operation__opbase__base__country__code__in=CHINA).count()
+
+    europe_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=EUROPE) | Q(choice_bases__base__country__code__in=EUROPE) )
+    europe_t = Position.objects.filter(  operation__opbase__base__country__code__in=EUROPE).count()
+
+    middle_east_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=M_EAST) | Q(choice_bases__base__country__code__in=M_EAST) )
+    middle_east_t = Position.objects.filter(  operation__opbase__base__country__code__in=M_EAST).count()
 
     return locals()
 
@@ -44,13 +77,11 @@ def overlay(request, z, x, y, o):
     just_routes = Airport.route.all()
     all_bases = Airport.base.all()
 
-    #layoff = all_bases.filter(layoff__in=Status.objects.all())
-
     all_hiring = Airport.hiring.all()
     not_hiring = Airport.not_hiring.all()
 
     just_hiring = Airport.objects.filter(Q(opbase__choice__in=Status.objects.exclude(advertising=True)) | Q(opbase__assign__in=Status.objects.exclude(advertising=True)))
-    advertising = Airport.objects.filter(Q(opbase__choice__in=Status.objects.filter(advertising=True)) | Q(opbase__assign__in=Status.objects.filter(advertising=True)))
+    #advertising = Airport.objects.filter(Q(opbase__choice__in=Status.objects.filter(advertising=True)) | Q(opbase__assign__in=Status.objects.filter(advertising=True)))
 
     ##########
 
