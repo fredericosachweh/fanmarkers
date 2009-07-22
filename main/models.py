@@ -111,6 +111,14 @@ class Position(models.Model):
     def get_edit_mins_url(self):
         return ('edit-mins', [str(self.pk)] )
 
+    def fleets(self):
+        try:
+            fleet = Fleet.objects.filter(operation__positions=self)
+        except:
+            fleet = None
+
+        return fleet
+
     def status(self):
         try:
             status = self.status_set.all()[0]       #try to get the status object if one exists

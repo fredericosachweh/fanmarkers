@@ -169,9 +169,9 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 		<tr>
 			<th>Aircraft:</th>
 			<td>	
-				{% for fleet in fleets %}
+				{% for fleet in position.fleets %}
 					
-					<a href="{{fleet.aircraft.get_absolute_url}}" class="immutable">{{fleet.aircraft}}</a><br />
+					<a href="{{fleet.aircraft.get_absolute_url}}" class="immutable">{{fleet.aircraft}}</a><br>
 					
 				{% endfor %}
 			</td>
