@@ -8,11 +8,11 @@ json = {
 					</div>",
 				
 		"base":    "{% if bases %}\
-						<ul>\
+						<ul class='popup_ul'>\
 						{% for position in bases %}\
 							<li>\
 								<span class='popup_position'><a class='view' href='{{ position.company.get_absolute_url }}'>{{ position.company }}</a>\
-								<a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span> {{position.status|safe}}<br>\
+								- <a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span> {{position.status|safe}}<br>\
 								<span class='popup_fleet'>{{position.operation_set.all.0.all_fleet}}</span>\
 							</li>\
 						{% endfor %}\
@@ -22,11 +22,11 @@ json = {
 					{% endif %}",
 				
 		"route":   "{% if routes %}\
-						<ul>\
+						<ul class='popup_ul'>\
 						{% for position in routes %}\
 							<li>\
 								<span class='popup_position'><a class='view' href='{{ position.company.get_absolute_url }}'>{{ position.company }}</a>\
-								<a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span> {{position.status|safe}}<br>\
+								- <a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span> {{position.status|safe}}<br>\
 								<span class='popup_fleet'>{{position.operation_set.all.0.all_fleet}}</span>\
 							</li>\
 						{% endfor %}\
