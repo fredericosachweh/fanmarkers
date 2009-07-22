@@ -114,13 +114,12 @@
 
 				{% if user.is_authenticated %}
 					<li>
-						<a href="/profile/">
-						{{user.username}}</a>
+						<a href="/profile/">{{user.username}}</a>
 					</li>
 				{% else %}
-					<a href="/openid/login">
-						<li>Sign in / Register</li>
-					</a>
+					<li>
+						<a href="/openid/login"><li>Sign in / Register</a>
+					</li>
 				{% endif %}
 				
 					<li>
