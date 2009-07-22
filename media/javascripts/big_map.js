@@ -99,9 +99,9 @@ function figure_zoom()
 		map.addOverlay(scandanavia[0]);
 		map.addOverlay(usa[0]);
 		
-		for(item in labels)
+		for(i=0; i<labels.length; i++)
 		{
-			map.addOverlay(labels[item]);
+			map.addOverlay(labels[i]);
 		}
 	}
 	else
