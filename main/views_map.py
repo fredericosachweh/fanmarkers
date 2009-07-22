@@ -24,49 +24,62 @@ def jobmap(request):
     AMERICAS =    ['MX','SV','PA','NI','HN','BZ','GT','CR']
 
 
-    africa_h = Status.objects.filter(  Q(assign_bases__base__country__continent='AF') | Q(choice_bases__base__country__continent='AF') ).count()
-    africa_t = Position.objects.filter(  operation__opbase__base__country__continent='AF' ).count()
+    africa_h = Status.objects.filter(  Q(assign_bases__base__country__continent='AF') | Q(choice_bases__base__country__continent='AF') ).distinct().count()
+    africa_t = Position.objects.filter(  operation__opbase__base__country__continent='AF' ).distinct().count()
 
-    usa_h = Status.objects.filter(  Q(assign_bases__base__country__code='US') | Q(choice_bases__base__country__code='US') ).count()
-    usa_t = Position.objects.filter(  operation__opbase__base__country__code='US').count()
+    usa_h = Status.objects.filter(  Q(assign_bases__base__country__code='US') | Q(choice_bases__base__country__code='US') ).distinct().count()
+    usa_t = Position.objects.filter(  operation__opbase__base__country__code='US').distinct().count()
 
-    alaska_h = Status.objects.filter(  Q(assign_bases__base__region__code='US-AK') | Q(choice_bases__base__region__code='US-AK') )
-    alaska_t = Position.objects.filter(  operation__opbase__base__region__code='US-AK').count()
+    alaska_h = Status.objects.filter(  Q(assign_bases__base__region__code='US-AK') | Q(choice_bases__base__region__code='US-AK') ).distinct().count()
 
-    india_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=INDIA) | Q(choice_bases__base__country__code__in=INDIA) )
-    india_t = Position.objects.filter(  operation__opbase__base__country__code__in=INDIA).count()
+    alaska_t = Position.objects.filter(  operation__opbase__base__region__code='US-AK').distinct().count()
 
-    australia_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=AUSTRALIA) | Q(choice_bases__base__country__code__in=AUSTRALIA) )
-    australia_t = Position.objects.filter(  operation__opbase__base__country__code__in=AUSTRALIA).count()
+    india_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=INDIA) | Q(choice_bases__base__country__code__in=INDIA) ).distinct().count()
 
-    indonesia_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=INDONESIA) | Q(choice_bases__base__country__code__in=INDONESIA) )
-    indonesia_t = Position.objects.filter(  operation__opbase__base__country__code__in=INDONESIA).count()
+    india_t = Position.objects.filter(  operation__opbase__base__country__code__in=INDIA).distinct().count()
 
-    russia_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=RUSSIA) | Q(choice_bases__base__country__code__in=RUSSIA) )
-    russia_t = Position.objects.filter(  operation__opbase__base__country__code__in=RUSSIA).count()
+    australia_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=AUSTRALIA) | Q(choice_bases__base__country__code__in=AUSTRALIA) ).distinct().count()
 
-    e_europe_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=E_EUROPE) | Q(choice_bases__base__country__code__in=E_EUROPE) )
-    e_europe_t = Position.objects.filter(  operation__opbase__base__country__code__in=E_EUROPE).count()
+    australia_t = Position.objects.filter(  operation__opbase__base__country__code__in=AUSTRALIA).distinct().count()
 
-    scandanavia_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=SCANDANAVIA) | Q(choice_bases__base__country__code__in=SCANDANAVIA) );scandanavia_t = Position.objects.filter(  operation__opbase__base__country__code__in=SCANDANAVIA).count()
+    indonesia_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=INDONESIA) | Q(choice_bases__base__country__code__in=INDONESIA) ).distinct().count()
 
-    canada_h = Status.objects.filter(  Q(assign_bases__base__country__code='CA') | Q(choice_bases__base__country__code='CA') )
-    canada_t = Position.objects.filter(  operation__opbase__base__country__code='CA').count()
+    indonesia_t = Position.objects.filter(  operation__opbase__base__country__code__in=INDONESIA).distinct().count()
+
+    russia_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=RUSSIA) | Q(choice_bases__base__country__code__in=RUSSIA) ).distinct().count()
+
+    russia_t = Position.objects.filter(  operation__opbase__base__country__code__in=RUSSIA).distinct().count()
+
+    e_europe_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=E_EUROPE) | Q(choice_bases__base__country__code__in=E_EUROPE) ).distinct().count()
+
+    e_europe_t = Position.objects.filter(  operation__opbase__base__country__code__in=E_EUROPE).distinct().count()
+
+    scandanavia_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=SCANDANAVIA) | Q(choice_bases__base__country__code__in=SCANDANAVIA) ).distinct().count()
+
+    scandanavia_t = Position.objects.filter(  operation__opbase__base__country__code__in=SCANDANAVIA).distinct().count()
+
+    canada_h = Status.objects.filter(  Q(assign_bases__base__country__code='CA') | Q(choice_bases__base__country__code='CA') ).distinct().count()
+
+    canada_t = Position.objects.filter(  operation__opbase__base__country__code='CA').distinct().count()
 
     americas_h = Status.objects.filter(  Q(assign_bases__base__country__continent='SA') | Q(choice_bases__base__country__continent='SA') )
-    americas_t = Position.objects.filter(  operation__opbase__base__country__continent='SA').count()
+    americas_t = Position.objects.filter(  operation__opbase__base__country__continent='SA').distinct().count()
 
-    carribean_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=CARRIBEAN) | Q(choice_bases__base__country__code__in=CARRIBEAN) )
-    carribean_t = Position.objects.filter(  operation__opbase__base__country__code__in=CARRIBEAN).count()
+    carribean_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=CARRIBEAN) | Q(choice_bases__base__country__code__in=CARRIBEAN) ).distinct().count()
 
-    china_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=CHINA) | Q(choice_bases__base__country__code__in=CHINA) )
-    china_t = Position.objects.filter(  operation__opbase__base__country__code__in=CHINA).count()
+    carribean_t = Position.objects.filter(  operation__opbase__base__country__code__in=CARRIBEAN).distinct().count()
 
-    europe_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=EUROPE) | Q(choice_bases__base__country__code__in=EUROPE) )
-    europe_t = Position.objects.filter(  operation__opbase__base__country__code__in=EUROPE).count()
+    china_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=CHINA) | Q(choice_bases__base__country__code__in=CHINA) ).distinct().count()
 
-    middle_east_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=M_EAST) | Q(choice_bases__base__country__code__in=M_EAST) )
-    middle_east_t = Position.objects.filter(  operation__opbase__base__country__code__in=M_EAST).count()
+    china_t = Position.objects.filter(  operation__opbase__base__country__code__in=CHINA).distinct().count()
+
+    europe_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=EUROPE) | Q(choice_bases__base__country__code__in=EUROPE) ).distinct().count()
+
+    europe_t = Position.objects.filter(  operation__opbase__base__country__code__in=EUROPE).distinct().count()
+
+    middle_east_h = Status.objects.filter(  Q(assign_bases__base__country__code__in=M_EAST) | Q(choice_bases__base__country__code__in=M_EAST) ).distinct().count()
+
+    middle_east_t = Position.objects.filter(  operation__opbase__base__country__code__in=M_EAST).distinct().count()
 
     return locals()
 
