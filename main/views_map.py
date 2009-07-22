@@ -13,7 +13,7 @@ def jobmap(request):
 
     INDIA =       ['IN','LK']
     AUSTRALIA =   ['AU','NZ','NC','VU','FJ','AS','TO','TV','TK','WF','CK','NU','PF']
-    M_EAST =      ['AE','AM','AF','BH','IR','IQ','IL','JO','KW','LB','YE','SY','OM','QA','PK']
+    M_EAST =      ['AE','AM','AF','BH','IR','IQ','IL','JO','KW','LB','YE','SY','OM','QA','PK', 'SA']
     E_EUROPE =    ['TR','GR','HU','MD','PL','BY','SK','CZ','RO','HR','BA','AL','MK','ME','CY','SI','LT','LV','EE']
     INDONESIA =   ['ID','PG','SG','MY','PH']
     SCANDANAVIA = ['IS','NO','SE','FI']
