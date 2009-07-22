@@ -58,7 +58,7 @@ function initialize()
 		map.enableContinuousZoom();
 		map.enableScrollWheelZoom();
 		
-		//figure_zoom();
+		figure_zoom();
 		
 		GEvent.addListener(map, "zoomend", figure_zoom);
 		
@@ -80,7 +80,7 @@ function initialize()
 
 function figure_zoom()
 {	
-	//map.clearOverlays();
+	map.clearOverlays();
 	
 	if(map.getZoom() < 3 ){
 		map.addOverlay(africa[0]);
