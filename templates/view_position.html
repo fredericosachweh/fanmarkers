@@ -116,7 +116,7 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 				<div class="top_section t_{{ ob.hiring_status }}">
 					<a class="immutable" href="{{ ob.base.get_absolute_url }}">{{ ob.base.display_name }}</a> 
 					<br />
-					<small>{{ ob.base.location_summary}}</small>
+					<small>{{ ob.base.location_summary }}</small>
 				</div>
 	
 				<div class="bottom_section b_{{ob.hiring_status}}">
@@ -276,12 +276,7 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 {##################################################}
 
 {% get_comment_list for position as comment_list %}
-
 {% include "comments_table.html"%}
+{% render_comment_form for position %}
 
-<table class="fancy_table">
-	<tr>
-		<td><div class="comments_form_div">{% render_comment_form for position %}</div></td>
-	</tr>
-</table>
 {% endblock %}

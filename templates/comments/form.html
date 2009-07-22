@@ -1,4 +1,18 @@
 {% load comments %}
+<div class="last_modified">&nbsp;</div>	
+<table class="fancy_table">
+	<thead>
+		<tr>
+			<td colspan="2">Add your comment</td>
+		</tr>
+	</thead>
+
+	<tr>
+		<td>
+			<div class="comments_form_div">
+
+
+
 <form action="{% comment_form_target %}" method="post" id="comment_form">
 	<div>
 		{% for field in form %}
@@ -29,3 +43,6 @@
 		<input type="submit" name="post" class="submit-post" value="Post" />
 	</div>
 </form>
+
+</div>
+</td></tr></table>
