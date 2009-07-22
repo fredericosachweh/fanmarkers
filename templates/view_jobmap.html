@@ -4,27 +4,30 @@
 
 {% block css %}
 {{ block.super }}
-	#container				{height: 100%; overflow: hidden}
-	#map_canvas				{height: 100%; width: 100%; float: left; background: white;    border: 0px solid black}
-	#sidebar				{height: 100%; width: 100%; float: left; background: #FFDDFF;  border: 0px solid black; padding-top: 20px}
+	#container						{height: 100%; overflow: hidden}
+	#map_canvas						{height: 100%; width: 100%; float: left; background: white;    border: 0px solid black}
+	#sidebar						{height: 100%; width: 100%; float: left; background: #FFDDFF;  border: 0px solid black; padding-top: 20px}
 
-	#container table			{height: 100%; width: 100%; border-collapse: collapse}
-	#container table tr			{height: 100%}
-	td					{height: 100%}
-	#container table td:last-child		{width: 20em; height: 100%}
+	#container table				{height: 100%; width: 100%; border-collapse: collapse}
+	#container table tr				{height: 100%; }
+	td								{height: 100%; }
+	#container table td:last-child	{width: 20em; height: 100%; }
 
-	#submit_sidebar				{margin-left: auto; margin-right: auto}
+	#submit_sidebar					{margin-left: auto; margin-right: auto}
 	
-	.overlay_number				{text-align: center; border: 0px solid black; width: 35px; line-height: 20px}
+	.overlay_number					{text-align: center; border: 0px solid black; width: 35px; line-height: 20px}
 	
 	/*************/
 	
-	.popup_small_div			{border: 0px solid black; padding: 2px; margin: 3px; background: white}
-	.popup_title				{border: 0px solid green; padding: 5px; font-size: large}
-	.popup_airport_name			{font-weight: bold}
-	.popup_location				{font-size: small}
-	.popup_not_known			{text-align: center; width: 100%; margin-top: 20px}
-	.popup_fleet				{text-size: smaller}
+	.popup_small_div				{border: 0px solid black; padding: 2px; margin: 3px; background: white}
+	.popup_title					{border: 0px solid green; padding: 5px; font-size: large}
+	.popup_airport_name				{font-weight: bold}
+	.popup_location					{font-size: small}
+	.popup_not_known				{text-align: center; width: 100%; margin-top: 20px}
+	.popup_fleet					{text-size: smaller}
+	.position_hiring_alert			{font-weight: bold; color: red; margin-left: 5px}
+
+	ul li							{margin-bottom: 5px}
 	
 {% endblock %}
 

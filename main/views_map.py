@@ -99,13 +99,13 @@ def overlay(request, z, x, y, o):
     ov = GoogleOverlay(z,x,y, queryset=all_hiring, image=ov.output(shuffle=False), field="location")                # red for hiring bases
     ov.icon(ICONS_DIR + size + '/hiring.png')
 
-    ov = GoogleOverlay(z,x,y, queryset=advertising, image=ov.output(shuffle=False), field="location")               # red-gold for advertising bases
-    ov.icon(ICONS_DIR + size + '/advertising.png')
+    #ov = GoogleOverlay(z,x,y, queryset=advertising, image=ov.output(shuffle=False), field="location")               # red-gold for advertising bases
+    #ov.icon(ICONS_DIR + size + '/advertising.png')
 
     #############################################################
 
     response = HttpResponse(mimetype="image/png")
-    ov.output().save(response, "PNG")
+    ov.output(shuffle=False).save(response, "PNG")
     return response
 
 @render_to('click.html')
@@ -132,28 +132,20 @@ def kml(request, position=None, company=None, airport=None):
         position = get_object_or_404(Position, pk=position)
         routes = Route.objects.filter(home__operation__positions=position)
         bases = Airport.objects.filter(opbase__operation__positions=position).distinct()
-
         routebases = Airport.objects.filter(routebase__route__in=routes).exclude(opbase__operation__positions=position).distinct()
-
         title = str(position.company) + " - " + str(position)
 
     if company:
         company = get_object_or_404(Company, pk=company)
         routes = Route.objects.filter(home__operation__company=company)
         bases = Airport.objects.filter(opbase__operation__company=company).distinct()
-
         routebases = Airport.objects.filter(routebase__route__in=routes).exclude(opbase__operation__company=company).distinct()
-
         title = str(company)
 
     if airport:
         base = get_object_or_404(Airport, pk=airport)
-
-
         title = str(airport)  + " - " + str(base.name)
-
         bases = [base]          #make it a list so it can be iterated in the template
 
     kml = get_template('base.kml').render(Context(locals() ))
-
     return HttpResponse(kml, mimetype="application/vnd.google-earth.kml+xml")

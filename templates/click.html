@@ -1,35 +1,41 @@
+{% spaceless %}
 json = {
-		"title":	"{% spaceless %}
-				<div class='popup_title'>
-					<span class='popup_airport_name'><a class='immutable' href='{{airport.get_absolute_url}}'>{{airport.identifier}}</a> - {{airport.name}}</span>
-					<br>
-					<span class='popup_location'>{{airport.location_summary}}</span>
-				</div>
-				{% endspaceless%}",
+		"title":   "<div class='popup_title'>\
+						<span class='popup_airport_name'>\
+						<a class='immutable' href='{{airport.get_absolute_url}}'>{{airport.identifier}}</a> - {{airport.name}}\
+						</span><br>\
+						<span class='popup_location'>{{airport.location_summary}}</span>\
+					</div>",
 				
-		"base":		"{% spaceless %}
-				 {% for position in bases %}
-					<div class='popup_small_div'>
-						<span class='popup_position'><a class='view' href='{{ position.company.get_absolute_url }}'>{{ position.company }}</a> - <a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span><br>
-						<span class='popup_fleet'>{{position.operation_set.all.0.all_fleet}}</span><br>
-					</div>
-					{% empty %}
-					<div class='popup_not_known not_known'>None</div>
-				{% endfor %}
-				{% endspaceless%}",
+		"base":    "{% if bases %}\
+						<ul>\
+						{% for position in bases %}\
+							<li>\
+								<span class='popup_position'><a class='view' href='{{ position.company.get_absolute_url }}'>{{ position.company }}</a>\
+								<a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span> {{position.status|safe}}<br>\
+								<span class='popup_fleet'>{{position.operation_set.all.0.all_fleet}}</span>\
+							</li>\
+						{% endfor %}\
+						</ul>\
+					{% else %}\
+						<div class='popup_not_known not_known'>None</div>\
+					{% endif %}",
 				
-		"route":	"{% spaceless %}
-				 {% for position in routes %}
-				 
-					<div class='popup_small_div'>
-						<span class='popup_position'><a class='view' href='{{ position.company.get_absolute_url }}'>{{ position.company }}</a> - <a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span><br>
-						<span class='popup_fleet'>{{ position.operation_set.all.0.all_fleet }}</span><br>
-					</div>
-					{% empty %}
-					<div class='popup_not_known not_known'>None</div>
-				{% endfor %}
-				{% endspaceless%}",
+		"route":   "{% if routes %}\
+						<ul>\
+						{% for position in routes %}\
+							<li>\
+								<span class='popup_position'><a class='view' href='{{ position.company.get_absolute_url }}'>{{ position.company }}</a>\
+								<a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span> {{position.status|safe}}<br>\
+								<span class='popup_fleet'>{{position.operation_set.all.0.all_fleet}}</span>\
+							</li>\
+						{% endfor %}\
+						</ul>\
+					{% else %}\
+						<div class='popup_not_known not_known'>None</div>\
+					{% endif %}",
 				
 		"base_t":	"({{ bases.count }})",
 		"route_t":	"({{ routes.count }})"
-	};
+};
+{% endspaceless %}

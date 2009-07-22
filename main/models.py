@@ -111,6 +111,16 @@ class Position(models.Model):
     def get_edit_mins_url(self):
         return ('edit-mins', [str(self.pk)] )
 
+    def status(self):
+        try:
+            status = self.status_set.all()[0]       #try to get the status object if one exists
+        except:
+            return ""
+
+        if status.choice_bases.count() + status.assign_bases.count() > 0:
+            return "<span class='position_hiring_alert'>Hiring!</span>"
+        else:
+            return ""
 
     def __unicode__(self):
         return u"%s" % (self.name,)
