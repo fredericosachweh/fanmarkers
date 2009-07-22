@@ -1,13 +1,14 @@
 {% load comments %}
 <form action="{% comment_form_target %}" method="post" id="comment_form">
-	
-	{% for field in form %}
-		{% if field.is_hidden %}
-			{{ field }}
-		{% endif %}
-	{% endfor %}
+	<div>
+		{% for field in form %}
+			{% if field.is_hidden %}
+				{{ field }}
+			{% endif %}
+		{% endfor %}
 
-	<input id="email" type="hidden" name="email" value="username@example.com"/>
+		<input id="email" type="hidden" name="email" value="username@example.com"/>
+	</div>
 	
 	<div style="margin-bottom: 10px">
 		{% if not user.is_authenticated %}{{ form.name.label_tag }}:<br>{{ form.name }}{% endif %}
