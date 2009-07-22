@@ -4,27 +4,28 @@ from django.views.generic.create_update import update_object, create_object
 
 from models import Company
 from forms import CompanySearch, CompanyForm
+from django.db.models import Q
+
 
 @render_to('list_aircraft-company.html')
 def make_list(request):
     type="Company"
     objects = Company.objects.all()
 
-    if request.GET:
+    if request.GET.get("type", False):
 
         searchform = CompanySearch(request.GET)
+        searchform.is_valid()
 
-        if searchform.is_valid():
+        if int(searchform.cleaned_data["type"]) >= 0:
+            objects = objects.filter(type=searchform.cleaned_data["type"])
 
-            if int(searchform.cleaned_data["type"]) >= 0:
-                objects = objects.filter(type=searchform.cleaned_data["type"])
+        if int(searchform.cleaned_data["jumpseat"]) >= 0:
+            objects = objects.filter(jumpseat=searchform.cleaned_data["jumpseat"])
 
-            if int(searchform.cleaned_data["jumpseat"]) >= 0:
-                objects = objects.filter(jumpseat=searchform.cleaned_data["jumpseat"])
-
-            if searchform.cleaned_data["search"]:
-                s = searchform.cleaned_data["search"]
-                objects = objects.filter( Q(name__icontains=s) | Q(description__icontains=s) )
+        if searchform.cleaned_data["search"]:
+            s = searchform.cleaned_data["search"]
+            objects = objects.filter( Q(name__icontains=s) | Q(description__icontains=s) )
     else:
         searchform = CompanySearch()
 
