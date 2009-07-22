@@ -245,8 +245,8 @@ class Mins(models.Model):
         rows = []
         data = ""
 
-        for cat in hard.items() + pref.items():          # each min category, eg: "Fixed Wing"
-            cat = cat[0]
+        for cat in list(set(hard.keys() + pref.keys())):          # each min category, eg: "Fixed Wing"
+        # cat = cat[0]
             if hard.get(cat, None) or pref.get(cat, None):
                 heading = "<th>" + cat + ":</th>"
 
