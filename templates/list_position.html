@@ -9,7 +9,7 @@
 {% block main_content %}
 	<ol>
 	{% for position in positions %}
-		<li><a class="view" href="{{ position.get_absolute_url }}">{{position.company}} - {{ position }}</li>
+	<li><a class="view" href="{{ position.get_absolute_url }}">{{position.company}} - {{ position }}</a></li>
 	{% empty %}
 		<li><strong>Nothing to show, sorry</strong></li>
 	{% endfor %}
