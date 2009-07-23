@@ -16,12 +16,14 @@
 {#######################################################################################}
 
 {% block javascript %}
-<script type="text/javascript" src="{{ MEDIA_URL }}/openid_ui/js/openid-jquery.js"></script>	
-<link rel="stylesheet" href="{{ MEDIA_URL }}/openid_ui/css/openid.css" />
+<script type="text/javascript" src="{{ MEDIA_URL }}/openid-realselector/js/jquery.openid.js"></script>	
+<link rel="stylesheet" href="{{ MEDIA_URL }}/openid-realselector/css/style.css">
 
 <script type="text/javascript">
-	$(document).ready(function() {
-	   openid.init('openid_identifier');
+		$(document).ready(function() {
+			$('#openid').openid({
+       			img_path: '{{ MEDIA_URL }}/openid-realselector/img/',
+      });
 	});
 </script>
 
@@ -37,26 +39,9 @@ Sign in using OpenID
 {#######################################################################################}
 
 {% block form %}
-<form action="." method="post" id="openid_form">
-	<fieldset>
-		<input type="hidden" name="action" value="verify" />
-		
-		<legend>Sign-in or Create New Account</legend>
-	
-		<div id="openid_choice">
-	    		<p>Please click your account provider:</p>
-	    		<div id="openid_btns"></div>
-		</div>
-		
-		<div id="openid_input_area">
-			<input id="openid_identifier" type="text" class="required openid" name="openid_identifier" maxlength="255" />
-			<input type="submit" value="Sign-In"/>
-		</div>
-		
-		<noscript>
-			<p>OpenID is service that allows you to log-on to many different websites using a single indentity.
-			Find out <a href="http://openid.net/what/">more about OpenID</a> and <a href="http://openid.net/get/">how to get an OpenID enabled account</a>.</p>
-		</noscript>
-	</fieldset>
+
+<form method="post" action="." id="openid">
+		<div><input type="hidden" name="action" value="verify"></div>
 </form>
+
 {% endblock %}
