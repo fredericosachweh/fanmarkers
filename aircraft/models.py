@@ -3,6 +3,8 @@ from django.db.models import permalink
 from django.contrib.auth.models import User
 from constants import *
 
+from django.template.defaultfilters import slugify
+
 class Aircraft(models.Model):
     manufacturer    =       models.CharField(max_length=32, help_text="e.g: Cessna, Beechcraft")
     type            =       models.CharField(max_length=32, help_text="e.g: C-172, BE-76")
@@ -17,24 +19,28 @@ class Aircraft(models.Model):
 
     @permalink
     def get_absolute_url(self):
-        return ('view-aircraft', [str(self.pk)] )
+        return ('view-aircraft', [str(self.pk), self.slug] )
 
     @permalink
     def get_edit_url(self):
         return ('edit-aircraft', [str(self.pk)] )
 
-
-    def __unicode__(self):
-
-
+    def slugify(self):
         if self.extra:
             model = " " + self.model + " " + self.extra
-
         elif self.model:
             model = " " + self.model
-
         else:
             model = ""
+        return slugify(u'%s %s' % (self.manufacturer, model) )
 
+    slug = property(slugify)
 
+    def __unicode__(self):
+        if self.extra:
+            model = " " + self.model + " " + self.extra
+        elif self.model:
+            model = " " + self.model
+        else:
+            model = ""
         return u'%s (%s%s)' % (self.type, self.manufacturer, model, )

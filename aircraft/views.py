@@ -4,16 +4,22 @@ from django.shortcuts import get_object_or_404
 from django.views.generic.create_update import update_object, create_object
 from django.db.models import Q
 
-from main.models import Company
+from django.http import HttpResponseRedirect
 
+
+from main.models import Company
 from forms import AircraftForm, AircraftSearch
 from models import Aircraft
 
 ################################
 
 @render_to('view_aircraft.html')
-def view(request, pk):
+def view(request, pk, slug):
     aircraft = get_object_or_404(Aircraft, pk=pk)
+
+    if not aircraft.slug == slug: return HttpResponseRedirect(aircraft.get_absolute_url() )
+
+
     companies = Company.objects.filter(fleet__aircraft=aircraft)
     return locals()
 

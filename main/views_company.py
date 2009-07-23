@@ -47,5 +47,4 @@ def view(request, pk, slug):
 
     if not company.slug == slug: return HttpResponseRedirect(company.get_absolute_url() )
 
-
     return locals()
