@@ -166,6 +166,8 @@ def make_list(request):
 
     positions = Position.objects.all()
 
+    title = "Positions"
+
     return locals()
 
 ###################################################################
