@@ -16,6 +16,7 @@ var BaseOverlay = new GTileLayerOverlay(
 );
 
 var offset = new GSize(-17,20)
+var instructions = "<b>Top Number</b>: Total Hiring Positions<br><br><b>Bottom Number</b>: Total Positions<br><br><b>Zoom in for more detail</b><br><br><i>**Many Features of this site are currently not implemented in Opera and especially IE. For best results, use Firefox 3.5 or Google Chrome**</i><br><br>Register an account to edit information and create new Company/Position/Aircraft profiles.";
 
 var labels =
 	[	
@@ -33,7 +34,9 @@ var labels =
 		new ELabel(new GLatLng(28.659744,49.716793), middle_east[1] + "<br>" + middle_east[2], "overlay_number", offset),	// middle-east
 		new ELabel(new GLatLng(65.3155,82.412106),  russia[1] + "<br>" + russia[2], "overlay_number", offset),			// russia
 		new ELabel(new GLatLng(65.960532,20.712887), scandanavia[1] + "<br>" + scandanavia[2], "overlay_number", offset),	// scandanavia
-		new ELabel(new GLatLng(39.524382,-98.100588), usa[1] + "<br>" + usa[2], "overlay_number", offset),			// usa		
+		new ELabel(new GLatLng(39.524382,-98.100588), usa[1] + "<br>" + usa[2], "overlay_number", offset),			// usa
+
+		new ELabel(new GLatLng(-58.052735,-156.474613), instructions, "instructions"),
 	]
 	
 
@@ -57,7 +60,12 @@ function initialize()
 		map.addControl(new GMapTypeControl(), topRight);
 		map.enableContinuousZoom();
 		map.enableScrollWheelZoom();
-		
+
+		G_PHYSICAL_MAP.getMinimumResolution = function () { return 2 };
+		G_NORMAL_MAP.getMinimumResolution = function () { return 2 };
+		G_SATELLITE_MAP.getMinimumResolution = function () { return 2 };
+		G_HYBRID_MAP.getMinimumResolution = function () { return 2 };
+
 		figure_zoom();
 		
 		GEvent.addListener(map, "zoomend", figure_zoom);
