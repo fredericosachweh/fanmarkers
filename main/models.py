@@ -7,6 +7,9 @@ from mins import Mins, MinsCatClass, MinsOnType
 
 from aircraft.models import Aircraft
 from airport.models import Airport
+
+from django.template.defaultfilters import slugify
+
 #from comment.models import Comment
 
 ###############################################################################################################################
@@ -72,7 +75,7 @@ class Company(models.Model):
 
     @permalink
     def get_absolute_url(self):
-        return ('view-company', [str(self.pk)] )
+        return ('view-company', [str(self.pk), self.slug] )
 
     @permalink
     def get_edit_url(self):
@@ -80,6 +83,11 @@ class Company(models.Model):
 
     def __unicode__(self):
         return u"%s" % (self.name)
+
+    def slugify(self):
+        return slugify(self.name)
+
+    slug = property(slugify)
 
 ###############################################################################################################################
 

@@ -2,6 +2,8 @@ from annoying.decorators import render_to
 from django.shortcuts import get_object_or_404
 from django.views.generic.create_update import update_object, create_object
 
+from django.http import HttpResponseRedirect
+
 from models import Company
 from forms import CompanySearch, CompanyForm
 from django.db.models import Q
@@ -40,7 +42,10 @@ def new(request):
     return create_object(request, form_class=CompanyForm, template_name='new_company.html')
 
 @render_to('view_company.html')
-def view(request, pk):
+def view(request, pk, slug):
     company = get_object_or_404(Company, pk=pk)
+
+    if not company.slug == slug: return HttpResponseRedirect(company.get_absolute_url() )
+
 
     return locals()
