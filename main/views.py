@@ -8,9 +8,6 @@ from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 from django.shortcuts import get_object_or_404
 
-from main.immutable_views import *
-from main.position_views import *
-
 ###############################################################################
 
 @login_required()

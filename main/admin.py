@@ -46,7 +46,7 @@ class OpBaseAdmin(admin.ModelAdmin):
     raw_id_fields = ('base', )
 
 class StatusAdmin(admin.ModelAdmin):
-    raw_id_fields = ('assign_bases','choice_bases','layoff_bases','not_bases', )
+    raw_id_fields = ('assign_bases','choice_bases','layoff_bases', )
     #inlines = (StatusBaseInline, )
 
 class PositionAdmin(admin.ModelAdmin):

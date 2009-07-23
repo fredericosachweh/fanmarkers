@@ -183,8 +183,8 @@ class OpBase(models.Model):
     base            =       models.ForeignKey(Airport)
     info            =       models.TextField("Extra Info", blank=True)
 
-    hiring_status   =       "unknown"
-    verbose_hiring_status=  HIRING_STATUS["unknown"]
+    hiring_status   =       "not"
+    verbose_hiring_status=  HIRING_STATUS["not"]
 
     def __unicode__(self):
         return u"%s - %s" % (self.base.identifier, self.operation.company.name)
@@ -196,16 +196,11 @@ class OpBase(models.Model):
         return "[" + ",".join(output) + "]"
 
     def fill_in_status(self, status):
-        not_bases = status.not_bases.all()
         assign_bases = status.assign_bases.all()
         choice_bases = status.choice_bases.all()
         layoff_bases = status.layoff_bases.all()
 
-        if self in not_bases:
-            self.hiring_status = "not"
-            self.verbose_hiring_status = HIRING_STATUS["not"]
-
-        elif self in assign_bases:
+        if self in assign_bases:
             self.hiring_status = "assign"
             self.verbose_hiring_status = HIRING_STATUS["assign"]
 
@@ -217,8 +212,8 @@ class OpBase(models.Model):
             self.hiring_status = "layoff"
             self.verbose_hiring_status = HIRING_STATUS["layoff"]
         else:
-            self.hiring_status = "unknown"
-            self.verbose_hiring_status = HIRING_STATUS["unknown"]
+            self.hiring_status = "not"
+            self.verbose_hiring_status = HIRING_STATUS["not"]
 
 
 ###############################################################################################################################
@@ -239,7 +234,6 @@ class Status(models.Model):
     reference       =       models.TextField(blank=True, null=True)
     last_modified   =       models.DateTimeField(auto_now=True)
 
-    not_bases       =       models.ManyToManyField(OpBase, related_name="not", blank=True)
     assign_bases    =       models.ManyToManyField(OpBase, related_name="assign", blank=True)
     choice_bases    =       models.ManyToManyField(OpBase, related_name="choice", blank=True)
     layoff_bases    =       models.ManyToManyField(OpBase, related_name="layoff", blank=True)

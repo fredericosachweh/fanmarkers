@@ -5,6 +5,8 @@ from django.shortcuts import get_object_or_404
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 
+from django.db.models import Q
+
 from models import *
 from forms import *
 
@@ -21,8 +23,8 @@ def view(request, pk):
         payscales = compensation.payscaleyear_set.all()
 
     status = get_object_or_None(Status, position=position)
+
     if status:
-        not_bases = status.not_bases.all()
         assign_bases = status.assign_bases.all()
         choice_bases = status.choice_bases.all()
         layoff_bases = status.layoff_bases.all()
@@ -113,8 +115,7 @@ def edit(request, pk):
             else:
                 instance = status_form.save(commit=False)
 
-            if list(instance.not_bases.all()) != field_bases["not"] or \
-                    list(instance.not_bases.all()) != field_bases["layoff"] or \
+            if      list(instance.layoff_bases.all()) != field_bases["layoff"] or \
                     list(instance.assign_bases.all()) != field_bases["assign"] or \
                     list(instance.choice_bases.all()) != field_bases["choice"] and \
                     status_form.has_changed() or not status_form.instance.pk:
@@ -122,7 +123,6 @@ def edit(request, pk):
 
                 status_form.save()
 
-                instance.not_bases = field_bases["not"]
                 instance.layoff_bases = field_bases["layoff"]
                 instance.assign_bases = field_bases["assign"]
                 instance.choice_bases = field_bases["choice"]
@@ -150,6 +150,17 @@ def edit(request, pk):
             "pos_form": pos_form,
             "last_modified": status.last_modified}
 
+##################################################################
+
+@render_to('list_position.html')
+def hiring(request):
+
+    positions = Position.objects.filter(Q(status__choice_bases__isnull=False) | Q(status__assign_bases__isnull=False)).distinct()
+
+    return locals()
+
+
+
 @render_to('list_position.html')
 def make_list(request):
 
@@ -164,10 +175,10 @@ def make_list(request):
 
 def rearrange_fields(newPOST, opbases):
     field_bases = {}
-    field_bases["not"] = field_bases["assign"] = field_bases["choice"] = field_bases["layoff"] = []
+    field_bases["assign"] = field_bases["choice"] = field_bases["layoff"] = []
 
     for opbase in opbases:
-        for item in ("not", "assign", "choice", "layoff", ):
+        for item in ("assign", "choice", "layoff", ):
             if newPOST["opb-" + str(opbase.pk)] == item:                    # if airport exists in approprate column...
                 field_bases[item] = field_bases[item] + [opbase]        # add that airport object to the appropriate list
     return field_bases
@@ -176,9 +187,6 @@ def mark_opbases(opbases, status):
 
     for opbase in opbases:
         if not status.pk:
-            opbase.unknown_checked = 'checked="checked"'
-
-        elif opbase in status.not_bases.all():
             opbase.not_checked = 'checked="checked"'
 
         elif opbase in status.choice_bases.all():
@@ -191,4 +199,4 @@ def mark_opbases(opbases, status):
             opbase.layoff_checked = 'checked="checked"'
 
         else:
-            opbase.unknown_checked = 'checked="checked"'
+            opbase.not_checked = 'checked="checked"'

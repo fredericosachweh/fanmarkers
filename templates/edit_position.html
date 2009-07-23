@@ -104,7 +104,6 @@
 				<table summary="hiring status form" id="status_table">
 				<tr>
 					<td>Base</td>
-					<td>Status Unknown</td>
 					<td>Laying Off</td>
 					<td>Not Hiring</td>
 					{% if opbases|length_is:"1" %}
@@ -119,7 +118,6 @@
 				<tr>
 					<td><strong><a href="{{ base.get_absolute_url }}" class="immutable">{{opbase.base.identifier}}</a></strong><br />{{ opbase.base.location_summary}}</td>
 		
-					<td><input type="radio" name="opb-{{opbase.pk}}" value="unknown" {{opbase.unknown_checked|safe}}/></td>
 					<td><input type="radio" name="opb-{{opbase.pk}}" value="layoff" {{opbase.layoff_checked|safe}}/></td>
 					<td><input type="radio" name="opb-{{opbase.pk}}" value="not" {{opbase.not_checked|safe}}/></td>
 					{% if opbases|length_is:"1" %}

@@ -6,7 +6,9 @@ def google_maps(request):
 
 def top_numbers(request):
     from settings import SITE_URL
-    hiring =        Status.objects.exclude(  choice_bases__isnull=True, assign_bases__isnull=True  )
+    from django.db.models import Q
+
+    hiring =        Status.objects.filter( Q(choice_bases__isnull=False) | Q(assign_bases__isnull=False)  ).distinct()
     advertising =   hiring.filter(advertising=True)
 
     return {"SITE_URL": SITE_URL, 'advertising': "Advertising: " + str(advertising.count()), 'hiring': "Hiring: " + str(hiring.count())}

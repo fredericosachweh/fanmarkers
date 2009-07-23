@@ -27,7 +27,7 @@
 	<div class="pagnate">{% paginate %}</div>
 	<ul>
 	{% for object in objects %}
-	<li><a class="{%ifequal type "Company"%}view{%else%}immutable{%endifequal%}" href="{{ object.get_absolute_url }}">{{object}}</a></li>
+	<li><a class="{%ifequal type "Aircraft"%}immutable{%else%}view{%endifequal%}" href="{{ object.get_absolute_url }}">{{object}}</a></li>
 	{% empty %}
 		<li><strong>Nothing to show, sorry</strong></li>
 	{% endfor %}
