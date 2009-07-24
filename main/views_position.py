@@ -61,7 +61,7 @@ def new(request, pk):
 
 ########################################################################
 
-#@login_required()
+@login_required()
 @render_to('edit_position.html')
 def edit(request, pk):
 

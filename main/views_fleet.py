@@ -7,6 +7,7 @@ from django.views.generic.create_update import update_object
 from models import Company, Fleet
 from forms import FleetForm
 
+@login_required()
 def edit(request, pk):
     company = get_object_or_404(Company, fleet=pk)
 

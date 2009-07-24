@@ -1,7 +1,7 @@
 from annoying.decorators import render_to
 from django.shortcuts import get_object_or_404
 from django.views.generic.create_update import update_object, create_object
-
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 
 from models import Company
@@ -35,9 +35,11 @@ def make_list(request):
 
 ########################################################
 
+@login_required()
 def edit(request, pk):
     return update_object(request, object_id=pk, form_class=CompanyForm, template_name='edit_company.html')
 
+@login_required()
 def new(request):
     return create_object(request, form_class=CompanyForm, template_name='new_company.html')
 

@@ -19,13 +19,14 @@ def view(request, pk, slug):
 
     if not aircraft.slug == slug: return HttpResponseRedirect(aircraft.get_absolute_url() )
 
-
     companies = Company.objects.filter(fleet__aircraft=aircraft)
     return locals()
 
+@login_required()
 def edit(request, pk):
     return update_object(request, object_id=pk, form_class=AircraftForm, template_name="new-edit_aircraft.html")
 
+@login_required()
 def new(request):
     return create_object(request, form_class=AircraftForm, template_name="new-edit_aircraft.html")
 

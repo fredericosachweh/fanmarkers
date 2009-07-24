@@ -9,7 +9,7 @@ from forms import *
 
 ##########################################################################################################
 
-#@login_required()
+@login_required()
 @render_to('edit_mins.html')
 def edit(request, pk):
 

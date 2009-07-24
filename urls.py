@@ -15,7 +15,6 @@ urlpatterns = patterns('',
     (r'^admin/doc/',                            include('django.contrib.admindocs.urls')),
     (r'^comments/',                             include('mod_comments.urls')),
 
-
     (r'^admin/(.*)',                            admin.site.root),
     (r'^openid/',                               include('django_openid_auth.urls')),
 
