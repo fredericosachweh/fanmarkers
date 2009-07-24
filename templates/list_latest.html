@@ -1,0 +1,37 @@
+{% extends "base_list.html" %}
+{% load duration %}
+
+{% block title %}Latest Changes{% endblock %}
+
+{% block css %}
+{{ block.super }}
+	.last_modified			{color: gray; margin-left: 10px}
+	.containers				{float: right; width: 50%; }
+	.containers li			{margin-bottom: 10px}
+{% endblock %}
+
+{% block main_content %}
+	<div class="containers">Latest Edited Positions:
+	<ul>
+	{% for position in positions %}
+	<li>
+		<a class="view" href="{{ position.get_absolute_url }}">{{position.company}} - {{ position }}</a><br>
+		<span class="last_modified">{{ position.modified_seconds_ago|sectodur }} Ago</span>
+	</li>
+	{% endfor %}
+	</ul>
+	</div>
+
+	<div class="containers">Latest Edited Companies:
+		<ul>
+		{% for company in companies %}
+		<li>
+			<a class="view" href="{{ company.get_absolute_url }}">{{ company }}</a><br>
+			<span class="last_modified">{{ company.modified_seconds_ago|sectodur }} Ago</span>
+		</li>
+		{% endfor %}
+		</ul>
+	</div>
+
+
+{% endblock %}

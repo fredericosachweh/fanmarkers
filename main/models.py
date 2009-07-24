@@ -87,6 +87,14 @@ class Company(models.Model):
     def slugify(self):
         return slugify(self.name)
 
+    def modified_seconds_ago(self):
+        import datetime
+        delta = datetime.datetime.now() - self.last_modified
+        days = delta.days
+        secs = delta.seconds
+        return ( days * 86400 ) + secs
+
+
     slug = property(slugify)
 
 ###############################################################################################################################
@@ -147,6 +155,12 @@ class Position(models.Model):
         except:
             return None
 
+    def modified_seconds_ago(self):
+        import datetime
+        delta = datetime.datetime.now() - self.last_modified
+        days = delta.days
+        secs = delta.seconds
+        return (days * 86400) + secs
 ###############################################################################################################################
 
 class Operation(models.Model):

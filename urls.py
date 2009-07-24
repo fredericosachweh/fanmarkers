@@ -34,6 +34,8 @@ urlpatterns = patterns('',
     (r'^fleet/',                include("main.urls_fleet")),
     (r'^operation/',            include("main.urls_operation")),
 
+    url(r'^latest/',               "main.views.latest", name="latest"),
+
 
 ###########################################################################################################################################
 
