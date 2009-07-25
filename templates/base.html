@@ -67,11 +67,11 @@
 			$(document).ready(function() {
 
 				$('a.or_sign_in').text("Sign in to edit").attr('href', '/openid/login/');
+				$('a.new').text("Sign in to create New").attr('href', '/openid/login/');
 		
-				//$("a.edit_link_ui").hide();
-				$("a.edit").hide();
-				$("a.new").hide();
-				$("a.watch").hide();
+				$("a.edit_link_ui").not("a.or_sign_in").hide();
+				
+				//$("a.watch").hide();
 	
 			});
 			{% endif %}

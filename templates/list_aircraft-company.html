@@ -2,7 +2,7 @@
 
 {% block title %}{{type}}{% endblock %}
 
-{% block under_heading %}
+{% block sub_heading %}
 	{% ifequal type "Aircraft" %}
 		<a href="{% url new-aircraft %}" class="new">Create New Aircraft</a>
 	{% else %}
