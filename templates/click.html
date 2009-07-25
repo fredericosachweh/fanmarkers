@@ -9,26 +9,30 @@ json = {
 				
 		"base":    "{% if bases %}\
 						<ul class='popup_ul'>\
-						{% for position in bases %}\
+						{% for operation in bases %}\
 							<li>\
-								<span class='popup_position'><a class='view' href='{{ position.company.get_absolute_url }}'>{{ position.company }}</a>\
-								- <a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span> {{position.status|safe}}<br>\
-								<span class='popup_fleet'>{{position.operation_set.all.0.all_fleet}}</span>\
-							</li>\
+							<span class='popup_position'><a class='view' href='{{ operation.company.get_absolute_url }}'>{{ operation.company }}</a>\
+									<span class='popup_fleet'>{{operation.all_fleet}}</span><br>\
+									{% for position in operation.positions.all %}\
+									- <a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span> {{position.status|safe}}<br>\
+									{% endfor %}\
+															</li>\
 						{% endfor %}\
 						</ul>\
 					{% else %}\
 						<div class='popup_not_known not_known'>None</div>\
 					{% endif %}",
 				
-		"route":   "{% if routes %}\
+		"route":   "{% if bases %}\
 						<ul class='popup_ul'>\
-						{% for position in routes %}\
+						{% for operation in routes %}\
 							<li>\
-								<span class='popup_position'><a class='view' href='{{ position.company.get_absolute_url }}'>{{ position.company }}</a>\
-								- <a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span> {{position.status|safe}}<br>\
-								<span class='popup_fleet'>{{position.operation_set.all.0.all_fleet}}</span>\
-							</li>\
+							<span class='popup_position'><a class='view' href='{{ operation.company.get_absolute_url }}'>{{ operation.company }}</a>\
+									<span class='popup_fleet'>{{operation.all_fleet}}</span><br>\
+									{% for position in operation.positions.all %}\
+									- <a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span> {{position.status|safe}}<br>\
+									{% endfor %}\
+															</li>\
 						{% endfor %}\
 						</ul>\
 					{% else %}\
