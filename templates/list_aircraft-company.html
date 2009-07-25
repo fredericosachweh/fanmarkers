@@ -20,10 +20,9 @@
 		<input type="submit">
 	</form>
 	</div>
-	{% load pagination_tags %}
-	
-	{% autopaginate objects %}
 
+	{% load pagination_tags %}
+	{% autopaginate objects 50 %}
 	<div class="pagnate">{% paginate %}</div>
 	<ul>
 	{% for object in objects %}

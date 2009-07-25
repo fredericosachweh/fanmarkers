@@ -24,26 +24,16 @@
 	.errorlist				{color: darkred}
 {% endblock %}
 
-{% block body %}
-<div id="main_container">
-	<h1>
-	{% block title %}{% endblock %}
-	</h1>
-	
-	{% block top_links%}{% endblock %}
-	
-	<hr/>
-	
-	{% block beforeform %}{% endblock %}
-	
-	<form action="." method="post">
-		<div>
+{% block edit %}{% endblock %}
+
+{% block heading %}
+{% block title %}{% endblock %}
+{% endblock %}
+
+{% block main_content %}
+	<form action="." method-"post">
 			{% block form %}{% endblock %}
-			<br />
-			<input type="submit" value="{% if last_modified %}Submit Changes{% else %}Submit{% endif %}" />
-		</div>
+			<input style="margin-top: 5px" type="submit" name="submit" value="Submit">
 	</form>
-	
-	{% block afterform %}{% endblock %}
-</div>
+	{%block afterform %}{% endblock %}
 {% endblock %}

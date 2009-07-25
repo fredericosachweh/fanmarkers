@@ -27,7 +27,7 @@
 		{% for company in companies %}
 		<li>
 			<a class="view" href="{{ company.get_absolute_url }}">{{ company }}</a><br>
-			<span class="last_modified">{{ company.modified_seconds_ago|sectodur }} Ago</span>
+			<span class="last_modified">{{ company.modified_seconds_ago|sectodur }} ago</span>
 		</li>
 		{% endfor %}
 		</ul>

@@ -164,7 +164,7 @@ def hiring(request):
 @render_to('list_position.html')
 def make_list(request):
 
-    positions = Position.objects.all()
+    positions = Position.objects.all().order_by('name', 'job_domain')
 
     title = "Positions"
 

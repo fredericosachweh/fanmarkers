@@ -7,13 +7,19 @@
 {% endblock %}
 
 {% block main_content %}
-	<ol>
+<ul>
+	{% load pagination_tags %}
+	
+	{% autopaginate positions 50 %}
+
+	<div class="pagnate">{% paginate %}</div>	
+		
 	{% for position in positions %}
 	<li>
-		<a class="view" href="{{ position.get_absolute_url }}">{{position.company}} - {{ position }}</a>
+		<a class="view" href="{{ position.get_absolute_url }}">{{position}} - {{ position.company }}</a>
 	</li>
 	{% empty %}
 		<li><strong>Nothing to show, sorry</strong></li>
 	{% endfor %}
-	</ol>
+	</ul>
 {% endblock %}

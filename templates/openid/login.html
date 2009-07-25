@@ -1,4 +1,4 @@
-{% extends "base_account.html" %}
+{% extends "base_view.html" %}
 
 {% block title %}Sign in using OpenID{% endblock %}
 
@@ -23,15 +23,9 @@
 
 {% endblock %}
 
-{#######################################################################################}
+{% block edit %}{%endblock %}
 
-{% block heading %}
-Sign in using OpenID
-{% endblock %}
-
-{#######################################################################################}
-
-{% block form %}
+{% block main_content %}
 
 <form method="post" action="." id="openid">
 		<div><input type="hidden" name="action" value="verify"></div>

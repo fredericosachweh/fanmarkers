@@ -1,26 +1,11 @@
 {% extends "base.html" %}
-{% load humanize %}
-
-{% block javascript %}{% endblock %}
 
 {% block css %}
 {{ block.super }}
 	.filter_form		{background: #DDDDDD; padding:5px}
-	.pagination		{margin: 5px; text-align: center; width: 100%}
+	.pagination			{margin: 5px; text-align: center; width: 100%; }
 {% endblock %}
 
-{% block body %}
-<div id="main_container">
-	<h1>
-	{% block title %}Heading{% endblock %}
-	</h1>
-	<div style="overflow: hidden">
-		<div>{% block under_heading %}{% endblock %}</div>
-	</div>
-	
-	<hr/>
-	
-	{% block main_content %}
-	{% endblock %}
-</div>
+{% block heading %}
+{% block title %}{% endblock %}
 {% endblock %}
