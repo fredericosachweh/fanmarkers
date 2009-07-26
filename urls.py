@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from django.views.generic import list_detail, create_update
+from django.views.generic.simple import direct_to_template
 from django.contrib import admin
 
 admin.autodiscover()
@@ -34,7 +34,8 @@ urlpatterns = patterns('',
     (r'^fleet/',                include("main.urls_fleet")),
     (r'^operation/',            include("main.urls_operation")),
 
-    url(r'^latest/',               "main.views.latest", name="latest"),
+    url(r'^latest/$',           "main.views.latest", name="latest"),
+    url(r'^about/$',            direct_to_template, {'template': 'about.html'}, name="about" ),
 
 
 ###########################################################################################################################################
