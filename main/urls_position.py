@@ -5,5 +5,4 @@ urlpatterns = patterns('main',
         url(r'^(?P<pk>\d{1,4})/$',              "views_position.view", name="view-position"),
         url(r'^new/(?P<pk>\d{1,4})/$',          "views_position.new", name="new-position"),
         url(r'^edit/(?P<pk>\d{1,4})/$',         "views_position.edit", name="edit-position"),
-        url(r'^hiring/$',                       "views_position.hiring", name="hiring-position"),
 )

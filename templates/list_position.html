@@ -7,7 +7,17 @@
 {% endblock %}
 
 {% block main_content %}
-<ul>
+	<div class="filter_form">
+	<form action="." method="get">
+		<table>
+		{{searchform}}
+		</table>
+		<input type="submit">
+	</form>
+	</div>
+
+
+	<ul>
 	{% load pagination_tags %}
 	
 	{% autopaginate positions 50 %}

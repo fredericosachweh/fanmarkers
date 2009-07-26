@@ -1,14 +1,15 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
+from django import forms
+from django.db.models import Q
 
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 
-from django.db.models import Q
-
 from models import *
 from forms import *
+from constants import *
 
 ########################################################################
 
@@ -152,21 +153,46 @@ def edit(request, pk):
 
 ##################################################################
 
-@render_to('list_position.html')
-def hiring(request):
+class PositionSearch(forms.Form):
+    search       = forms.CharField(max_length=100, required=False)
+    job_domain   = forms.ChoiceField(choices=[(-1,"Any",),]+JOB_DOMAIN, required=False)
+    aircraft     = forms.ModelChoiceField( queryset=Aircraft.objects.all(), required=False )
+    status       = forms.ChoiceField( choices=[(-1, "Any"), (0, "Not Hiring"), (1, "Hiring")], required=False)
 
-    positions = Position.objects.filter(Q(status__choice_bases__isnull=False) | Q(status__assign_bases__isnull=False)).distinct()
-
-    return locals()
-
-
+##################################################################
 
 @render_to('list_position.html')
 def make_list(request):
 
     positions = Position.objects.all().order_by('name', 'job_domain')
-
     title = "Positions"
+
+    if request.GET.get("status", False):
+
+        get = request.GET
+        searchform = PositionSearch(get)
+
+        domain =   int(get.get("job_domain", -1))
+        search =       get.get("search", "")
+        aircraft =     get.get("aircraft", "")          #when aircraft is left "---", it returns a blank value
+        status =   int(get.get("status", -1))
+
+        if domain > 0:
+            positions = positions.filter( job_domain=domain )
+                
+        if search:
+            positions = positions.filter( name__icontains=search )
+
+        if aircraft != "":
+            positions = positions.filter( operation__fleet__aircraft=aircraft)
+
+        if status == 0:
+            positions = positions.filter( Q(status__assign_bases__isnull=True) & Q(status__choice_bases__isnull=True) )
+
+        if status == 1:
+            positions = positions.filter( Q(status__assign_bases__isnull=False) | Q(status__choice_bases__isnull=False) ).distinct()
+    else:
+        searchform = PositionSearch()
 
     return locals()
 
