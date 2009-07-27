@@ -101,7 +101,7 @@ class Company(models.Model):
 
 class Position(models.Model):
     company         =       models.ForeignKey("Company", )
-    name            =       models.CharField("Position Name", max_length=32, blank=True)
+    name            =       models.CharField("Position Name", max_length=32,)
     description     =       models.TextField(blank=True)
 
     job_domain      =       models.IntegerField(choices=JOB_DOMAIN, default=0)
