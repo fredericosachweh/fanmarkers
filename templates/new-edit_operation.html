@@ -29,7 +29,7 @@
 
 {#############################################################}
 
-{% block top_links %}
+{% block sub_heading %}
 	{% ifequal type "edit" %}
 	<a href="{{ form.instance.company.get_edit_url }}" class="edit">Edit {{ form.instance.company }}</a>
 	{% else %}
