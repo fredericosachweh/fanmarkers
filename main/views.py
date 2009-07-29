@@ -41,7 +41,29 @@ def profile(request):
 @render_to('list_latest.html')
 def latest(request):
     positions = Position.objects.order_by('-last_modified').select_related()[:15]
-    #aircrafts = Aircraft.objects.order_by('-last_modified')[:15]
     companies = Company.objects.order_by('-last_modified')[:15]
 
     return locals()
+    
+@render_to('about.html')
+def about(request):
+    positions = Position.objects.all().count()
+    companies = Company.objects.all().count()
+    return locals()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

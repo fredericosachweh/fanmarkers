@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from django.views.generic.simple import direct_to_template
+from django.views.generic.simple import redirect_to, direct_to_template
 from django.contrib import admin
 
 admin.autodiscover()
@@ -10,7 +10,7 @@ urlpatterns = patterns('',
     (r'^map_click/(?P<z>\d{1,2})_(?P<lat>\-?\d+\.\d*)_(?P<lng>\-?\d+\.\d*)/$',          'main.views_map.click'),
 
     url(r'^jobmap/',                            "main.views_map.jobmap", name="jobmap"),
-    url('^$',                                   "main.views_map.jobmap", name="root"),
+    url('^$',                                   redirect_to, {'url': '/about/'}),
 
     (r'^admin/doc/',                            include('django.contrib.admindocs.urls')),
     (r'^comments/',                             include('mod_comments.urls')),
@@ -35,7 +35,7 @@ urlpatterns = patterns('',
     (r'^operation/',            include("main.urls_operation")),
 
     url(r'^latest/$',           "main.views.latest", name="latest"),
-    url(r'^about/$',            direct_to_template, {'template': 'about.html'}, name="about" ),
+    url(r'^about/$',            "main.views.about", name="about" ),
 
 
 ###########################################################################################################################################
