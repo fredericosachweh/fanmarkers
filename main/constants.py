@@ -94,6 +94,9 @@ BUSINESS_TYPE   =       [       (1, "FBO-type flight school"),
                                 (9, "Aerial Photography"),
                                 (10, "Aerial Survey"),
                                 (11, "Scenic flights / Aerial Tours"),
+                                (13, "Private Charters"),
+                                (14, "Corporate Flight Department"),
+                                (15, "Sky Diving Drop Zone"),
                                 (12, "Other")
                         ]
 
