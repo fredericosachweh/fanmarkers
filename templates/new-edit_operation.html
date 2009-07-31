@@ -63,7 +63,7 @@
 					</tr>
 					{% if form.instance.pk %}
 					<tr>					
-						<th>New {{form.info.label_tag}}:</th>
+						<th>{{form.info.label_tag}}:</th>
 						<td>
 							{{form.info}}
 							{% for error in form.info.errors %} <span class="errorlist">{{error}}</span>{% endfor %}

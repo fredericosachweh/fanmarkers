@@ -7,14 +7,6 @@
 	input[type="text"]		{width:4em}
 {% endblock %}
 
-{% block heading %}
-	{% ifequal type "edit" %}
-	<h1>Edit Route for {{opbase.base}}</h1>
-	{% else %}
-	<h1>New Route for {{opbase.base}}</h1>
-	{% endifequal %}
-{% endblock %}
-
 {% block sub_heading %}	
 	<a href="{{ opbase.operation.get_edit_url }}" class="edit">Edit {{ opbase.operation }}</a>
 {% endblock %}	
