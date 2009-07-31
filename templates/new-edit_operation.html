@@ -61,14 +61,15 @@
 							{% for error in form.base.errors %}  <span class="errorlist">{{error}}</span>{% endfor %}
 						</td>
 					</tr>
-					
+					{% if form.instance.pk %}
 					<tr>					
-						<th>{{form.info.label_tag}}:</th>
+						<th>New {{form.info.label_tag}}:</th>
 						<td>
 							{{form.info}}
 							{% for error in form.info.errors %} <span class="errorlist">{{error}}</span>{% endfor %}
 						</td>
 					</tr>
+                    {% endif %}
 					
 					{% if form.instance.pk %}
 					<tr>

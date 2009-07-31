@@ -70,7 +70,7 @@ class OpBaseForm(ModelForm):
         model = OpBase
         extra = 0
 
-OpBaseFormset = inlineformset_factory(Operation, OpBase, form=OpBaseForm, extra=3, )
+OpBaseFormset = inlineformset_factory(Operation, OpBase, form=OpBaseForm, extra=7, )
 
 #####################################################################################################
 
