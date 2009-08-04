@@ -31,9 +31,10 @@
 {% endblock %}
 
 {% block main_content %}
+
+	{%block afterform %}{% endblock %}
 	<form action="." method="post">
 			{% block form %}{% endblock %}
 			<input style="margin-top: 5px" type="submit" name="submit" value="Submit">
 	</form>
-	{%block afterform %}{% endblock %}
 {% endblock %}
