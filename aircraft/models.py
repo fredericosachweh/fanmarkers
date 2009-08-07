@@ -37,15 +37,12 @@ class Aircraft(models.Model):
     slug = property(slugify)
 
     def __unicode__(self):
-        if self.extra:
-            model = " " + self.model + " " + self.extra
-            type = " (" + self.type + ")"
+        if self.model and self.type:
+            return u"%s %s %s (%s)" % (self.manufacturer, self.model, self.extra, self.type)
 
-        elif self.model:
-            model = " " + self.model
-            type = " (" + self.type + ")"
-        else:
-            model = " " + self.type
-            type = ""
+        elif self.model and not self.type:
+            return u"%s %s %s" % (self.manufacturer, self.model, self.extra)
 
-        return u'%s%s%s' % (self.manufacturer, model, self.type)
+        elif self.type and not self.model:
+            return u"%s %s %s" % (self.manufacturer, self.type, self.extra)
+
