@@ -39,8 +39,13 @@ class Aircraft(models.Model):
     def __unicode__(self):
         if self.extra:
             model = " " + self.model + " " + self.extra
+            type = " (" + self.type + ")"
+
         elif self.model:
             model = " " + self.model
+            type = " (" + self.type + ")"
         else:
-            model = ""
-        return u'%s (%s%s)' % (self.type, self.manufacturer, model, )
+            model = " " + self.type
+            type = ""
+
+        return u'%s%s%s' % (self.manufacturer, model, self.type)
