@@ -270,11 +270,3 @@ class Status(models.Model):
 
     def __unicode__(self):
         return str(self.position) + " - " + str(self.last_modified)
-
-###############################################################################################################################
-
-class Profile(models.Model):
-    user            =       models.ForeignKey(User, primary_key=True)
-
-    dob             =       models.DateField("Date of Birth", blank=True, default="1900-01-01")
-    #resume         =       models.FileField(upload_to="resume/")

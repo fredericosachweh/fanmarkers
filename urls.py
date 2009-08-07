@@ -44,7 +44,7 @@ urlpatterns = patterns('',
     url(r'^latest/$',           "main.views.latest", name="latest"),
     url(r'^about/$',            "main.views.about", name="about" ),
     url(r'^jobmap/',            "main.views_map.jobmap", name="jobmap"),
-    url(r'^profile/',           "main.views.profile", name="profile"),
+    url(r'^profile/',           "profile.views.profile", name="profile"),
 
     (r'^openid/',               include('django_openid_auth.urls')),
 
@@ -57,5 +57,5 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += patterns('django.contrib.auth',
-    url(r'^accounts/logout/$','views.logout', {"template_name": "view_jobmap.html"}, name="logout"),
+    url(r'^accounts/logout/$','views.logout', {"template_name": "about.html"}, name="logout"),
 )
