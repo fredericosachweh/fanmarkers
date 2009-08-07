@@ -182,7 +182,7 @@ class Operation(models.Model):
     def _all_fleet(self):
         ret = []
         for fleet in self.fleet.all():
-            ret.append(unicode(fleet.aircraft))
+            ret.append(unicode(fleet.aircraft.type))
 
         return " + ".join(ret)
 
