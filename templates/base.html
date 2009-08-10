@@ -11,7 +11,8 @@
 	body					{font-family: Bitstream Vera Sans; font-size: small}
 	input					{font-family: Bitstream Vera Sans; font-size: small}
 	
-	h1          		    {margin-bottom: 0px}
+	h1          		    {display: inline}
+    .heading_padding        {padding: 30px 0 10px 0}
 	
 	a              			{text-decoration: none}
 	a:hover     			{text-decoration: underline}
@@ -152,7 +153,10 @@
 			{% block fullscreen %}
 			<div id="main_container">
 				{% block heading_block %}
-					<h1>{% block heading %}{% endblock %}</h1>
+				    <div class="heading_padding">
+                        <h1>{% block heading %}{% endblock %}</h1>{% block logo %}{% endblock %}
+                    </div>
+
 					<div style="overflow: hidden">
 						<div style="text-align: left; width: 50%; float: left">
 						{% block sub_heading %}{% endblock %}

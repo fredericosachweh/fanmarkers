@@ -19,13 +19,13 @@ urlpatterns = patterns('',
 
     #################################################################################################################
 
-    url('^$',                           redirect_to, {'url': '/about/'}),
+    url('^$',                           redirect_to, {'url': 'about/'}),
 
     (r'^admin/',                        include(admin.site.urls)),
     (r'^admin/doc/',                    include('django.contrib.admindocs.urls')),
     (r'^comments/',                     include('mod_comments.urls')),
     (r'^sitemap.xml$',                  'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
-    (r'^site-media/(?P<path>.*)$',      'django.views.static.serve', {'document_root': '/home/chris/Websites/jobmap/media', 'show_indexes': True}),
+    (r'^site-media/(?P<path>.*)$',      'django.views.static.serve', {'document_root': '/home/chris/Websites/fanmarkers/media', 'show_indexes': True}),
 
     
     #################################################################################################################
