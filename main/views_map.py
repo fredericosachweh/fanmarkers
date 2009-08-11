@@ -140,6 +140,9 @@ def kml(request, position=None, company=None, airport=None):
     from django.http import HttpResponse
     from django.template import Context
     from route.models import Route
+    from settings import MEDIA_URL
+
+    MEDIA_URL = MEDIA_URL
 
     if position:
         position = get_object_or_404(Position, pk=position)
