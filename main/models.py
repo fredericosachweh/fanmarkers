@@ -4,13 +4,10 @@ from django.contrib.auth.models import User
 
 from constants import *
 from mins import Mins, MinsCatClass, MinsOnType
-
 from aircraft.models import Aircraft
 from airport.models import Airport
 
 from django.template.defaultfilters import slugify
-
-#from comment.models import Comment
 
 ###############################################################################################################################
 

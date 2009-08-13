@@ -1,7 +1,8 @@
 from django.contrib.gis.db import models
-from django.contrib.auth.models import User
 from constants import AIRPORT_TYPE
+
 from django.db.models import Q, permalink
+from django.contrib.auth.models import User
 
 class BaseManager(models.GeoManager):
     def get_query_set(self):                                #all airports which are an opbase
