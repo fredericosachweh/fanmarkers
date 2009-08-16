@@ -2,7 +2,9 @@ from django.conf.urls.defaults import *
 from django.views.generic.simple import redirect_to, direct_to_template
 from django.contrib import admin
 from sitemaps import *
+import django_cron
 
+#django_cron.autodiscover()
 admin.autodiscover()
 
 sitemaps = {"company": CompanySitemap,
@@ -59,3 +61,5 @@ urlpatterns = patterns('',
 urlpatterns += patterns('django.contrib.auth',
     url(r'^accounts/logout/$','views.logout', {"template_name": "about.html"}, name="logout"),
 )
+
+
