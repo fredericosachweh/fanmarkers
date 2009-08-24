@@ -12,7 +12,7 @@ class UpdateHiring(CronJob):
     run_every = 43200
             
     def job(self):
-        logfile = open(PROJECT_PATH + 'status_cron.log', 'a')
+        logfile = open(PROJECT_PATH + '/status_cron.log', 'a')
         
         cutoff_date = date.today() + relativedelta(days=-30)                    #the date of 30 days ago
         
