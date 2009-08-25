@@ -14,7 +14,7 @@ json = {
 							<span class='popup_position'><a class='view' href='{{ operation.company.get_absolute_url }}'>{{ operation.company }}</a>\
 									<span class='popup_fleet'>{{operation.all_fleet}}</span><br>\
 									{% for position in operation.positions.all %}\
-									- <a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span> {{position.status|safe}}<br>\
+									- <a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a>&nbsp;</span>{{position.status|safe}}<br>\
 									{% endfor %}\
 															</li>\
 						{% endfor %}\
@@ -30,7 +30,7 @@ json = {
 							<span class='popup_position'><a class='view' href='{{ operation.company.get_absolute_url }}'>{{ operation.company }}</a>\
 									<span class='popup_fleet'>{{operation.all_fleet}}</span><br>\
 									{% for position in operation.positions.all %}\
-									- <a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a></span> {{position.status|safe}}<br>\
+									- <a class='view' href='{{position.get_absolute_url}}'>{{position.name}}</a>&nbsp;</span>{{position.status|safe}}<br>\
 									{% endfor %}\
 															</li>\
 						{% endfor %}\

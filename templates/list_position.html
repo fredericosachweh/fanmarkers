@@ -1,4 +1,5 @@
 {% extends "base_list.html" %}
+{% load duration %}
 
 {% block title %}{% if title %}{{title}}{% else %}{{hiring}} Positions{% endif %}{% endblock %}
 
@@ -26,7 +27,12 @@
 		
 	{% for position in positions %}
 	<li>
-		<a class="view" href="{{ position.get_absolute_url }}">{{position}} - {{ position.company }}</a>
+		<a class="view" href="{{ position.get_absolute_url }}">{{position}} - {{ position.company }}</a><br>
+		{% if position.status %}
+		    {{ position.status|safe }}
+		    Since {{ position.status_since|date:"N d, Y" }}
+		    <span class="last_modified">({{ position.status_modified_seconds_ago|sectodur }} Ago)</span>
+		{% endif %}
 	</li>
 	{% empty %}
 		<li><strong>Nothing to show, sorry</strong></li>

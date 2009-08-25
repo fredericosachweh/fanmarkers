@@ -131,6 +131,14 @@ class Position(models.Model):
             fleet = None
 
         return fleet
+        
+    def status_since(self):
+        try:
+            status = self.status_set.all()[0]       #try to get the status object if one exists
+        except:
+            return ""
+            
+        return status.last_modified
 
     def status(self):
         try:
@@ -155,6 +163,17 @@ class Position(models.Model):
     def modified_seconds_ago(self):
         import datetime
         delta = datetime.datetime.now() - self.last_modified
+        days = delta.days
+        secs = delta.seconds
+        return (days * 86400) + secs
+        
+    def status_modified_seconds_ago(self):
+        import datetime
+        try:
+            delta = datetime.datetime.now() - self.status_set.all()[0].last_modified
+        except:
+            return 0
+            
         days = delta.days
         secs = delta.seconds
         return (days * 86400) + secs
