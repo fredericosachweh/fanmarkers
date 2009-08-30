@@ -46,6 +46,9 @@
 	{% for point in routebases %}
 	<Placemark>
 		<name>{{point.identifier}}</name>
+		<![CDATA[
+                <b>{{point.name}}</b><br>{{point.location_summary}}
+        ]]>
 		<styleUrl>#route_icon</styleUrl>
 		<Point>
 			<coordinates>{{point.location.x}},{{point.location.y}},0</coordinates>
@@ -56,6 +59,9 @@
 	{% for point in bases %}
 	<Placemark>
 		<name>{{point.identifier}}</name>
+		<![CDATA[
+                <b>{{point.name}}</b><br>{{point.location_summary}}
+        ]]>
 		<styleUrl>#base_icon</styleUrl>
 		<Point>
 			<coordinates>{{point.location.x}},{{point.location.y}},0</coordinates>
