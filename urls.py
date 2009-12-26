@@ -20,7 +20,7 @@ urlpatterns = patterns('',
 
     #################################################################################################################
 
-    url('^$',                           redirect_to, {'url': 'about/'}),
+    url('^$',                           redirect_to, {'url': 'about.html'}),
 
     (r'^admin/',                        include(admin.site.urls)),
     (r'^admin/doc/',                    include('django.contrib.admindocs.urls')),
@@ -45,10 +45,10 @@ urlpatterns = patterns('',
     (r'^fleet/',                include("main.urls_fleet")),
     (r'^operation/',            include("main.urls_operation")),
 
-    url(r'^latest/$',           "main.views.latest", name="latest"),
-    url(r'^about/$',            "main.views.about", name="about" ),
-    url(r'^jobmap/',            "main.views_map.jobmap", name="jobmap"),
-    url(r'^profile/',           "profile.views.profile", name="profile"),
+    url(r'^latest.html$',       "main.views.latest", name="latest"),
+    url(r'^about.html$',        "main.views.about", name="about" ),
+    url(r'^jobmap.html',        "main.views_map.jobmap", name="jobmap"),
+    url(r'^profile.html',       "profile.views.profile", name="profile"),
 
     (r'^openid/',               include('django_openid_auth.urls')),
 

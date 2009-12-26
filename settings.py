@@ -31,7 +31,7 @@ USE_I18N = True
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/'
+ADMIN_MEDIA_PREFIX = '/ad-media/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '&52lnelj34-*+76c2x*e0q4&b9zec%@^l_@s%*u*ar!%b5v!yr'
@@ -47,6 +47,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'pagination.middleware.PaginationMiddleware',
 )
 
 ROOT_URLCONF = 'fanmarkers.urls'
@@ -63,13 +64,21 @@ INSTALLED_APPS = (
     'route',
     'mod_comments',
     'django_openid_auth',
+    'robots',
     'pagination',
 
     'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.humanize',
     'django.contrib.gis',
+    'django.contrib.comments',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
 )
 
+#TEMPLATE_CONTEXT_PROCESSORS = (
+#    'django.core.context_processors.request',
+#)
