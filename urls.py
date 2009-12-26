@@ -2,7 +2,6 @@ from django.conf.urls.defaults import *
 from django.views.generic.simple import redirect_to, direct_to_template
 from django.contrib import admin
 from sitemaps import *
-import django_cron
 
 #django_cron.autodiscover()
 admin.autodiscover()
