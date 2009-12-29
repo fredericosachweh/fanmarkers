@@ -7,7 +7,7 @@ from django.db.models import Q
 from django.http import HttpResponseRedirect
 
 
-from main.models import Company
+from company.models import Company
 from forms import AircraftForm, AircraftSearch
 from models import Aircraft
 
@@ -17,18 +17,24 @@ from models import Aircraft
 def view(request, pk, slug):
     aircraft = get_object_or_404(Aircraft, pk=pk)
 
-    if not aircraft.slug == slug: return HttpResponseRedirect(aircraft.get_absolute_url() )
+    if not aircraft.slug == slug:
+        return HttpResponseRedirect(aircraft.get_absolute_url() )
 
     companies = Company.objects.filter(fleet__aircraft=aircraft)
     return locals()
 
 @login_required()
 def edit(request, pk):
-    return update_object(request, object_id=pk, form_class=AircraftForm, template_name="new-edit_aircraft.html")
+    return update_object(request,
+                         object_id=pk,
+                         form_class=AircraftForm,
+                         template_name="new-edit_aircraft.html")
 
 @login_required()
 def new(request):
-    return create_object(request, form_class=AircraftForm, template_name="new-edit_aircraft.html")
+    return create_object(request,
+                         form_class=AircraftForm,
+                         template_name="new-edit_aircraft.html")
 
 @render_to('list_aircraft-company.html')
 def make_list(request):

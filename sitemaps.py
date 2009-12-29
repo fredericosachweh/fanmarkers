@@ -1,6 +1,7 @@
 from django.contrib.sitemaps import Sitemap
 from aircraft.models import Aircraft
-from main.models import Position, Company
+from company.models import Company
+from position.models import Position
 from airport.models import Airport
 
 class AircraftSitemap(Sitemap):

@@ -1,4 +1,5 @@
-#! /srv/fanmarkers/env/bin/python
+#! /home/chris/.virtualenvs/fanmarkers/bin/python
+
 
 from django.core.management import execute_manager
 try:

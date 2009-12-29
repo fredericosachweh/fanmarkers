@@ -57,7 +57,11 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
-    'main',
+    'operation',
+    'company',
+    'mins',
+    'compensation',
+    'position',
     'airport',
     'aircraft',
     'profile',

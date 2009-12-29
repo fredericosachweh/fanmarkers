@@ -1,10 +1,15 @@
 from django.conf.urls.defaults import *
 from django.views.generic.simple import redirect_to, direct_to_template
-from django.contrib import admin
-from sitemaps import *
 
-#django_cron.autodiscover()
+################################################
+
+from django.contrib import admin
+
 admin.autodiscover()
+
+#################################################
+
+from sitemaps import *
 
 sitemaps = {"company": CompanySitemap,
             "aircraft": AircraftSitemap,
@@ -12,56 +17,69 @@ sitemaps = {"company": CompanySitemap,
             "airport": AirportSitemap,
            }
 
+#################################################
 
 urlpatterns = patterns('',
 
-    (r'^overlay/(?P<z>\d{1,2})_(?P<x>\d{1,5})_(?P<y>\d{1,5})_(?P<o>\S{1,5})/$',         'main.views_map.overlay'),
-    (r'^map_click/(?P<z>\d{1,2})_(?P<lat>\-?\d+\.\d*)_(?P<lng>\-?\d+\.\d*)/$',          'main.views_map.click'),
+    (r'^overlay/(?P<z>\d{1,2})_(?P<x>\d{1,5})_(?P<y>\d{1,5})_(?P<o>\S{1,5})/$',
+                                'jobmap.views.overlay'),
+                            
+    (r'^map_click/(?P<z>\d{1,2})_(?P<lat>\-?\d+\.\d*)_(?P<lng>\-?\d+\.\d*)/$',
+                                'jobmap.views.click'),
 
-    #################################################################################################################
+    ###########################################################################
 
-    url('^$',                           redirect_to, {'url': 'about.html'}),
+    url('^$',                   redirect_to, {'url': 'about.html'}),
 
-    (r'^admin/',                        include(admin.site.urls)),
-    (r'^admin/doc/',                    include('django.contrib.admindocs.urls')),
-    (r'^comments/',                     include('mod_comments.urls')),
+    (r'^admin/',                include(admin.site.urls)),
+    (r'^admin/doc/',            include('django.contrib.admindocs.urls')),
+    (r'^comments/',             include('mod_comments.urls')),
     
-    (r'^sitemap.xml$',                  'django.contrib.sitemaps.views.sitemap', {'sitemaps': sitemaps}),
-    (r'^robots.txt$',                   include('robots.urls')),
+    (r'^robots.txt$',           include('robots.urls')),
     
-    (r'^site-media/(?P<path>.*)$',      'django.views.static.serve', {'document_root': '/home/chris/Websites/fanmarkers/media', 'show_indexes': True}),
-
-    
-    #################################################################################################################
-
+    ###########################################################################
 
     (r'^airport/',              include("airport.urls")),
     (r'^aircraft/',             include("aircraft.urls")),
     (r'^route/',                include("route.urls")),
 
-    (r'^mins/',                 include("main.urls_mins")),
-    (r'^company/',              include("main.urls_company")),
-    (r'^position/',             include("main.urls_position")),
-    (r'^fleet/',                include("main.urls_fleet")),
-    (r'^operation/',            include("main.urls_operation")),
+    (r'^mins/',                 include("mins.urls")),
+    (r'^company/',              include("company.urls")),
+    (r'^position/',             include("position.urls")),
+    #(r'^fleet/',                include("company.urls_fleet")),
+    (r'^operation/',            include("operation.urls")),
 
-    url(r'^latest.html$',       "main.views.latest", name="latest"),
-    url(r'^about.html$',        "main.views.about", name="about" ),
-    url(r'^jobmap.html',        "main.views_map.jobmap", name="jobmap"),
+    #url(r'^latest.html$',       "main.views.latest", name="latest"),
+    #url(r'^about.html$',        "main.views.about", name="about" ),
+    url(r'^jobmap.html',        "jobmap.views.jobmap", name="jobmap"),
     url(r'^profile.html',       "profile.views.profile", name="profile"),
 
     (r'^openid/',               include('django_openid_auth.urls')),
 
-###########################################################################################################################################
+###############################################################################
 
-    (r'^kml/position-(?P<position>\d+).kml$',   "main.views_map.kml"),
-    (r'^kml/company-(?P<company>\d+).kml$',     "main.views_map.kml"),
-    (r'^kml/airport-(?P<airport>\S+).kml$',     "main.views_map.kml"),
+    (r'^kml/position-(?P<position>\d+).kml$',   "jobmap.views.kml"),
+    (r'^kml/company-(?P<company>\d+).kml$',     "jobmap.views.kml"),
+    (r'^kml/airport-(?P<airport>\S+).kml$',     "jobmap.views.kml"),
+
+    (
+        r'^dev-media/(?P<path>.*)$',
+        'django.views.static.serve',
+        {'document_root': '/srv/fanmarkers/media', 'show_indexes': True}
+    ),
+    
+    (
+        r'^sitemap.xml$',
+        'django.contrib.sitemaps.views.sitemap',
+        {'sitemaps': sitemaps}
+    ),
 
 )
 
 urlpatterns += patterns('django.contrib.auth',
-    url(r'^accounts/logout/$','views.logout', {"template_name": "about.html"}, name="logout"),
+    url(
+        r'^accounts/logout/$','views.logout',
+        {"template_name": "about.html"},                        name="logout"),
 )
 
 

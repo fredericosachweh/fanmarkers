@@ -3,7 +3,8 @@ from annoying.decorators import render_to
 from django.shortcuts import get_object_or_404
 
 from models import *
-from main.models import Company, Operation
+from company.models import Company
+from operation.models import Operation
 
 ################################
 

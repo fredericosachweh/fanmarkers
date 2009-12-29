@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import permalink
 from airport.models import Airport
-from main.models import OpBase
+from operation.models import OpBase
 
 class Route(models.Model):
     bases           = models.ManyToManyField(Airport, through="RouteBase", blank=True)

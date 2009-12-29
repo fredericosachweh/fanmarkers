@@ -10,6 +10,7 @@ from annoying.functions import get_object_or_None
 from models import *
 from forms import *
 from constants import *
+from aircraft.models import Aircraft
 
 ########################################################################
 
@@ -153,9 +154,11 @@ def edit(request, pk):
 
 ##################################################################
 
+JOB_DOMAIN_ANY = [(-1, "Any")] + JOB_DOMAIN
+
 class PositionSearch(forms.Form):
     search       = forms.CharField(max_length=100, required=False)
-    job_domain   = forms.ChoiceField(choices=[(-1,"Any",),]+JOB_DOMAIN, required=False)
+    job_domain   = forms.ChoiceField(choices=JOB_DOMAIN_ANY, required=False)
     aircraft     = forms.ModelChoiceField( queryset=Aircraft.objects.all(), required=False )
     status       = forms.ChoiceField( choices=[(-1, "Any"), (0, "Not Hiring"), (1, "Hiring")], required=False)
 

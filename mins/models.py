@@ -1,7 +1,7 @@
 from django.db import models
 from constants import *
 
-from aircraft.models import Aircraft
+Aircraft = models.get_model('aircraft', 'aircraft')
 
 def merge(*input):
     return reduce(list.__add__, input, list())

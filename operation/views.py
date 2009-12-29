@@ -6,7 +6,9 @@ from django.views.generic.create_update import update_object, create_object
 from annoying.decorators import render_to
 
 from forms import OpBaseFormset, OperationForm
-from models import Company, Operation
+from models import Operation
+from company.models import Company
+from position.models import Position
 
 @login_required()
 @render_to('new-edit_operation.html')
