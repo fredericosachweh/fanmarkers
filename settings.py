@@ -60,6 +60,8 @@ INSTALLED_APPS = (
     'operation',
     'company',
     'mins',
+    'main',
+    'fleet',
     'compensation',
     'position',
     'airport',

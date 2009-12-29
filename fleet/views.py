@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
 from django.views.generic.create_update import update_object
 
-from models import Company, Fleet
+from models import Fleet
 from forms import FleetForm
 
 @login_required()

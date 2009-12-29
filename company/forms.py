@@ -9,12 +9,6 @@ class CompanyForm(ModelForm):
         model = Company
         exclude = ('watchers',)
 
-class FleetForm(ModelForm):
-    class Meta:
-        model = Fleet
-        exclude = ('watchers', 'company')
-        
-
 BUSINESS_TYPE_ANY = [(-1,"Any",),] + BUSINESS_TYPE
 JUMPSEAT_TYPE_ANY = [(-1,"Any",),] + JUMPSEAT_TYPE
 

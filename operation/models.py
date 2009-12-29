@@ -9,7 +9,7 @@ from django.template.defaultfilters import slugify
 class Operation(models.Model):
     company         =       models.ForeignKey('company.Company',)
     
-    fleet           =       models.ManyToManyField('company.Fleet',
+    fleet           =       models.ManyToManyField('fleet.Fleet',
                                                    blank=True,
                                                    null=True)
                                                    

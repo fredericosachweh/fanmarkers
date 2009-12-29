@@ -5,7 +5,7 @@ from django.forms.models import inlineformset_factory
 from django.forms import ModelForm
 from models import *
 from position.models import Position
-from company.models import Fleet
+from fleet.models import Fleet
 from airport.models import Airport
 
 class OperationForm(ModelForm):
