@@ -85,6 +85,8 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
 )
 
-#TEMPLATE_CONTEXT_PROCESSORS = (
-#    'django.core.context_processors.request',
-#)
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.request',
+    'django.core.context_processors.auth',
+    'main.context_processors.google_maps',
+)
