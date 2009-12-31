@@ -5,8 +5,20 @@ import os
 
 PROJECT_PATH = os.path.abspath(os.path.dirname(__file__))
 
+#openid settings #################################
+
+OPENID_CREATE_USERS = True
+OPENID_UPDATE_DETAILS_FROM_SREG = True
+LOGIN_URL = "/openid/login/"
+LOGIN_REDIRECT_URL = '/'
+
+AUTHENTICATION_BACKENDS = (
+    'django_openid_auth.auth.OpenIDBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
 ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+    ('Chris Priest', 'nbvfour@gmail.com'),
 )
 
 MANAGERS = ADMINS
@@ -16,7 +28,7 @@ MANAGERS = ADMINS
 # although not all choices may be available on all operating systems.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'America/New_York'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -26,7 +38,7 @@ SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
-USE_I18N = True
+USE_I18N = False
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
