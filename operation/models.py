@@ -4,8 +4,6 @@ from django.contrib.auth.models import User
 
 from constants import *
 
-from django.template.defaultfilters import slugify
-
 class Operation(models.Model):
     company         =       models.ForeignKey('company.Company',)
     

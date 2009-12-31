@@ -1,6 +1,8 @@
 from django.db import models
 from constants import *
 
+from django.template.defaultfilters import slugify
+
 User = models.get_model('auth','user')
 Aircraft = models.get_model('aircraft','aircraft')
 

@@ -11,6 +11,7 @@ from models import *
 from forms import *
 from constants import *
 from aircraft.models import Aircraft
+from company.models import Company
 
 ########################################################################
 

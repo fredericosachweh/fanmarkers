@@ -5,6 +5,8 @@ from django.http import HttpResponseRedirect
 from django.views.generic.create_update import update_object
 
 from models import Fleet
+from company.models import Company
+
 from forms import FleetForm
 
 @login_required()
