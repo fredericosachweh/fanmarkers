@@ -113,8 +113,12 @@ def jobmap(request):
     return locals()
 
 def overlay(request, z, x, y, o):
-    from overlay.overlays import GoogleOverlay
-    from settings import ICONS_DIR
+    import os
+    
+    from gtileoverlay.overlays import GTileOverlay
+    from django.conf import settings
+    
+    ICONS_DIR = os.path.join(settings.PROJECT_PATH, 'media', 'icons')
 
     just_routes = Airport.route.all()
     all_bases = Airport.base.all()
@@ -132,16 +136,16 @@ def overlay(request, z, x, y, o):
     else:
         size = "/big"
 
-    ov = GoogleOverlay(z,x,y, queryset=just_routes, field="location")
+    ov = GTileOverlay(z,x,y, queryset=just_routes, field="location")
     ov.icon(ICONS_DIR + size + '/route.png')                                                                                # light blue icons for route bases
 
-    ov = GoogleOverlay(z,x,y, queryset=all_bases, image=ov.output(shuffle=False), field="location")
+    ov = GTileOverlay(z,x,y, queryset=all_bases, image=ov.output(shuffle=False), field="location")
     ov.icon(ICONS_DIR + size + '/base.png')                                                                         # green icons for no status bases
 
-    ov = GoogleOverlay(z,x,y, queryset=all_hiring, image=ov.output(shuffle=False), field="location")                # red for hiring bases
+    ov = GTileOverlay(z,x,y, queryset=all_hiring, image=ov.output(shuffle=False), field="location")                # red for hiring bases
     ov.icon(ICONS_DIR + size + '/hiring.png')
 
-    #ov = GoogleOverlay(z,x,y, queryset=advertising, image=ov.output(shuffle=False), field="location")               # red-gold for advertising bases
+    #ov = GTileOverlay(z,x,y, queryset=advertising, image=ov.output(shuffle=False), field="location")               # red-gold for advertising bases
     #ov.icon(ICONS_DIR + size + '/advertising.png')
 
     #############################################################

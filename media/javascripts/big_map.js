@@ -8,7 +8,7 @@ var CustomGetTileUrl = function(point,zoom){
 
 var BaseOverlay = new GTileLayerOverlay(
 	new GTileLayer(null, null, null, {
-		tileUrlTemplate: '/overlay/{Z}_{X}_{Y}_DMB/', 
+		tileUrlTemplate: '/overlay/{Z}_{X}_{Y}_DMB.png', 
 		isPng:true,
 		opacity:1.0
 		}
