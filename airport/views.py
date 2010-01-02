@@ -9,9 +9,9 @@ from operation.models import Operation
 ################################
 
 @render_to('view_airport.html')
-def airport(request, pk):
+def airport(request, ident):
 
-    airport = get_object_or_404(Airport, pk=pk)
+    airport = get_object_or_404(Airport, identifier=ident)
 
     company_base =  Company.objects.filter(operation__opbase__base=airport).distinct()         #ops where this airport is a base
     ops_fly =       Operation.objects.filter(opbase__route__bases=airport).distinct()          #ops where this airport is part of a route

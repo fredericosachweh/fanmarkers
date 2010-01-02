@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q
 
 
-from models import *
+from company.models import Company
 from operation.models import OpBase
 from position.models import Position, Status
 from airport.models import Airport
@@ -192,9 +192,24 @@ def kml(request, position=None, company=None, airport=None):
         title = str(company)
 
     if airport:
-        base = get_object_or_404(Airport, pk=airport)
-        title = str(airport)  + " - " + str(base.name)
-        bases = [base]          #make it a list so it can be iterated in the template
+        base = get_object_or_404(Airport, identifier=airport)
+        title = "%s - %s" % (airport, base.name)
+        #make it a list so it can be iterated in the template
+        bases = [base]
+    
+    from utils import locals_to_kmz_response
+    return locals_to_kmz_response(locals())
 
-    kml = get_template('base.kml').render(Context(locals() ))
-    return HttpResponse(kml, mimetype="application/vnd.google-earth.kml+xml")
+
+
+
+
+
+
+
+
+
+
+
+
+

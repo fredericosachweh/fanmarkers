@@ -48,7 +48,7 @@ class RelevantManager(models.GeoManager):
                                            .distinct()
 
 class Airport(models.Model):
-    identifier      =       models.CharField(max_length=8, primary_key=True)
+    identifier      =       models.CharField(max_length=8)
 
     name            =       models.CharField(max_length=96)
     municipality    =       models.CharField(max_length=60)
@@ -95,7 +95,10 @@ class Region(models.Model):
     code = models.CharField(max_length=48)
     country = models.CharField(max_length=2)
     name = models.CharField(max_length=60)
-
+    
+    class Meta:
+        verbose_name_plural = "Regions"
+        
     def __unicode__(self):
         return "%s" % (self.name)
 
@@ -103,6 +106,9 @@ class Country(models.Model):
     name = models.CharField(max_length=48)
     code = models.CharField(max_length=2, primary_key=True)
     continent = models.CharField(max_length=2)
+    
+    class Meta:
+        verbose_name_plural = "Countries"
 
     def __unicode__(self):
         return self.name

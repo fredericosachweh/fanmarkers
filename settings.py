@@ -81,6 +81,8 @@ INSTALLED_APPS = (
     'profile',
     'route',
     'mod_comments',
+    
+    'django_extensions',
     'django_openid_auth',
     'robots',
     'pagination',
@@ -101,5 +103,5 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.request',
     'django.core.context_processors.auth',
     'django.core.context_processors.media',
-    'main.context_processors.google_maps',
+    'main.context_processors.settings_values',
 )

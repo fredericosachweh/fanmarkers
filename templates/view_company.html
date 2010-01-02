@@ -12,6 +12,7 @@
 {% endblock %}
 
 {% block javascript %}
+{% url company-kml company.pk as kml %}
 <script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/small_map.js"></script>
 
@@ -21,7 +22,7 @@
 
 	$(document).ready(function() {
 		
-		var kml = new GGeoXml('{{ SITE_URL }}/kml/company-{{company.pk}}.kml', function(){
+		var kml = new GGeoXml('{{ SITE_URL }}{{ kml }}', function(){
 		
 			if (kml.loadedCorrectly())
 			{
@@ -45,7 +46,7 @@
 
 	<thead>
 		<tr>
-			<td colspan="2">Overview Map<a title="Download KML file for viewing in Google Earth" class="corner_link" href="/kml/company-{{company.pk}}.kml">kml</a></td>
+			<td colspan="2">Overview Map<a title="Download KML file for viewing in Google Earth" class="corner_link" href="{{ kml }}">kml</a></td>
 		</tr>
 	</thead>
 	

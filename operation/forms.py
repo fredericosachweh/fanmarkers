@@ -32,10 +32,22 @@ class OperationForm(ModelForm):
             self.fields['fleet'].queryset = fleet
             self.fields['positions'].queryset = pos
 
+class AirportFinderField(forms.ModelMultipleChoiceField):
+    widget = forms.TextInput
+    
+    def clean(self, value):
+        airport = None
+        try:
+            airport = Airport.objects.get(identifier__iexact=value)
+        except:
+            airport = Airport.objects.get(identifier__iexact="k" + value)
+            
+        return airport
+
+
 class OpBaseForm(ModelForm):
 
-    base = forms.ModelChoiceField(queryset=Airport.objects.all(),
-                                  widget=forms.TextInput)
+    base = AirportFinderField(queryset=Airport.objects.all())
 
     class Meta:
         model = OpBase

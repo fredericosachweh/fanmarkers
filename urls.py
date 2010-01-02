@@ -58,9 +58,23 @@ urlpatterns = patterns('',
 
 ###############################################################################
 
-    (r'^kml/position-(?P<position>\d+).kml$',   "jobmap.views.kml"),
-    (r'^kml/company-(?P<company>\d+).kml$',     "jobmap.views.kml"),
-    (r'^kml/airport-(?P<airport>\S+).kml$',     "jobmap.views.kml"),
+    url(
+        r'^kmz/position-(?P<position>\d+).kmz$',
+        "jobmap.views.kml",
+                                                           name="position-kml",
+    ),
+    
+    url(
+        r'^kmz/company-(?P<company>\d+).kmz$',
+        "jobmap.views.kml",
+                                                            name="company-kml",
+    ),
+        
+    url(
+        r'^kmz/airport-(?P<airport>\S+).kmz$',
+        "jobmap.views.kml",
+                                                            name="airport-kml",
+    ),
 
     (
         r'^dev-media/(?P<path>.*)$',
