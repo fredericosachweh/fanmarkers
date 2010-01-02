@@ -221,7 +221,7 @@ def kml(request, pk):
     from route.models import Route
     from airport.models import Airport
     
-    position = Position.goon(pk=pk)
+    position = Position.goof(pk=pk)
     
     routes = Route.objects.filter(home__operation__positions=position)
     

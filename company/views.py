@@ -1,4 +1,3 @@
-from django.shortcuts import get_object_or_404
 from django.views.generic.create_update import update_object, create_object
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -56,9 +55,12 @@ def view(request, pk, slug):
     return locals()
 
 def kml(request, pk):
-    from kml.utils import locals_to_kmz_response
     
-    company = Company.goon(pk=pk)
+    from route.models import Route
+    from airport.models import Airport
+   
+    company = Company.goof(pk=pk)
+    
     routes = Route.objects.filter(home__operation__company=company)
     bases = Airport.objects\
                    .filter(opbase__operation__company=company)\
@@ -70,7 +72,10 @@ def kml(request, pk):
                         .distinct()
                         
     title = str(company)
-        
+    
+    print company
+    
+    from kml.utils import locals_to_kmz_response    
     return locals_to_kmz_response(locals())
 
 

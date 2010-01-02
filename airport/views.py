@@ -31,10 +31,11 @@ def airport(request, ident):
 
 def kmz(request, ident):
 
-    base = Airport.goon(identifier=ident)
+    base = Airport.goof(identifier=ident)
+    
     title = "%s - %s" % (ident, base.name)
     #make it a list so it can be iterated in the template
-    bases = [base]
+    bases = (base, )
     
     from kml.utils import locals_to_kmz_response
     return locals_to_kmz_response(locals())
