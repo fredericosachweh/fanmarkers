@@ -9,6 +9,7 @@ from annoying.decorators import render_to
 from compensation.models import Compensation
 from aircraft.models import Aircraft
 from company.models import Company
+from operation.models import Operation
 
 from models import *
 from forms import *
@@ -69,7 +70,8 @@ def new(request, pk):
 @login_required()
 @render_to('edit_position.html')
 def edit(request, pk):
-
+    from compensation.forms import PayscaleFormset, CompensationForm
+    
     position = Position.goof(pk=pk)
     operation = Operation.goon(positions=position)
 
@@ -80,7 +82,7 @@ def edit(request, pk):
 
     #######################################################################
 
-    status = get_object_or_None(Status, position=position)
+    status = Status.goon(position=position)
     if not status:
         status = Status(position=position)
 
@@ -91,11 +93,9 @@ def edit(request, pk):
     #######################################################################
 
     if request.method == "POST":
-
+        
         newPOST = request.POST.copy()
         newPOST.update({"position": position.pk})
-
-        #assert False
 
         field_bases = rearrange_fields(newPOST, opbases)
 

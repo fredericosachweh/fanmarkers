@@ -2,9 +2,10 @@ from django.db import models
 from django.db.models import Q, permalink
 from django.contrib.auth.models import User
 
+from main.mixins import GoonMixin
 from constants import *
 
-class Operation(models.Model):
+class Operation(models.Model, GoonMixin):
     company         =       models.ForeignKey('company.Company',)
     
     fleet           =       models.ManyToManyField('fleet.Fleet',
