@@ -32,15 +32,35 @@ class OperationForm(ModelForm):
             self.fields['fleet'].queryset = fleet
             self.fields['positions'].queryset = pos
 
+###############################################################################
+
+class AirportWidget(forms.TextInput):
+    def _format_value_out(self, pk):
+        try:
+            airport = Airport.objects.get(pk=pk).identifier
+        except:
+            airport = ""
+            
+        return airport
+
+    def render(self, name, value, attrs=None):
+        value = self._format_value_out(value)
+        return super(AirportWidget, self).render(name, value, attrs)
+        
+    def _has_changed(self, initial, data):
+        return super(AirportWidget, self)\
+                ._has_changed(self._format_value_out(initial), data)
+
+
+
 class AirportFinderField(forms.ModelMultipleChoiceField):
-    widget = forms.TextInput
+    widget = AirportWidget
     
     def clean(self, value):
-        airport = None
-        try:
-            airport = Airport.objects.get(identifier__iexact=value)
-        except:
-            airport = Airport.objects.get(identifier__iexact="k" + value)
+        airport = Airport.goon(identifier__iexact=value)
+        
+        if not airport:
+            airport = Airport.goon(identifier__iexact="k" + value)
             
         return airport
 

@@ -4,6 +4,8 @@ from constants import AIRPORT_TYPE
 from django.db.models import Q, permalink
 from django.contrib.auth.models import User
 
+from main.mixins import GoonMixin
+
 class BaseManager(models.GeoManager):
     "all airports which are an opbase"
     def get_query_set(self):
@@ -47,7 +49,7 @@ class RelevantManager(models.GeoManager):
                                                   | Q(opbase__isnull=False))\
                                            .distinct()
 
-class Airport(models.Model):
+class Airport(models.Model, GoonMixin):
     identifier      =       models.CharField(max_length=8)
 
     name            =       models.CharField(max_length=96)
