@@ -2,7 +2,7 @@
 {% load humanize %}
 {% load comments %}
 
-{% block title %}{{position.company.name}} - {{position.name}}{% endblock %}
+{% block title %}{{ position.company.name }} - {{ position.name }}{% endblock %}
 
 {% block edit_top %}"{{ position.get_edit_url }}"{% endblock %}
 
@@ -51,7 +51,6 @@
 
 {% block javascript %}
 {{block.super}}
-
 <script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key={{ GOOGLE_MAPS_KEY }}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}/javascripts/small_map.js"></script>
 
@@ -62,7 +61,7 @@
 	$(document).ready(function() {
 		
 		
-		var kml = new GGeoXml('{{ SITE_URL }}/kml/position-{{position.pk}}.kml', function(){
+		var kml = new GGeoXml('{{ SITE_URL }}{{ kmz_url }}', function(){
 		
 			if (kml.loadedCorrectly())
 			{
@@ -81,10 +80,8 @@
 	
 	window.onunload = GUnload;
 </script>
-
 {% endblock %}
-
-Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a href="/watch/position/{{ position.pk }}">Watch this position</a>{%else%}<a href="/unwatch/position/{{ position.pk }}">Unwatch this position</a>{% endif %}
+{#Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a href="/watch/position/{{ position.pk }}">Watch this position</a>{%else%}<a href="/unwatch/position/{{ position.pk }}">Unwatch this position</a>{% endif %}#}
 
 
 {% block main_content %}
@@ -98,7 +95,10 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 	
 		<thead>
 			<tr>
-				<td colspan="2">Bases &amp; Routes <a title="Download KML file for viewing in Google Earth" class="corner_link" href="/kml/position-{{position.pk}}.kml">kml</a></td>
+				<td colspan="2">Bases &amp; Routes
+				<a title="Download KML file for viewing in Google Earth"
+				   class="corner_link" href="{{ kmz_url }}">kml</a>
+				</td>
 			</tr>
 		</thead>
 		
@@ -114,7 +114,8 @@ Current watchers: <strong>{{watchers}}</strong>  {% if not already_watching %}<a
 			<td>
 			{% for ob in opbases %}
 				<div class="top_section t_{{ ob.hiring_status }}">
-					<a class="immutable" href="{{ ob.base.get_absolute_url }}">{{ ob.base.display_name }}</a> 
+					<a class="immutable"
+					   href="{{ ob.base.get_absolute_url }}">{{ ob.base.display_name }}</a> 
 					<br />
 					<small>{{ ob.base.location_summary }}</small>
 				</div>

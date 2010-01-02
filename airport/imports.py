@@ -53,32 +53,34 @@ def ia():
 
         ##########################
 
-        if ident[:2].upper() == "X-":           ## throw out all closed airports with "X" identifiers
+        ## throw out all closed airports with "X" identifiers
+        if ident[:2].upper() == "X-":
             throw_out = True
 
-        if country == "US":                                     ## US AIRPORTS
-            if ident[0] == "K":                             ## STARTS WITH K
-                if re.search("[0-9]", ident):           ## HAS NUMBER
-                    ident = ident[1:]               ## get rid of the K
+        if country == "US":                     ## US AIRPORTS
+            if ident[0] == "K":                 ## STARTS WITH K
+                if re.search("[0-9]", ident):   ## HAS NUMBER
+                    ident = ident[1:]           ## get rid of the K
 
         if ident[:3] == "US-":
-            ident = ident[3:]                       ## get rid of the "US-" part
+            ident = ident[3:]                   ## get rid of the "US-" part
 
         if not throw_out:
             region = Region.objects.get(code=region, country=country)
             country = Country.objects.get(code=country)
             try:
-                Airport.objects.get_or_create(
-                          pk=pk,
-                          identifier=ident,
-                          name=name,
-                          region=region,
-                          municipality=city,
-                          country=country,
-                          elevation=elev,
-                          location='POINT (%s %s)' % (lng, lat),
-                          type=types[type]
-                )
+                a,c = Airport.objects.get_or_create(pk=pk)
+                    
+                a.identifier = ident
+                a.name = name
+                a.region = region
+                a.municipality = city
+                a.country = country
+                a.elevation = elev
+                a.location = 'POINT (%s %s)' % (lng, lat)
+                a.type = types[type]
+                
+                a.save()
                 
                 count2 += 1
 
@@ -86,6 +88,8 @@ def ia():
                 print ident, e
             else:
                 count_to += 1
+                if c:
+                    print "created: %s" % ident
 
     print "total:      " + str(count)
     print "success:    " + str(count2)

@@ -13,7 +13,14 @@ def airport(request, ident):
 
     airport = get_object_or_404(Airport, identifier=ident)
 
-    company_base =  Company.objects.filter(operation__opbase__base=airport).distinct()         #ops where this airport is a base
-    ops_fly =       Operation.objects.filter(opbase__route__bases=airport).distinct()          #ops where this airport is part of a route
+    #ops where this airport is a base
+    company_base =  Company.objects\
+                           .filter(operation__opbase__base=airport)\
+                           .distinct()
+    
+    #ops where this airport is part of a route                    
+    ops_fly =       Operation.objects\
+                             .filter(opbase__route__bases=airport)\
+                             .distinct()
 
     return locals()

@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django import forms
@@ -7,11 +8,13 @@ from django.db.models import Q
 from annoying.decorators import render_to
 from annoying.functions import get_object_or_None
 
+from compensation.models import Compensation
+from aircraft.models import Aircraft
+from company.models import Company
+
 from models import *
 from forms import *
 from constants import *
-from aircraft.models import Aircraft
-from company.models import Company
 
 ########################################################################
 
@@ -40,6 +43,7 @@ def view(request, pk):
     if request.user in position.watchers.all():
         already_watching = True
 
+    kmz_url = reverse("position-kml", kwargs={"position": position.pk})
 
     return locals()
 

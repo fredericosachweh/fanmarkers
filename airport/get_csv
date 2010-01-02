@@ -1,0 +1,20 @@
+#! /bin/bash
+
+get='get'
+
+cd /srv/fanmarkers/airport/fixtures;
+
+if [ $1 = $get ]; then
+
+    echo ">>>>>>>> Getting remote airport files...<<<<<<<";
+
+    wget -O - http://www.ourairports.com/data/regions.csv > regions.csv;
+    wget -O - http://www.ourairports.com/data/countries.csv > countries.csv;
+    wget -O - http://www.ourairports.com/data/airports.csv > airports.csv;
+
+    echo ">>>>>>>>>>>>>>>>>> Diff Below <<<<<<<<<<<<<<<<<";
+
+    git diff $PWD/fixtures/airports.csv;
+    git diff $PWD/fixtures/navaids.csv;
+    cd -;
+fi

@@ -6,7 +6,7 @@ from django.db.models import Q
 
 
 from company.models import Company
-from operation.models import OpBase
+from operation.models import OpBase, Operation
 from position.models import Position, Status
 from airport.models import Airport
  
