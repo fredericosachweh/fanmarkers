@@ -46,7 +46,7 @@ def new(request):
 
 @render_to('view_company.html')
 def view(request, pk, slug):
-    company = get_object_or_404(Company, pk=pk)
+    company = Company.goof(pk=pk)
 
     if not company.slug == slug: return HttpResponseRedirect(company.get_absolute_url() )
 

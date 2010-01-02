@@ -1,7 +1,8 @@
 from django.db import models
 from constants import *
+from main.mixins import GoonMixin
 
-class Compensation(models.Model):
+class Compensation(models.Model, GoonMixin):
     position        =       models.ForeignKey('position.Position')
 
     benefits        =       models.TextField(blank=True)

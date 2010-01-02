@@ -104,7 +104,7 @@ class NotHiringManager(models.Manager):
                                          .distinct()
 
 
-class Status(models.Model):
+class Status(models.Model, GoonMixin):
 
     position        =       models.ForeignKey('position.Position')
 
@@ -133,4 +133,4 @@ class Status(models.Model):
     not_hiring      =       NotHiringManager()
 
     def __unicode__(self):
-        return str(self.position) + " - " + str(self.last_modified)
+        return "%s - %s" % (self.position, self.last_modified)

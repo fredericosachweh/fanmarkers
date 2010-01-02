@@ -1,12 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
 from django import forms
 from django.db.models import Q
 
 from annoying.decorators import render_to
-from annoying.functions import get_object_or_None
 
 from compensation.models import Compensation
 from aircraft.models import Aircraft
@@ -20,15 +18,15 @@ from constants import *
 
 @render_to('view_position.html')
 def view(request, pk):
-    position = get_object_or_404(Position, pk=pk)
+    position = Position.goof(pk=pk)
 
     opbases = position.opbases()
 
-    compensation = get_object_or_None(Compensation, position=position)
+    compensation = Compensation.goon(position=position)
     if compensation:
         payscales = compensation.payscaleyear_set.all()
 
-    status = get_object_or_None(Status, position=position)
+    status = Status.goon(position=position)
 
     if status:
         assign_bases = status.assign_bases.all()
@@ -52,7 +50,7 @@ def view(request, pk):
 @render_to('new_position.html')
 def new(request, pk):
 
-    company = get_object_or_404(Company, pk=pk)
+    company = Company.goof(pk=pk)
 
     if request.method == "POST":
         pos = Position(company=company)
@@ -72,8 +70,8 @@ def new(request, pk):
 @render_to('edit_position.html')
 def edit(request, pk):
 
-    position = get_object_or_404(Position, pk=pk)
-    operation = get_object_or_None(Operation, positions=position)
+    position = Position.goof(pk=pk)
+    operation = Operation.goon(positions=position)
 
     if operation:
         opbases = operation.opbase_set.all()
@@ -86,7 +84,7 @@ def edit(request, pk):
     if not status:
         status = Status(position=position)
 
-    compensation = get_object_or_None(Compensation, position=position)
+    compensation = Compensation.goon(position=position)
     if not compensation:
         compensation = Compensation(position=position)
 
