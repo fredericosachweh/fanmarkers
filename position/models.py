@@ -1,8 +1,9 @@
 from django.db import models
 from constants import *
 from mins.models import Mins
+from main.mixins import GoonMixin
 
-class Position(models.Model):
+class Position(models.Model, GoonMixin):
     company         =       models.ForeignKey("company.Company")
     name            =       models.CharField("Position Name", max_length=32,)
     description     =       models.TextField(blank=True)

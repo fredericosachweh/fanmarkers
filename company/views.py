@@ -1,8 +1,10 @@
-from annoying.decorators import render_to
 from django.shortcuts import get_object_or_404
 from django.views.generic.create_update import update_object, create_object
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+
+from annoying.decorators import render_to
 
 from models import Company
 from forms import CompanySearch, CompanyForm
@@ -49,4 +51,29 @@ def view(request, pk, slug):
 
     if not company.slug == slug: return HttpResponseRedirect(company.get_absolute_url() )
 
+    kmz_url = reverse("kml-company", kwargs={"pk": company.pk})
+
     return locals()
+
+def kml(request, pk):
+    from kml.utils import locals_to_kmz_response
+    
+    company = Company.goon(pk=pk)
+    routes = Route.objects.filter(home__operation__company=company)
+    bases = Airport.objects\
+                   .filter(opbase__operation__company=company)\
+                   .distinct()
+                   
+    routebases = Airport.objects\
+                        .filter(routebase__route__in=routes)\
+                        .exclude(opbase__operation__company=company)\
+                        .distinct()
+                        
+    title = str(company)
+        
+    return locals_to_kmz_response(locals())
+
+
+
+
+

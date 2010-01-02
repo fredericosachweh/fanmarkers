@@ -43,7 +43,7 @@ def view(request, pk):
     if request.user in position.watchers.all():
         already_watching = True
 
-    kmz_url = reverse("position-kml", kwargs={"position": position.pk})
+    kmz_url = reverse("kml-position", kwargs={"pk": position.pk})
 
     return locals()
 
@@ -182,7 +182,7 @@ def make_list(request):
 
         domain =   int(get.get("job_domain", -1))
         search =       get.get("search", "")
-        aircraft =     get.get("aircraft", "")          #when aircraft is left "---", it returns a blank value
+        aircraft =     get.get("aircraft", "")#when aircraft is left "---", it returns a blank value
         status =   int(get.get("status", -1))
 
         if domain > 0:
@@ -195,19 +195,60 @@ def make_list(request):
             positions = positions.filter( operation__fleet__aircraft=aircraft)
 
         if status == 0:
-            positions = positions.filter( Q(status__assign_bases__isnull=True) & Q(status__choice_bases__isnull=True) )
+            positions = (positions
+                            .filter(
+                                       Q(status__assign_bases__isnull=True)
+                                     & Q(status__choice_bases__isnull=True)
+                             )
+                        )
 
         if status == 1:
-            positions = positions.filter( Q(status__assign_bases__isnull=False) | Q(status__choice_bases__isnull=False) ).distinct()
+            positions = (positions
+                            .filter(
+                                       Q(status__assign_bases__isnull=False)
+                                     | Q(status__choice_bases__isnull=False)
+                             )
+                            .distinct()
+                        )
     else:
         searchform = PositionSearch()
 
     return locals()
 
+##############################################################################
+
+def kml(request, pk):
+    from route.models import Route
+    from airport.models import Airport
+    
+    position = Position.goon(pk=pk)
+    
+    routes = Route.objects.filter(home__operation__positions=position)
+    
+    bases = Airport.objects\
+                   .filter(opbase__operation__positions=position)\
+                   .distinct()
+                   
+    routebases = Airport.objects\
+                        .filter(routebase__route__in=routes)\
+                        .exclude(opbase__operation__positions=position)\
+                        .distinct()
+                        
+    title = "%s - %s" % (position.company, position)
+
+    
+    from kml.utils import locals_to_kmz_response
+    return locals_to_kmz_response(locals())
+
 ###################################################################
 ###################################################################
 ###################################################################
 ###################################################################
+
+
+
+
+
 
 def rearrange_fields(newPOST, opbases):
     field_bases = {}
