@@ -1,12 +1,13 @@
-from django.db import models
-from constants import *
-
 from django.template.defaultfilters import slugify
+from django.db import models
+
+from constants import *
+from main.mixins import GoonMixin
 
 User = models.get_model('auth','user')
 Aircraft = models.get_model('aircraft','aircraft')
 
-class Company(models.Model):
+class Company(models.Model, GoonMixin):
     name            =       models.CharField(max_length=64, unique=True)
     call_sign       =       models.CharField(max_length=32, blank=True)
     website         =       models.URLField(blank=True)
