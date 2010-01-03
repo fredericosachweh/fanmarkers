@@ -1,14 +1,12 @@
-from django.views.generic.create_update import update_object, create_object
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from django.db.models import Q
 
 from annoying.decorators import render_to
 
 from models import Company
 from forms import CompanySearch, CompanyForm
-from django.db.models import Q
-
 
 @render_to('list_aircraft-company.html')
 def make_list(request):
@@ -21,14 +19,18 @@ def make_list(request):
         searchform.is_valid()
 
         if int(searchform.cleaned_data["type"]) >= 0:
-            objects = objects.filter(type=searchform.cleaned_data["type"])
+            ty = searchform.cleaned_data["type"]
+            objects = objects.filter(type=ty)
 
         if int(searchform.cleaned_data["jumpseat"]) >= 0:
-            objects = objects.filter(jumpseat=searchform.cleaned_data["jumpseat"])
+            js = searchform.cleaned_data["jumpseat"]
+            objects = objects.filter(jumpseat=js)
 
         if searchform.cleaned_data["search"]:
             s = searchform.cleaned_data["search"]
-            objects = objects.filter( Q(name__icontains=s) | Q(description__icontains=s) )
+            objects = objects.filter(   Q(name__icontains=s)
+                                      | Q(description__icontains=s)
+                                    )
     else:
         searchform = CompanySearch()
 
@@ -38,17 +40,29 @@ def make_list(request):
 
 @login_required()
 def edit(request, pk):
-    return update_object(request, object_id=pk, form_class=CompanyForm, template_name='edit_company.html')
+    from django.views.generic.create_update import update_object
+    return update_object(
+                            request,
+                            object_id=pk,
+                            form_class=CompanyForm,
+                            template_name='edit_company.html'
+                        )
 
 @login_required()
 def new(request):
-    return create_object(request, form_class=CompanyForm, template_name='new_company.html')
+    from django.views.generic.create_update import create_object
+    return create_object(
+                            request,
+                            form_class=CompanyForm,
+                            template_name='new_company.html',
+                         )
 
 @render_to('view_company.html')
 def view(request, pk, slug):
     company = Company.goof(pk=pk)
 
-    if not company.slug == slug: return HttpResponseRedirect(company.get_absolute_url() )
+    if not company.slug == slug:
+        return HttpResponseRedirect(company.get_absolute_url() )
 
     kmz_url = reverse("kml-company", kwargs={"pk": company.pk})
 

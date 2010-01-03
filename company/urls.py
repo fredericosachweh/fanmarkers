@@ -14,7 +14,7 @@ urlpatterns = patterns('company',
         ),
         
         url(
-            r'^new.html$',
+            r'^new/$',
             "views.new",
                                                             name="new-company",
         ),
