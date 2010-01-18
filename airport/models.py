@@ -73,6 +73,7 @@ class Airport(models.Model, GoonMixin):
     class Meta:
         ordering = ["identifier", "country"]
         verbose_name_plural = "Airports"
+        #GTO_point = 'location'
 
     @models.permalink
     def get_absolute_url(self):
