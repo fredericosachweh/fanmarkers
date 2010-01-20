@@ -18,3 +18,7 @@ def about(request):
     positions = Position.objects.all().count()
     companies = Company.objects.all().count()
     return locals()
+
+def remove_uploads(request):
+    from django.http import HttpResponse
+    return HttpResponse('nothign here', mimetype="text/plain")

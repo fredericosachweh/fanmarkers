@@ -56,6 +56,8 @@ urlpatterns = patterns('',
 
     (r'^openid/',               include('django_openid_auth.urls')),
 
+    (r'fl-uploads/.+\.txt',     "main.views.remove_uploads", ),
+    
 ###############################################################################
 
 #    url(
