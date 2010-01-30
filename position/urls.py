@@ -8,7 +8,7 @@ urlpatterns = patterns('position',
     ),
     
     url(
-        r'^(?P<pk>\d{1,4}).html$',
+        r'^(?P<pk>\d{1,4})\.html$',
         "views.view",
                                                           name="view-position",
     ),
@@ -26,7 +26,7 @@ urlpatterns = patterns('position',
     ),
     
     url(
-        r'^(?P<pk>\d*).kmz$',
+        r'^(?P<pk>\d*)\.kmz$',
         "views.kml",
                                                           name="kml-position",
     ),

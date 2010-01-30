@@ -49,10 +49,10 @@ urlpatterns = patterns('',
     (r'^fleet/',                include("fleet.urls")),
     (r'^operation/',            include("operation.urls")),
 
-    url(r'^latest.html$',       "main.views.latest", name="latest"),
-    url(r'^about.html$',        "main.views.about", name="about" ),
-    url(r'^jobmap.html',        "jobmap.views.jobmap", name="jobmap"),
-    url(r'^profile.html',       "profile.views.profile", name="profile"),
+    url(r'^latest\.html$',      "main.views.latest", name="latest"),
+    url(r'^about\.html$',       "main.views.about", name="about" ),
+    url(r'^jobmap\.html',       "jobmap.views.jobmap", name="jobmap"),
+    url(r'^profile\.html',      "profile.views.profile", name="profile"),
 
     (r'^openid/',               include('django_openid_auth.urls')),
 
