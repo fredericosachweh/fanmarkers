@@ -32,9 +32,10 @@ class Position(models.Model, GoonMixin):
         return ('edit-mins', [str(self.pk)] )
 
     def fleets(self):
+        from fleet.models import Fleet
         try:
-            fleet = Fleet.objects.filter(operation__positions=self)
-        except:
+            fleet = Fleet.objects.filter(operation__positions=self).distinct()
+        except Fleet.DoesNotExist:
             fleet = None
 
         return fleet
