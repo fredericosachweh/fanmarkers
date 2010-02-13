@@ -69,8 +69,8 @@
 			{% if not user.is_authenticated %}
 			$(document).ready(function() {
 
-				$('a.or_sign_in').text("Sign in to edit").attr('href', '/openid/login/');
-				$('a.new').text("Sign in to create New").attr('href', '/openid/login/');
+				$('a.or_sign_in').text("Sign in to edit").attr('href', '/openid/login');
+				$('a.new').text("Sign in to create New").attr('href', '/openid/login');
 		
 				$("a.edit_link_ui").not("a.or_sign_in").hide();
 				
