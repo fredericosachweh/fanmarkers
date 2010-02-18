@@ -4,9 +4,19 @@
 
 {% block css %}
 {{ block.super }}
-	#container						{height: 100%; overflow: hidden}
-	#map_canvas						{height: 100%; width: 100%; float: left; background: white;    border: 0px solid black}
-	#sidebar						{height: 100%; width: 100%; float: left; background: #FFDDFF;  border: 0px solid black; padding-top: 20px}
+
+	#map_canvas	                    {height: 500px;
+	                                 width: 80%;
+	                                 margin: 40px auto 0 auto;
+	                                 background: green;
+	                                 border: 0px solid black}
+	
+	#sidebar                        {height: 100%;
+	                                 width: 100%;
+	                                 float: left;
+	                                 background: #FFDDFF;
+	                                 border: 0px solid black;
+	                                 padding-top: 20px}
 
 	#container table				{height: 100%; width: 100%; border-collapse: collapse}
 	#container table tr				{height: 100%; }
@@ -71,4 +81,36 @@
 		<div id="map_canvas"></div>
 	</div>
 	
+	<b>Top Number</b>: Total Hiring Positions
+	<br><br>
+	<b>Bottom Number</b>: Total Positions<br>
+	<br>
+	<b>Zoom in for more detail</b>
+	<br>
+	<br>
+	<i>**Many Features of this site are currently not implemented in Opera
+	 and especially IE. For best results, use Firefox 3.5 or Google Chrome**</i>
+	 <br>
+	 <br>
+	 Register an account to edit information and create new 
+	 Company/Position/Aircraft profiles.
+	 
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
