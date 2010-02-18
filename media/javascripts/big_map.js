@@ -127,9 +127,9 @@ function initialize()
 	G_HYBRID_MAP.getMinimumResolution = function () { return 2 };
 
 	figure_zoom();
-	
+
 	GEvent.addListener(map, "zoomend", figure_zoom);
-	
+
 	GEvent.addListener(map, "click", function(marker, point) {
 	    
 	    url = sprintf("/map_click/%s_%s_%s/",
@@ -142,10 +142,11 @@ function initialize()
 }
 
 function figure_zoom()
-{	
+{
 	map.clearOverlays();
-	
+
 	if(map.getZoom() < 3 ){
+		
 		map.addOverlay(africa[0]);
 		map.addOverlay(americas[0]);
 		map.addOverlay(carribean[0]);
@@ -162,14 +163,14 @@ function figure_zoom()
 		map.addOverlay(scandanavia[0]);
 		map.addOverlay(usa[0]);
 		
-		for(var i=0; i<labels.length; i++)
+		for(var i=0; i<labels.length - 1; i++)
 		{
 			map.addOverlay(labels[i]);
 		}
+
 	}
-	else
+        else
 		map.addOverlay(BaseOverlay);
-	
 }
 
 $(document).ready(function() {
